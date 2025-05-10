@@ -669,6 +669,11 @@ export function parsePDU(pduString: string, pduType: "sms-deliver" | "sms-submit
   }
   
   // Protocol Identifier
+  // Check if we're within array bounds
+  if (offset >= bytes.length) {
+    throw new Error(`PDU parsing error: Attempted to access byte at offset ${offset} but PDU is only ${bytes.length} bytes long. This may be an unsupported or malformed PDU format.`);
+  }
+  
   const protocolId = bytes[offset++];
   fields.push({
     name: 'Protocol Identifier',
@@ -685,6 +690,11 @@ export function parsePDU(pduString: string, pduType: "sms-deliver" | "sms-submit
   structureBreakdown.tooltips.push(`Protocol Identifier (${protocolId.toString(16).padStart(2, '0')} = ${protocolId === 0 ? 'Standard SMS' : 'Protocol-specific message'})`);
   
   // Data Coding Scheme
+  // Check bounds
+  if (offset >= bytes.length) {
+    throw new Error(`PDU parsing error: Attempted to access byte at offset ${offset} but PDU is only ${bytes.length} bytes long. This may be an unsupported or malformed PDU format.`);
+  }
+  
   const dcs = bytes[offset++];
   fields.push({
     name: 'Data Coding Scheme',
