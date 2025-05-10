@@ -126,6 +126,24 @@ export default function Home() {
               <li className="mr-2">
                 <button 
                   className={`inline-block py-2 px-4 border-b-2 font-medium whitespace-nowrap ${
+                    activeTab === "efsms" 
+                      ? "text-primary border-primary" 
+                      : "text-muted-foreground border-transparent hover:text-foreground hover:border-muted"
+                  }`}
+                  onClick={() => setActiveTab("efsms")}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-block mr-1">
+                    <path d="M17 21H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4h12a4 4 0 0 1 4 4v4.5"></path>
+                    <path d="M13 18a2 2 0 1 1 4 0 2 2 0 1 1-4 0z"></path>
+                    <path d="M13 6H7a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h.5"></path>
+                    <path d="M16 6h.3c.3 0 .5.1.7.3L20 10"></path>
+                  </svg>
+                  EF_SMS Storage
+                </button>
+              </li>
+              <li className="mr-2">
+                <button 
+                  className={`inline-block py-2 px-4 border-b-2 font-medium whitespace-nowrap ${
                     activeTab === "learn" 
                       ? "text-primary border-primary" 
                       : "text-muted-foreground border-transparent hover:text-foreground hover:border-muted"
@@ -148,6 +166,7 @@ export default function Home() {
         {activeTab === "encoder" && <PDUEncoder />}
         {activeTab === "sat" && <SATParser />}
         {activeTab === "smpp" && <SMPPParser />}
+        {activeTab === "efsms" && <EFSMSParser />}
         {activeTab === "learn" && <PDULearn />}
       </main>
 
