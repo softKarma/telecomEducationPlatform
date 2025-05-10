@@ -16,9 +16,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { pduString, pduType } = pduSchema.parse(req.body);
       
-      const parsedPDU = parsePDU(pduString, pduType);
+      console.log(`Processing PDU: ${pduString}, type: ${pduType}`);
       
-      return res.json(parsedPDU);
+      try {
+        const parsedPDU = parsePDU(pduString, pduType);
+        return res.json(parsedPDU);
+      } catch (parseError) {
+        console.error('PDU Parse Error:', parseError);
+        if (parseError instanceof Error) {
+          console.error(parseError.stack);
+        }
+        throw parseError;
+      }
     } catch (error) {
       if (error instanceof ZodError) {
         return res.status(400).json({ 
@@ -27,8 +36,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
       
+      const errorMessage = error instanceof Error ? error.message : "Failed to parse PDU";
+      console.error(`Error processing PDU: ${errorMessage}`);
+      
       return res.status(400).json({ 
-        message: error instanceof Error ? error.message : "Failed to parse PDU" 
+        message: errorMessage 
       });
     }
   });
