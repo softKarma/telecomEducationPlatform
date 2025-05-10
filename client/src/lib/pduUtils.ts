@@ -685,7 +685,28 @@ export function parsePDU(pduString: string, pduType: "sms-deliver" | "sms-submit
     offset += actualDestAddrDataLength;
     
     try {
-      headerInfo.recipient = parseAddress(destAddrLength, destAddrType, destAddrData);
+      const parsedAddress = parseAddress(destAddrLength, destAddrType, destAddrData);
+      
+      // Add validation for the recipient - if it contains many non-printable characters
+      // it's likely that the parsing resulted in garbage due to malformed PDU
+      const nonPrintableCount = (parsedAddress.match(/[^\x20-\x7E]/g) || []).length;
+      const printablePercent = parsedAddress.length > 0 ? 
+        ((parsedAddress.length - nonPrintableCount) / parsedAddress.length) * 100 : 
+        0;
+        
+      if (printablePercent < 50 && parsedAddress.length > 10) {
+        // If less than 50% of the characters are printable, we likely have a bad parse
+        console.warn('Recipient address contains mostly non-printable characters, may be malformed');
+        headerInfo.recipient = `[Parsing Error: Malformed Address]`;
+        
+        fields.push({
+          name: 'Warning',
+          value: 'Address Format Invalid',
+          description: `The destination address appears to be malformed or corrupted`,
+        });
+      } else {
+        headerInfo.recipient = parsedAddress;
+      }
       
       fields.push({
         name: 'Destination Address Length',
@@ -697,7 +718,7 @@ export function parsePDU(pduString: string, pduType: "sms-deliver" | "sms-submit
       });
     } catch (error) {
       console.error('Error parsing recipient address:', error);
-      headerInfo.recipient = 'PARSING_ERROR';
+      headerInfo.recipient = '[PARSING_ERROR]';
       
       // Continue parsing as much as possible despite the error
       fields.push({

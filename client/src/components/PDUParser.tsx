@@ -229,8 +229,12 @@ export default function PDUParser() {
                             )}
                             {parsedData.header.recipient && (
                               <tr>
-                                <td className="pb-1 pr-3 text-muted-foreground">Recipient:</td>
-                                <td className="pb-1 font-medium">{parsedData.header.recipient}</td>
+                                <td className="pb-1 pr-3 text-muted-foreground align-top">Recipient:</td>
+                                <td className="pb-1 font-medium break-all max-w-[200px]" title={parsedData.header.recipient}>
+                                  {parsedData.header.recipient.length > 50 
+                                    ? `${parsedData.header.recipient.substring(0, 50)}...` 
+                                    : parsedData.header.recipient}
+                                </td>
                               </tr>
                             )}
                             {parsedData.header.timestamp && (
