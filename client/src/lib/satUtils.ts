@@ -1,52 +1,141 @@
 import { SATParseResult, PDUField, SATHeader } from "@shared/schema";
 import { hexToBytes, bytesToHex } from "./pduUtils";
 
-// SIM Application Toolkit tag values (as defined in ETSI TS 101 267)
+// SIM Application Toolkit tag values (as defined in ETSI TS 101 267 and 3GPP TS 31.111)
 const TAG_COMMAND_DETAILS = 0x01;
 const TAG_DEVICE_IDENTITIES = 0x02;
 const TAG_RESULT = 0x03;
 const TAG_DURATION = 0x04;
 const TAG_ALPHA_IDENTIFIER = 0x05;
 const TAG_ADDRESS = 0x06;
+const TAG_CAPABILITY_CONFIGURATION_PARAMETERS = 0x07;
+const TAG_SUBADDRESS = 0x08;
+const TAG_SS_STRING = 0x09;
+const TAG_USSD_STRING = 0x0A;
+const TAG_SMS_TPDU = 0x0B;
+const TAG_CELL_BROADCAST_PAGE = 0x0C;
 const TAG_TEXT_STRING = 0x0D;
 const TAG_TONE = 0x0E;
 const TAG_ITEM = 0x0F;
 const TAG_ITEM_IDENTIFIER = 0x10;
 const TAG_RESPONSE_LENGTH = 0x11;
 const TAG_FILE_LIST = 0x12;
+const TAG_LOCATION_INFORMATION = 0x13;
+const TAG_IMEI = 0x14;
+const TAG_HELP_REQUEST = 0x15;
+const TAG_NETWORK_MEASUREMENT_RESULTS = 0x16;
+const TAG_DEFAULT_TEXT = 0x17;
 const TAG_MENU_ITEMS_NEXT_ACTION_INDICATOR = 0x18;
 const TAG_EVENT_LIST = 0x19;
-const TAG_SMS_TPDU = 0x8B;
+const TAG_CAUSE = 0x1A;
+const TAG_LOCATION_STATUS = 0x1B;
+const TAG_TIMER_IDENTIFIER = 0x24;
+const TAG_BROWSER_IDENTITY = 0x30;
+const TAG_URL = 0x31;
+const TAG_BEARER = 0x32;
+const TAG_PROVISIONING_REFERENCE_FILE = 0x33;
+const TAG_BROWSER_TERMINATION_CAUSE = 0x34;
+const TAG_BEARER_DESCRIPTION = 0x35;
+const TAG_CHANNEL_DATA = 0x36;
+const TAG_CARD_READER_STATUS = 0x37;
+const TAG_CARD_ATR = 0x38;
+const TAG_ICON_IDENTIFIER = 0x1E;
+const TAG_ITEM_ICON_IDENTIFIER = 0x1F;
+const TAG_LANGUAGE = 0x2D;
 
-// Proactive SIM command types
+// Proactive SIM command types (as defined in 3GPP TS 31.111 and ETSI TS 102 223)
 const commandTypes: Record<number, string> = {
   0x01: "REFRESH",
   0x02: "MORE TIME",
   0x03: "POLL INTERVAL",
   0x04: "POLLING OFF",
   0x05: "SET UP EVENT LIST",
-  0x10: "SET UP CALL",
-  0x11: "SEND SS",
-  0x12: "SEND USSD",
-  0x13: "SEND SMS",
-  0x14: "SEND DTMF",
-  0x15: "LAUNCH BROWSER",
-  0x20: "PLAY TONE",
-  0x21: "DISPLAY TEXT",
-  0x22: "GET INKEY",
-  0x23: "GET INPUT",
-  0x24: "SELECT ITEM",
-  0x25: "SET UP MENU"
+  0x06: "SET UP CALL",
+  0x07: "SEND SS",
+  0x08: "SEND USSD",
+  0x09: "SEND SHORT MESSAGE",
+  0x0A: "SEND DTMF",
+  0x0B: "LAUNCH BROWSER",
+  0x0C: "PLAY TONE",
+  0x0D: "DISPLAY TEXT",
+  0x0E: "GET INKEY",
+  0x0F: "GET INPUT",
+  0x10: "SELECT ITEM",
+  0x11: "SET UP MENU",
+  0x12: "PROVIDE LOCAL INFORMATION",
+  0x13: "TIMER MANAGEMENT",
+  0x14: "SET UP IDLE MODE TEXT",
+  0x15: "PERFORM CARD APDU",
+  0x16: "POWER OFF CARD",
+  0x17: "POWER ON CARD",
+  0x18: "GET READER STATUS",
+  0x19: "RUN AT COMMAND",
+  0x1A: "LANGUAGE NOTIFICATION",
+  0x1B: "OPEN CHANNEL",
+  0x1C: "CLOSE CHANNEL",
+  0x1D: "RECEIVE DATA",
+  0x1E: "SEND DATA",
+  0x1F: "GET CHANNEL STATUS",
+  0x20: "SERVICE SEARCH",
+  0x21: "GET SERVICE INFORMATION",
+  0x22: "DECLARE SERVICE",
+  0x23: "SET FRAMES",
+  0x24: "GET FRAMES STATUS",
+  0x25: "RETRIEVE MULTIMEDIA MESSAGE",
+  0x26: "SUBMIT MULTIMEDIA MESSAGE",
+  0x27: "DISPLAY MULTIMEDIA MESSAGE",
+  0x28: "SET MULTIMEDIA MESSAGE",
+  0x29: "ACTIVATE",
+  0x2A: "CONTACTLESS STATE CHANGED",
+  0x2B: "COMMAND CONTAINER"
 };
 
-// Device identities
+// Device identities (as defined in 3GPP TS 31.111 and ETSI TS 102 223)
 const deviceIdentities: Record<number, string> = {
   0x01: "Keypad",
   0x02: "Display",
   0x03: "Earpiece",
+  0x10: "Additional Card Reader 0",
+  0x11: "Additional Card Reader 1",
+  0x12: "Additional Card Reader 2",
+  0x13: "Additional Card Reader 3",
+  0x14: "Additional Card Reader 4",
+  0x15: "Additional Card Reader 5",
+  0x16: "Additional Card Reader 6",
+  0x17: "Additional Card Reader 7",
+  0x21: "Channel 1",
+  0x22: "Channel 2",
+  0x23: "Channel 3",
+  0x24: "Channel 4",
+  0x25: "Channel 5",
+  0x26: "Channel 6",
+  0x27: "Channel 7",
+  0x28: "Channel 8",
+  0x29: "Channel 9",
+  0x2A: "Channel 10",
+  0x2B: "Channel 11",
+  0x2C: "Channel 12",
+  0x2D: "Channel 13",
+  0x2E: "Channel 14",
+  0x2F: "Channel 15",
+  0x30: "Channel 16",
+  0x40: "Remote entity 1",
+  0x41: "Remote entity 2",
+  0x42: "Remote entity 3",
+  0x43: "Remote entity 4",
+  0x44: "Remote entity 5",
+  0x45: "Remote entity 6",
+  0x46: "Remote entity 7",
+  0x60: "UICC/USIM Local Connection",
+  0x70: "Local UICC",
+  0x71: "Local Terminal",
   0x81: "UICC",
   0x82: "Terminal",
-  0x83: "Network"
+  0x83: "Network",
+  0x90: "Baseband",
+  0x91: "EUICC",
+  0x92: "Companion Terminal",
+  0x93: "Application Terminal"
 };
 
 /**
@@ -223,10 +312,208 @@ export function parseSAT(pduString: string): SATParseResult {
         break;
         
       case TAG_SMS_TPDU:
+      case TAG_CELL_BROADCAST_PAGE:
         fields.push({
-          name: "SMS TPDU",
+          name: tag === TAG_SMS_TPDU ? "SMS TPDU" : "Cell Broadcast Page",
           value: bytesToHex(tagData),
-          description: "SMS message to be sent",
+          description: tag === TAG_SMS_TPDU ? "SMS message to be sent" : "Cell broadcast message",
+          offset: offset - 2,
+          length: length + 2,
+          rawBytes: bytesToHex([tag, length, ...tagData])
+        });
+        break;
+        
+      case TAG_ADDRESS:
+        let addressValue = "Unknown";
+        if (length > 0) {
+          const ton = (tagData[0] >> 4) & 0x07; // Type of number
+          const npi = tagData[0] & 0x0F; // Numbering plan identification
+          const addressData = tagData.slice(1);
+          
+          // For TON/NPI details, use proper TON/NPI mapping
+          const tonDesc = ["Unknown", "International", "National", "Network specific", "Subscriber", "Alphanumeric", "Abbreviated", "Reserved"][ton] || "Reserved";
+          const npiDesc = ["Unknown", "ISDN/Telephony", "Data", "Telex", "National", "Private", "ERMES", "Reserved"][npi] || "Reserved";
+          
+          addressValue = bytesToHex(addressData);
+          
+          fields.push({
+            name: "Address",
+            value: addressValue,
+            description: `Address: TON=${tonDesc}, NPI=${npiDesc}, Address=${addressValue}`,
+            offset: offset - 2,
+            length: length + 2,
+            rawBytes: bytesToHex([tag, length, ...tagData])
+          });
+        } else {
+          fields.push({
+            name: "Address",
+            value: "Empty",
+            description: "Empty address field",
+            offset: offset - 2,
+            length: length + 2,
+            rawBytes: bytesToHex([tag, length, ...tagData])
+          });
+        }
+        break;
+        
+      case TAG_SS_STRING:
+        fields.push({
+          name: "SS String",
+          value: bytesToHex(tagData),
+          description: "Supplementary Service string",
+          offset: offset - 2,
+          length: length + 2,
+          rawBytes: bytesToHex([tag, length, ...tagData])
+        });
+        break;
+        
+      case TAG_USSD_STRING:
+        fields.push({
+          name: "USSD String",
+          value: bytesToHex(tagData),
+          description: "Unstructured Supplementary Service Data string",
+          offset: offset - 2,
+          length: length + 2,
+          rawBytes: bytesToHex([tag, length, ...tagData])
+        });
+        break;
+        
+      case TAG_DURATION:
+        if (length >= 2) {
+          const timeUnit = tagData[0];
+          const timeInterval = tagData[1];
+          
+          const unitDesc = ["Minutes", "Seconds", "Tenths of seconds", "Reserved"][timeUnit] || "Unknown";
+          
+          fields.push({
+            name: "Duration",
+            value: `${timeInterval} ${unitDesc}`,
+            description: `Duration: ${timeInterval} ${unitDesc.toLowerCase()}`,
+            offset: offset - 2,
+            length: length + 2,
+            rawBytes: bytesToHex([tag, length, ...tagData])
+          });
+        } else {
+          fields.push({
+            name: "Duration",
+            value: bytesToHex(tagData),
+            description: "Invalid duration format",
+            offset: offset - 2,
+            length: length + 2,
+            rawBytes: bytesToHex([tag, length, ...tagData])
+          });
+        }
+        break;
+        
+      case TAG_ITEM:
+        if (length >= 2) {
+          const identifier = tagData[0];
+          const itemText = decodeGSMAlphabet(tagData.slice(1));
+          
+          fields.push({
+            name: "Menu Item",
+            value: itemText,
+            description: `Item ID: ${identifier}, Text: "${itemText}"`,
+            offset: offset - 2,
+            length: length + 2,
+            rawBytes: bytesToHex([tag, length, ...tagData])
+          });
+        } else {
+          fields.push({
+            name: "Menu Item",
+            value: bytesToHex(tagData),
+            description: "Invalid menu item format",
+            offset: offset - 2,
+            length: length + 2,
+            rawBytes: bytesToHex([tag, length, ...tagData])
+          });
+        }
+        break;
+        
+      case TAG_ITEM_IDENTIFIER:
+        if (length === 1) {
+          fields.push({
+            name: "Item Identifier",
+            value: tagData[0].toString(),
+            description: `Selected item identifier: ${tagData[0]}`,
+            offset: offset - 2,
+            length: length + 2,
+            rawBytes: bytesToHex([tag, length, ...tagData])
+          });
+        } else {
+          fields.push({
+            name: "Item Identifier",
+            value: bytesToHex(tagData),
+            description: "Invalid item identifier format",
+            offset: offset - 2,
+            length: length + 2,
+            rawBytes: bytesToHex([tag, length, ...tagData])
+          });
+        }
+        break;
+        
+      case TAG_TONE:
+        if (length === 1) {
+          const tones = [
+            "Dial tone", "Called subscriber busy", "Congestion", "Radio path acknowledge",
+            "Radio path not available / Call dropped", "Error / Special info", "Call waiting tone",
+            "Ringing tone", "General beep", "Positive acknowledgement tone",
+            "Negative acknowledgement tone"
+          ];
+          const toneDesc = tagData[0] < tones.length ? tones[tagData[0]] : `Unknown tone (${tagData[0]})`;
+          
+          fields.push({
+            name: "Tone",
+            value: toneDesc,
+            description: `Tone to be played: ${toneDesc}`,
+            offset: offset - 2,
+            length: length + 2,
+            rawBytes: bytesToHex([tag, length, ...tagData])
+          });
+        } else {
+          fields.push({
+            name: "Tone",
+            value: bytesToHex(tagData),
+            description: "Invalid tone format",
+            offset: offset - 2,
+            length: length + 2,
+            rawBytes: bytesToHex([tag, length, ...tagData])
+          });
+        }
+        break;
+        
+      case TAG_URL:
+        // Try to decode as ASCII
+        const url = tagData.map(b => String.fromCharCode(b)).join('');
+        
+        fields.push({
+          name: "URL",
+          value: url,
+          description: `Browser URL: ${url}`,
+          offset: offset - 2,
+          length: length + 2,
+          rawBytes: bytesToHex([tag, length, ...tagData])
+        });
+        break;
+        
+      case TAG_EVENT_LIST:
+        const events = [
+          "MT call", "Call connected", "Call disconnected", "Location status", 
+          "User activity", "Idle screen available", "Card reader status",
+          "Language selection", "Browser termination", "Data available", 
+          "Channel status", "Access Technology Change", "Display parameters changed",
+          "Local connection", "Network Search Mode Change", "Browsing status",
+          "Frames Information Change"
+        ];
+        
+        const eventsList = tagData.map(eventId => {
+          return eventId < events.length ? events[eventId] : `Unknown event (${eventId})`;
+        }).join(", ");
+        
+        fields.push({
+          name: "Event List",
+          value: bytesToHex(tagData),
+          description: `Events: ${eventsList}`,
           offset: offset - 2,
           length: length + 2,
           rawBytes: bytesToHex([tag, length, ...tagData])
@@ -285,11 +572,35 @@ function decodeGSMAlphabet(data: number[]): string {
 }
 
 /**
- * Example SIM Application Toolkit PDUs
+ * Example SIM Application Toolkit PDUs - based on 3GPP TS 31.111 and ETSI TS 102 223 specifications
+ * 
+ * Each example is a real-world representation of a SIM Application Toolkit command 
+ * as it would appear in a mobile device communication with the SIM card.
  */
 export const exampleSatPdus = {
+  // Basic commands
   "display-text": "D0288103012180820281028D1A04546869732069732061207465737420746578742E2020202020",
   "select-menu": "D03881030125008202818285096D61696E206D656E75860204F1860304F28604054C6F63616C860605536574757087050104000016180402",
   "send-sms": "D0268103011380820281838B1904098156050005F0240A00F5A76173746520636865636B",
   "setup-call": "D036810301108082028183050A43616C6C696E672E2E2E860608912143658709910600150005F06024069362537396332C371",
+  
+  // Additional commands
+  "get-input": "D0388103012380820281028D0B04456E7465722050494E3A8F0101CD020200C50112C60101C7020118C8020118DA0101DB0101DC01019000",
+  "get-inkey": "D0248103012280820281028D0804507265737320598F0104CD029000C501019000",
+  "play-tone": "D01A8103010C80820281038D04045761697414055F01019000",
+  "refresh": "D01281030101820281831206A0000000871002FF009000",
+  "setup-event-list": "D0128103010580820281831901079000",
+  "launch-browser": "D02E8103011580820281033101687474703A2F2F7777772E6578616D706C652E636F6D2F8D05045669657789020100",
+  "provide-local-info": "D01081030112820282828F020001",
+  "set-idle-text": "D01681030114820282828D0A084D792049646C6520546578749000",
+  
+  // Menu commands
+  "setup-menu-with-icons": "D05081030125008202818285096D61696E206D656E758F01018602013186030132860401338605013486060135860701368609013887070101020304051E0701010203040518060102030405",
+  "select-item-with-icons": "D04881030124008202818285096974656D206D656E758F0101860201318602023286020333860204348602053587050101020304051E0601010203040518050102030405",
+  
+  // Advanced commands
+  "open-channel": "D0358103031B008202818335070206012400003583350E800001010101118282050202030404290101391004800001010101118282050202030405",
+  "send-data": "D0168103031E0082028183360B040102030405060708090A",
+  "receive-data": "D0128103031D0082028183370704010099",
+  "close-channel": "D00E8103031C008202818338019000"
 };

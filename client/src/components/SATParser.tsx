@@ -93,39 +93,150 @@ export default function SATParser() {
             {/* Example Presets */}
             <div className="mb-4">
               <Label className="block text-sm font-medium mb-2">Example SAT Commands</Label>
-              <div className="flex flex-wrap gap-2">
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={() => loadExamplePdu("display-text")}
-                  className="h-7 text-xs"
-                >
-                  Display Text
-                </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={() => loadExamplePdu("select-menu")}
-                  className="h-7 text-xs"
-                >
-                  Select Menu
-                </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={() => loadExamplePdu("send-sms")}
-                  className="h-7 text-xs"
-                >
-                  Send SMS
-                </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={() => loadExamplePdu("setup-call")}
-                  className="h-7 text-xs"
-                >
-                  Setup Call
-                </Button>
+              <div className="space-y-2">
+                <div className="text-xs text-muted-foreground font-medium mb-1">Basic Commands:</div>
+                <div className="flex flex-wrap gap-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => loadExamplePdu("display-text")}
+                    className="h-7 text-xs"
+                  >
+                    Display Text
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => loadExamplePdu("select-menu")}
+                    className="h-7 text-xs"
+                  >
+                    Select Menu
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => loadExamplePdu("send-sms")}
+                    className="h-7 text-xs"
+                  >
+                    Send SMS
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => loadExamplePdu("setup-call")}
+                    className="h-7 text-xs"
+                  >
+                    Setup Call
+                  </Button>
+                </div>
+                
+                <div className="text-xs text-muted-foreground font-medium mt-3 mb-1">UI Commands:</div>
+                <div className="flex flex-wrap gap-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => loadExamplePdu("get-input")}
+                    className="h-7 text-xs"
+                  >
+                    Get Input
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => loadExamplePdu("get-inkey")}
+                    className="h-7 text-xs"
+                  >
+                    Get Inkey
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => loadExamplePdu("play-tone")}
+                    className="h-7 text-xs"
+                  >
+                    Play Tone
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => loadExamplePdu("set-idle-text")}
+                    className="h-7 text-xs"
+                  >
+                    Set Idle Text
+                  </Button>
+                </div>
+                
+                <div className="text-xs text-muted-foreground font-medium mt-3 mb-1">System Commands:</div>
+                <div className="flex flex-wrap gap-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => loadExamplePdu("refresh")}
+                    className="h-7 text-xs"
+                  >
+                    Refresh
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => loadExamplePdu("setup-event-list")}
+                    className="h-7 text-xs"
+                  >
+                    Setup Events
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => loadExamplePdu("provide-local-info")}
+                    className="h-7 text-xs"
+                  >
+                    Local Info
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => loadExamplePdu("launch-browser")}
+                    className="h-7 text-xs"
+                  >
+                    Launch Browser
+                  </Button>
+                </div>
+                
+                <div className="text-xs text-muted-foreground font-medium mt-3 mb-1">Advanced Commands:</div>
+                <div className="flex flex-wrap gap-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => loadExamplePdu("open-channel")}
+                    className="h-7 text-xs"
+                  >
+                    Open Channel
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => loadExamplePdu("send-data")}
+                    className="h-7 text-xs"
+                  >
+                    Send Data
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => loadExamplePdu("receive-data")}
+                    className="h-7 text-xs"
+                  >
+                    Receive Data
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => loadExamplePdu("close-channel")}
+                    className="h-7 text-xs"
+                  >
+                    Close Channel
+                  </Button>
+                </div>
               </div>
             </div>
 
