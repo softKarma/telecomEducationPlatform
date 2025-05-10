@@ -447,16 +447,39 @@ export function parsePDU(pduString: string, pduType: "sms-deliver" | "sms-submit
   
   // Parse message type indicator
   const mti = firstOctet & 0x03;
-  if (pduType === 'sms-deliver' && mti !== 0) {
-    throw new Error('Invalid MTI for SMS-DELIVER, expected 00');
-  } else if (pduType === 'sms-submit' && mti !== 1) {
-    throw new Error('Invalid MTI for SMS-SUBMIT, expected 01');
+  
+  // For parsing purposes, we'll accept the provided PDU type from the user
+  // and not strictly validate the MTI field to allow for flexibility
+  // This makes the tool more useful for educational purposes
+  
+  if (pduType === 'sms-deliver') {
+    // For SMS-DELIVER, report but don't error if MTI is unexpected
+    if (mti !== 0) {
+      console.warn(`Warning: Unexpected MTI ${mti} for SMS-DELIVER (expected 0)`);
+    }
+  } else if (pduType === 'sms-submit') {
+    // For SMS-SUBMIT, report but don't error if MTI is unexpected
+    if (mti !== 1) {
+      console.warn(`Warning: Unexpected MTI ${mti} for SMS-SUBMIT (expected 1)`);
+    }
+  }
+  
+  // Determine the actual message type description based on MTI and user-provided type
+  let mtiDescription = '';
+  if (mti === 0) {
+    mtiDescription = 'SMS-DELIVER message';
+  } else if (mti === 1) {
+    mtiDescription = 'SMS-SUBMIT message';
+  } else if (mti === 2) {
+    mtiDescription = 'SMS-STATUS-REPORT message';
+  } else {
+    mtiDescription = 'SMS-RESERVED message';
   }
   
   fields.push({
     name: 'TP-MTI',
     value: mti.toString(),
-    description: mti === 0 ? 'SMS-DELIVER message' : 'SMS-SUBMIT message'
+    description: `${mtiDescription} (Using ${pduType.toUpperCase()} format for parsing)`
   });
   
   // Parse other flags

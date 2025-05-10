@@ -1,385 +1,272 @@
 import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { EFSMSParseResult } from "@shared/schema";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { AlertCircle, Check, Copy } from "lucide-react";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import ByteDisplay from "./ByteDisplay";
 import { exampleEfSmsPdus } from "@/lib/efSmsUtils";
+import ByteDisplay from "./ByteDisplay";
 
 export default function EFSMSParser() {
-  const [hexData, setHexData] = useState<string>("03001901059144371300006018402151311063A7F79B9D066181C6687CB6890BB4C0699DF723A");
-  const [recordNum, setRecordNum] = useState<number>(1);
-  const [resultsTab, setResultsTab] = useState<string>("overview");
-  const [clipboardStatus, setClipboardStatus] = useState<"idle" | "copied">("idle");
-
-  // EF_SMS Parse mutation
-  const { mutate: parseEfSms, data: parsedData, isPending, isError, error } = useMutation({
-    mutationFn: async (data: { hexData: string; recordNum: number }) => {
-      const response = await apiRequest("POST", "/api/parse-efsms", data);
-      return response.json() as Promise<EFSMSParseResult>;
-    }
+  const [hexData, setHexData] = useState("");
+  const [recordNumber, setRecordNumber] = useState(1);
+  const [activeTab, setActiveTab] = useState("input");
+  
+  const { data, isPending, isError, error, refetch } = useQuery<EFSMSParseResult>({
+    queryKey: ["parse-efsms", hexData, recordNumber],
+    queryFn: async () => {
+      if (!hexData) return null;
+      const result = await apiRequest<EFSMSParseResult>("/api/parse-efsms", {
+        method: "POST",
+        body: JSON.stringify({ hexData, recordNumber }),
+      });
+      return result;
+    },
+    enabled: !!hexData,
   });
 
-  // Handle parse button click
-  const handleParse = () => {
+  const handleParse = async () => {
     if (hexData.trim()) {
-      parseEfSms({ hexData: hexData.trim(), recordNum });
+      await refetch();
+      if (activeTab === "input") {
+        setActiveTab("output");
+      }
     }
   };
 
-  // Load example data
-  const loadExampleData = (example: keyof typeof exampleEfSmsPdus) => {
-    const data = exampleEfSmsPdus[example];
-    setHexData(data);
-  };
-
-  // Copy to clipboard
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text);
-    setClipboardStatus("copied");
-    setTimeout(() => setClipboardStatus("idle"), 2000);
+  const handleUseExample = (example: string) => {
+    setHexData(example);
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-      {/* Input Panel */}
-      <div className="lg:col-span-5">
-        <Card>
-          <CardContent className="pt-6">
-            <h2 className="text-lg font-medium mb-4">EF_SMS Record Data</h2>
-            
-            {/* Hex Data Input */}
-            <div className="mb-4">
-              <Label htmlFor="hex-data" className="block text-sm font-medium mb-1">
-                Hexadecimal Data
-              </Label>
-              <Textarea
-                id="hex-data"
-                rows={4}
+    <Card className="w-full">
+      <CardHeader>
+        <CardTitle className="text-xl font-bold">SIM EF_SMS Record Parser</CardTitle>
+        <CardDescription>
+          Parse Elementary File for SMS (EF_SMS) records from a SIM card. EF_SMS records contain SMS messages 
+          stored on the SIM card, with a status byte indicating the message state.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="w-full grid grid-cols-2">
+            <TabsTrigger value="input">Input</TabsTrigger>
+            <TabsTrigger value="output">Output</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="input" className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="efsms-hex">EF_SMS Hex Data</Label>
+              <Input
+                id="efsms-hex"
+                placeholder="Enter EF_SMS hexadecimal data..."
                 value={hexData}
                 onChange={(e) => setHexData(e.target.value)}
-                placeholder="Enter EF_SMS record hexadecimal data"
-                className="font-mono text-sm resize-none"
+                className="font-mono"
               />
-              <div className="mt-1 flex justify-between items-center">
-                <div className="text-xs text-muted-foreground">
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger className="cursor-help">
-                        <AlertCircle className="h-3 w-3 inline-block mr-1" />
-                        EF_SMS format
-                      </TooltipTrigger>
-                      <TooltipContent className="max-w-xs">
-                        <p>EF_SMS (Elementary File for Short Message Storage) is the format used to store SMS messages on a SIM card. The data starts with a status byte followed by the SMS PDU.</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                </div>
-                <Button 
-                  variant="link" 
-                  size="sm" 
-                  onClick={() => setHexData("")}
-                  className="h-auto p-0 text-xs"
-                >
-                  Clear
-                </Button>
-              </div>
             </div>
-
-            {/* Record Number */}
-            <div className="mb-4">
-              <Label htmlFor="record-num" className="block text-sm font-medium mb-1">
-                Record Number
-              </Label>
+            
+            <div className="space-y-2">
+              <Label htmlFor="record-number">Record Number</Label>
               <Input
-                id="record-num"
+                id="record-number"
                 type="number"
                 min={1}
-                value={recordNum}
-                onChange={(e) => setRecordNum(parseInt(e.target.value) || 1)}
+                value={recordNumber}
+                onChange={(e) => setRecordNumber(parseInt(e.target.value) || 1)}
                 className="w-24"
               />
-              <p className="mt-1 text-xs text-muted-foreground">
-                SIM card record number (for reference only)
-              </p>
+              <span className="text-sm text-muted-foreground ml-2">
+                SIM card record number (typically 1-10)
+              </span>
             </div>
-
-            {/* Example Data */}
-            <div className="mb-4">
-              <Label className="block text-sm font-medium mb-2">Example EF_SMS Records</Label>
-              <div className="flex flex-wrap gap-2">
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={() => loadExampleData("unread-message")}
-                  className="h-7 text-xs"
-                >
-                  Unread Message
-                </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={() => loadExampleData("read-message")}
-                  className="h-7 text-xs"
-                >
-                  Read Message
-                </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={() => loadExampleData("stored-sent")}
-                  className="h-7 text-xs"
-                >
-                  Stored (Sent)
-                </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={() => loadExampleData("empty-record")}
-                  className="h-7 text-xs"
-                >
-                  Empty Record
-                </Button>
+            
+            <div className="flex flex-col space-y-2 mt-4">
+              <Button onClick={handleParse} className="w-full sm:w-auto">Parse EF_SMS Data</Button>
+              
+              <div className="mt-6 space-y-2">
+                <h3 className="text-sm font-medium">Example EF_SMS Records:</h3>
+                <div className="grid grid-cols-1 gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="justify-start text-left font-mono overflow-hidden truncate"
+                    onClick={() => handleUseExample(exampleEfSmsPdus.unread)}
+                  >
+                    <span className="font-normal mr-2 text-muted-foreground">Unread:</span>
+                    {exampleEfSmsPdus.unread.substring(0, 20)}...
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="justify-start text-left font-mono overflow-hidden truncate"
+                    onClick={() => handleUseExample(exampleEfSmsPdus.read)}
+                  >
+                    <span className="font-normal mr-2 text-muted-foreground">Read:</span>
+                    {exampleEfSmsPdus.read.substring(0, 20)}...
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="justify-start text-left font-mono overflow-hidden truncate"
+                    onClick={() => handleUseExample(exampleEfSmsPdus.sent)}
+                  >
+                    <span className="font-normal mr-2 text-muted-foreground">Sent:</span>
+                    {exampleEfSmsPdus.sent.substring(0, 20)}...
+                  </Button>
+                </div>
               </div>
             </div>
-
-            {/* Parse Button */}
-            <Button 
-              className="w-full" 
-              onClick={handleParse}
-              disabled={isPending}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
-                <path d="M17 21H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4h12a4 4 0 0 1 4 4v4.5"></path>
-                <path d="M13 18a2 2 0 1 1 4 0 2 2 0 1 1-4 0z"></path>
-                <path d="M13 6H7a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h.5"></path>
-                <path d="M16 6h.3c.3 0 .5.1.7.3L20 10"></path>
-              </svg>
-              {isPending ? "Parsing..." : "Parse EF_SMS Data"}
-            </Button>
-
-            {/* Parse Errors */}
+          </TabsContent>
+          
+          <TabsContent value="output" className="space-y-6">
+            {isPending && <div className="text-center">Parsing EF_SMS data...</div>}
+            
             {isError && (
-              <Alert variant="destructive" className="mt-4">
-                <AlertCircle className="h-4 w-4" />
-                <AlertTitle>Error</AlertTitle>
-                <AlertDescription>
-                  {error instanceof Error ? error.message : "Failed to parse EF_SMS data"}
-                </AlertDescription>
-              </Alert>
+              <div className="bg-destructive/10 p-4 rounded-md text-destructive">
+                <h3 className="font-medium">Error Parsing EF_SMS Data</h3>
+                <p>{(error as Error)?.message || "Unknown error occurred"}</p>
+              </div>
             )}
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Results Panel */}
-      <div className="lg:col-span-7">
-        <Card>
-          <CardContent className="pt-6">
-            <h2 className="text-lg font-medium mb-4">EF_SMS Analysis</h2>
-
-            {parsedData ? (
-              <Tabs value={resultsTab} onValueChange={setResultsTab}>
-                <TabsList className="mb-4">
-                  <TabsTrigger value="overview">Record Overview</TabsTrigger>
-                  <TabsTrigger value="pdu">PDU Content</TabsTrigger>
-                  <TabsTrigger value="structure">Hex Structure</TabsTrigger>
-                </TabsList>
-
-                {/* Overview Tab */}
-                <TabsContent value="overview">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            
+            {data && (
+              <div className="space-y-6">
+                <div className="bg-muted/50 p-4 rounded-md border">
+                  <h3 className="text-lg font-medium mb-2">EF_SMS Header Information</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <h3 className="text-sm font-semibold mb-2">Record Information</h3>
-                      <div className="bg-muted/50 p-3 rounded border">
-                        <table className="w-full text-sm">
-                          <tbody>
-                            <tr>
-                              <td className="pb-1 pr-3 text-muted-foreground">Record Number:</td>
-                              <td className="pb-1 font-medium">{parsedData.header.recordNumber}</td>
-                            </tr>
-                            <tr>
-                              <td className="pb-1 pr-3 text-muted-foreground">Status:</td>
-                              <td className="pb-1 font-medium">{parsedData.header.status} ({parsedData.header.statusDescription})</td>
-                            </tr>
-                            <tr>
-                              <td className="pb-1 pr-3 text-muted-foreground">Message Type:</td>
-                              <td className="pb-1 font-medium">{parsedData.header.messageType}</td>
-                            </tr>
-                            <tr>
-                              <td className="pb-1 pr-3 text-muted-foreground">Record Size:</td>
-                              <td className="pb-1 font-medium">{parsedData.header.recordSize} bytes</td>
-                            </tr>
-                          </tbody>
-                        </table>
+                      <p className="text-sm text-muted-foreground">Status:</p>
+                      <p className="font-mono">{data.header.status} ({data.header.statusDescription})</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground">SMS Type:</p>
+                      <p className="font-mono">{data.header.smsType}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground">Record Number:</p>
+                      <p className="font-mono">{data.header.recordNumber}</p>
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground">Record Size:</p>
+                      <p className="font-mono">{data.header.recordSize} bytes</p>
+                    </div>
+                  </div>
+                </div>
+                
+                {data.message && (
+                  <div className="bg-muted/50 p-4 rounded-md border">
+                    <h3 className="text-lg font-medium mb-2">Decoded Message</h3>
+                    <p className="font-medium border-l-4 border-primary pl-3 py-1">{data.message}</p>
+                  </div>
+                )}
+                
+                {data.pdu && (
+                  <div className="bg-muted/50 p-4 rounded-md border">
+                    <h3 className="text-lg font-medium mb-2">Embedded PDU Information</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <p className="text-sm text-muted-foreground">Message Type:</p>
+                        <p className="font-mono">{data.pdu.header.messageType}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">Encoding:</p>
+                        <p className="font-mono">{data.pdu.header.encoding}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">Sender:</p>
+                        <p className="font-mono">{data.pdu.header.sender || 'N/A'}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">Recipient:</p>
+                        <p className="font-mono">{data.pdu.header.recipient || 'N/A'}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">Timestamp:</p>
+                        <p className="font-mono">{data.pdu.header.timestamp || 'N/A'}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-muted-foreground">SMSC:</p>
+                        <p className="font-mono">{data.pdu.header.smsc}</p>
                       </div>
                     </div>
-
-                    {parsedData.message && (
-                      <div>
-                        <h3 className="text-sm font-semibold mb-2">Message Content</h3>
-                        <div className="bg-muted/50 p-3 rounded border h-full">
-                          <p className="text-sm whitespace-pre-wrap">{parsedData.message}</p>
-                        </div>
-                      </div>
-                    )}
                   </div>
-
-                  {/* Record Fields */}
+                )}
+                
+                <div>
+                  <h3 className="text-lg font-medium mb-2">EF_SMS Binary Structure</h3>
+                  <div className="w-full border rounded-md overflow-hidden">
+                    <div className="grid grid-cols-12 gap-1 p-3 overflow-x-auto">
+                      {data.structureBreakdown.bytes.map((byte, index) => (
+                        <ByteDisplay
+                          key={index}
+                          value={byte}
+                          color={data.structureBreakdown.colors[index] || "default"}
+                          tooltip={data.structureBreakdown.tooltips[index] || byte}
+                        />
+                      ))}
+                    </div>
+                    <div className="bg-muted/50 border-t p-2">
+                      <div className="flex flex-wrap gap-2">
+                        {Array.from(new Set(data.structureBreakdown.colors)).map((color, index) => {
+                          // Find the first index with this color
+                          const descIndex = data.structureBreakdown.colors.indexOf(color);
+                          const description = data.structureBreakdown.descriptions[descIndex] || '';
+                          
+                          return (
+                            <div key={index} className="flex items-center">
+                              <div 
+                                className={`w-3 h-3 rounded-full mr-1 ${
+                                  color === 'primary' ? 'bg-primary' :
+                                  color === 'secondary' ? 'bg-secondary' :
+                                  color === 'destructive' ? 'bg-destructive' :
+                                  color === 'warning' ? 'bg-yellow-500' :
+                                  color === 'success' ? 'bg-green-500' :
+                                  color === 'info' ? 'bg-blue-500' :
+                                  'bg-gray-500'
+                                }`}
+                              />
+                              <span className="text-xs">{description}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                {data.properties.length > 0 && (
                   <div>
-                    <h3 className="text-sm font-semibold mb-2">Record Fields</h3>
-                    <div className="overflow-x-auto">
-                      <table className="min-w-full text-sm">
-                        <thead>
-                          <tr className="bg-muted text-left">
-                            <th className="px-4 py-2 font-medium">Field</th>
-                            <th className="px-4 py-2 font-medium">Value</th>
-                            <th className="px-4 py-2 font-medium">Description</th>
+                    <h3 className="text-lg font-medium mb-2">EF_SMS Fields</h3>
+                    <div className="overflow-x-auto border rounded-md">
+                      <table className="min-w-full divide-y divide-border">
+                        <thead className="bg-muted/50">
+                          <tr>
+                            <th scope="col" className="px-4 py-2 text-left text-xs font-medium text-muted-foreground">Field</th>
+                            <th scope="col" className="px-4 py-2 text-left text-xs font-medium text-muted-foreground">Value</th>
+                            <th scope="col" className="px-4 py-2 text-left text-xs font-medium text-muted-foreground">Description</th>
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-border">
-                          {parsedData.properties.map((property, index) => (
+                          {data.properties.map((field, index) => (
                             <tr key={index}>
-                              <td className="px-4 py-2">{property.name}</td>
-                              <td className="px-4 py-2 font-mono">{property.value}</td>
-                              <td className="px-4 py-2 text-muted-foreground">{property.description}</td>
+                              <td className="px-4 py-2 text-sm font-medium">{field.name}</td>
+                              <td className="px-4 py-2 text-sm font-mono">{field.value}</td>
+                              <td className="px-4 py-2 text-sm">{field.description}</td>
                             </tr>
                           ))}
                         </tbody>
                       </table>
                     </div>
                   </div>
-                </TabsContent>
-
-                {/* PDU Content Tab */}
-                <TabsContent value="pdu">
-                  {parsedData.pdu ? (
-                    <div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                        <div>
-                          <h3 className="text-sm font-semibold mb-2">PDU Information</h3>
-                          <div className="bg-muted/50 p-3 rounded border">
-                            <table className="w-full text-sm">
-                              <tbody>
-                                <tr>
-                                  <td className="pb-1 pr-3 text-muted-foreground">PDU Type:</td>
-                                  <td className="pb-1 font-medium">{parsedData.pdu.header.messageType.toUpperCase()}</td>
-                                </tr>
-                                <tr>
-                                  <td className="pb-1 pr-3 text-muted-foreground">SMSC:</td>
-                                  <td className="pb-1 font-medium">{parsedData.pdu.header.smsc}</td>
-                                </tr>
-                                {parsedData.pdu.header.sender && (
-                                  <tr>
-                                    <td className="pb-1 pr-3 text-muted-foreground">Sender:</td>
-                                    <td className="pb-1 font-medium">{parsedData.pdu.header.sender}</td>
-                                  </tr>
-                                )}
-                                {parsedData.pdu.header.recipient && (
-                                  <tr>
-                                    <td className="pb-1 pr-3 text-muted-foreground">Recipient:</td>
-                                    <td className="pb-1 font-medium">{parsedData.pdu.header.recipient}</td>
-                                  </tr>
-                                )}
-                                {parsedData.pdu.header.timestamp && (
-                                  <tr>
-                                    <td className="pb-1 pr-3 text-muted-foreground">Timestamp:</td>
-                                    <td className="pb-1 font-medium">{parsedData.pdu.header.timestamp}</td>
-                                  </tr>
-                                )}
-                                <tr>
-                                  <td className="pb-1 pr-3 text-muted-foreground">Encoding:</td>
-                                  <td className="pb-1 font-medium">{parsedData.pdu.header.encoding}</td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </div>
-                        </div>
-
-                        <div>
-                          <h3 className="text-sm font-semibold mb-2">Message Content</h3>
-                          <div className="bg-muted/50 p-3 rounded border h-full">
-                            <p className="text-sm whitespace-pre-wrap">{parsedData.pdu.message}</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="p-8 text-center">
-                      <div className="mx-auto w-12 h-12 rounded-full bg-muted flex items-center justify-center mb-4">
-                        <AlertCircle className="h-6 w-6 text-muted-foreground" />
-                      </div>
-                      <h3 className="text-lg font-medium">No PDU Data Available</h3>
-                      <p className="text-muted-foreground">
-                        This record does not contain a valid SMS PDU or it couldn't be parsed.
-                      </p>
-                    </div>
-                  )}
-                </TabsContent>
-
-                {/* Hex Structure Tab */}
-                <TabsContent value="structure">
-                  <div>
-                    <h3 className="text-sm font-semibold mb-2">Byte Structure</h3>
-                    <div className="border rounded-lg p-4 bg-muted/50">
-                      <div className="flex flex-wrap gap-1 mb-3">
-                        {parsedData.structureBreakdown.bytes.map((byte, index) => (
-                          <ByteDisplay 
-                            key={index} 
-                            value={byte} 
-                            color={parsedData.structureBreakdown.colors[index]} 
-                            tooltip={parsedData.structureBreakdown.tooltips[index]} 
-                          />
-                        ))}
-                      </div>
-
-                      <div className="text-xs space-y-2">
-                        <div className="flex items-center">
-                          <span className="w-4 h-4 bg-primary/20 border border-primary/30 inline-block mr-2"></span>
-                          <span>Status</span>
-                        </div>
-                        <div className="flex items-center">
-                          <span className="w-4 h-4 bg-secondary/20 border border-secondary/30 inline-block mr-2"></span>
-                          <span>SMSC Information</span>
-                        </div>
-                        <div className="flex items-center">
-                          <span className="w-4 h-4 bg-accent/20 border border-accent/30 inline-block mr-2"></span>
-                          <span>Address Fields</span>
-                        </div>
-                        <div className="flex items-center">
-                          <span className="w-4 h-4 bg-destructive/20 border border-destructive/30 inline-block mr-2"></span>
-                          <span>Message Content</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </TabsContent>
-              </Tabs>
-            ) : (
-              <div className="p-8 text-center">
-                <div className="mx-auto w-12 h-12 rounded-full bg-muted flex items-center justify-center mb-4">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-muted-foreground">
-                    <path d="M17 21H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4h12a4 4 0 0 1 4 4v4.5"></path>
-                    <path d="M13 18a2 2 0 1 1 4 0 2 2 0 1 1-4 0z"></path>
-                    <path d="M13 6H7a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h.5"></path>
-                    <path d="M16 6h.3c.3 0 .5.1.7.3L20 10"></path>
-                  </svg>
-                </div>
-                <h3 className="text-lg font-medium">No EF_SMS Data Parsed Yet</h3>
-                <p className="text-muted-foreground">Enter EF_SMS data and click "Parse" to analyze it.</p>
+                )}
               </div>
             )}
-          </CardContent>
-        </Card>
-      </div>
-    </div>
+          </TabsContent>
+        </Tabs>
+      </CardContent>
+    </Card>
   );
 }
