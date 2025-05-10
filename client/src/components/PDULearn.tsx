@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 // Learning content sections
-type LearnSection = "overview" | "pdu-formats" | "encodings" | "fields" | "multipart";
+type LearnSection = "overview" | "pdu-formats" | "encodings" | "fields" | "multipart" | "sat" | "smpp" | "sms-flow";
 
 export default function PDULearn() {
   const [section, setSection] = useState<LearnSection>("overview");
@@ -13,7 +13,7 @@ export default function PDULearn() {
   return (
     <Card>
       <CardContent className="pt-6">
-        <h2 className="text-lg font-medium mb-4">3GPP 23.040 SMS Specification Guide</h2>
+        <h2 className="text-lg font-medium mb-4">SMS Protocol & Specification Guide</h2>
         
         <div className="flex flex-wrap gap-2 mb-4">
           <Button 
@@ -50,6 +50,27 @@ export default function PDULearn() {
             onClick={() => setSection("multipart")}
           >
             Multipart SMS
+          </Button>
+          <Button 
+            variant={section === "sat" ? "default" : "outline"}
+            size="sm"
+            onClick={() => setSection("sat")}
+          >
+            SIM Toolkit
+          </Button>
+          <Button 
+            variant={section === "smpp" ? "default" : "outline"}
+            size="sm"
+            onClick={() => setSection("smpp")}
+          >
+            SMPP Protocol
+          </Button>
+          <Button 
+            variant={section === "sms-flow" ? "default" : "outline"}
+            size="sm"
+            onClick={() => setSection("sms-flow")}
+          >
+            SMS Flow
           </Button>
         </div>
         
@@ -490,6 +511,366 @@ export default function PDULearn() {
               <p>
                 Most modern phones handle this automatically, so users see only the complete message.
               </p>
+            </>
+          )}
+
+          {section === "sat" && (
+            <>
+              <h3>SIM Application Toolkit (SAT)</h3>
+              <p>
+                The SIM Application Toolkit is a standard of the GSM system which enables the SIM card to initiate actions 
+                which can be used for various value-added services and applications. It's defined in the GSM 11.14 and later 
+                in the 3GPP TS 51.014 specifications.
+              </p>
+              
+              <h4>SAT Basics</h4>
+              <p>
+                SAT allows the SIM card to:
+              </p>
+              <ul>
+                <li>Display text and menus on the phone screen</li>
+                <li>Initiate calls, send SMS or USSD messages</li>
+                <li>Provide information to the phone</li>
+                <li>Set up event notifications</li>
+                <li>Request user input</li>
+              </ul>
+              
+              <div className="bg-muted/50 p-4 rounded-md border mb-4">
+                <h4 className="mt-0">Common SAT Commands</h4>
+                <ul className="mt-2 mb-0">
+                  <li><strong>DISPLAY TEXT</strong>: Shows text on the phone's display</li>
+                  <li><strong>GET INPUT</strong>: Requests text input from the user</li>
+                  <li><strong>SELECT ITEM</strong>: Presents a menu for the user to select options</li>
+                  <li><strong>SETUP MENU</strong>: Creates a menu that becomes part of the phone's menu system</li>
+                  <li><strong>SEND SMS</strong>: Instructs the phone to send an SMS</li>
+                  <li><strong>SETUP CALL</strong>: Initiates a voice call</li>
+                  <li><strong>REFRESH</strong>: Updates the SIM data on the phone</li>
+                </ul>
+              </div>
+              
+              <h4>Proactive SIM Command Format</h4>
+              <p>
+                SAT commands follow a TLV (Tag-Length-Value) structure:
+              </p>
+              
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Field</TableHead>
+                    <TableHead>Size (bytes)</TableHead>
+                    <TableHead>Description</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  <TableRow>
+                    <TableCell>Proactive SIM Command Tag</TableCell>
+                    <TableCell>1</TableCell>
+                    <TableCell>Always 0xD0 to indicate a proactive command</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Length</TableCell>
+                    <TableCell>1-3</TableCell>
+                    <TableCell>Length of all subsequent data</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Command Details TLV</TableCell>
+                    <TableCell>3-5</TableCell>
+                    <TableCell>Tag (0x01), Length (3), and command details (command number, type, qualifier)</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Device Identities TLV</TableCell>
+                    <TableCell>4</TableCell>
+                    <TableCell>Tag (0x02), Length (2), Source and Destination device identities</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Command-specific TLVs</TableCell>
+                    <TableCell>Variable</TableCell>
+                    <TableCell>Additional TLVs specific to the command type</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+              
+              <h4>Common Command-specific TLVs</h4>
+              <ul>
+                <li><strong>Text String (0x0D)</strong>: Text to be displayed or used</li>
+                <li><strong>Alpha Identifier (0x05)</strong>: Text label for menus and commands</li>
+                <li><strong>Item (0x0F)</strong>: Menu item for selection menus</li>
+                <li><strong>Item Identifier (0x10)</strong>: Identifier for an item</li>
+                <li><strong>SMS TPDU (0x8B)</strong>: SMS message to be sent</li>
+                <li><strong>Address (0x06)</strong>: Phone number (in the same format as SMS PDUs)</li>
+              </ul>
+              
+              <h4>Example: DISPLAY TEXT command</h4>
+              <p>
+                A typical DISPLAY TEXT command would have this structure:
+              </p>
+              <pre><code>D0 ## 
+01 03 21 ## ## (Command Details)
+02 02 81 82    (Device Identities: SIM to Terminal)
+0D ## 04 Text  (Text String with DCS=0x04 for 8-bit text)
+</code></pre>
+              
+              <h4>Applications of SAT</h4>
+              <p>
+                SAT enables numerous applications on mobile phones, especially in emerging markets:
+              </p>
+              <ul>
+                <li>Mobile banking and payment services</li>
+                <li>Information services (weather, news, etc.)</li>
+                <li>Prepaid account management</li>
+                <li>Value-added services like call forwarding configuration</li>
+                <li>Location-based services</li>
+              </ul>
+            </>
+          )}
+
+          {section === "smpp" && (
+            <>
+              <h3>Short Message Peer-to-Peer (SMPP) Protocol</h3>
+              <p>
+                SMPP is an open, industry standard protocol designed for exchanging SMS messages between 
+                Short Message Service Centers (SMSCs) and External Short Message Entities (ESMEs) such as
+                SMS gateways, SMS applications, or other SMSCs.
+              </p>
+              
+              <h4>SMPP Basics</h4>
+              <p>
+                SMPP is a binary protocol that operates at the application layer. It's typically used over TCP/IP 
+                connections and provides features for:
+              </p>
+              <ul>
+                <li>Submitting messages to an SMSC for delivery</li>
+                <li>Delivering messages from an SMSC to an application</li>
+                <li>Querying message status</li>
+                <li>Canceling or replacing messages</li>
+                <li>Managing the connection between an ESME and an SMSC</li>
+              </ul>
+              
+              <div className="bg-muted/50 p-4 rounded-md border mb-4">
+                <h4 className="mt-0">Key SMPP Operations</h4>
+                <ul className="mt-2 mb-0">
+                  <li><strong>bind_transmitter</strong>: Establish a connection for sending messages</li>
+                  <li><strong>bind_receiver</strong>: Establish a connection for receiving messages</li>
+                  <li><strong>bind_transceiver</strong>: Establish a bidirectional connection</li>
+                  <li><strong>submit_sm</strong>: Submit a message for delivery</li>
+                  <li><strong>deliver_sm</strong>: Deliver a message to an ESME</li>
+                  <li><strong>query_sm</strong>: Query the status of a message</li>
+                  <li><strong>cancel_sm</strong>: Cancel a previously submitted message</li>
+                  <li><strong>replace_sm</strong>: Replace a previously submitted message</li>
+                  <li><strong>unbind</strong>: Terminate the connection</li>
+                </ul>
+              </div>
+              
+              <h4>SMPP PDU Format</h4>
+              <p>
+                All SMPP operations use a standard PDU format:
+              </p>
+              
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Field</TableHead>
+                    <TableHead>Size (bytes)</TableHead>
+                    <TableHead>Description</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  <TableRow>
+                    <TableCell>Command Length</TableCell>
+                    <TableCell>4</TableCell>
+                    <TableCell>Total length of the PDU in bytes (including this field)</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Command ID</TableCell>
+                    <TableCell>4</TableCell>
+                    <TableCell>Identifies the SMPP operation</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Command Status</TableCell>
+                    <TableCell>4</TableCell>
+                    <TableCell>Indicates success/failure in responses (0 = success)</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Sequence Number</TableCell>
+                    <TableCell>4</TableCell>
+                    <TableCell>Used to correlate requests and responses</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Command Body</TableCell>
+                    <TableCell>Variable</TableCell>
+                    <TableCell>Command-specific parameters</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+              
+              <h4>Example: submit_sm PDU</h4>
+              <p>
+                A <code>submit_sm</code> PDU is used to submit a message to an SMSC. Its body contains:
+              </p>
+              <ul>
+                <li><strong>service_type</strong>: Type of service (e.g., "CMT" for cellular messaging)</li>
+                <li><strong>source_addr_ton, source_addr_npi</strong>: Type of number and numbering plan for source address</li>
+                <li><strong>source_addr</strong>: Source address (usually a phone number)</li>
+                <li><strong>dest_addr_ton, dest_addr_npi</strong>: Type of number and numbering plan for destination address</li>
+                <li><strong>destination_addr</strong>: Destination address (usually a phone number)</li>
+                <li><strong>esm_class</strong>: Message mode and type</li>
+                <li><strong>protocol_id</strong>: Protocol identifier</li>
+                <li><strong>priority_flag</strong>: Priority level of the message</li>
+                <li><strong>schedule_delivery_time</strong>: When to deliver the message</li>
+                <li><strong>validity_period</strong>: How long the message is valid</li>
+                <li><strong>registered_delivery</strong>: Whether a delivery receipt is requested</li>
+                <li><strong>replace_if_present_flag</strong>: Whether to replace an existing message</li>
+                <li><strong>data_coding</strong>: Encoding scheme</li>
+                <li><strong>sm_default_msg_id</strong>: Default message ID</li>
+                <li><strong>sm_length</strong>: Length of the short message</li>
+                <li><strong>short_message</strong>: The actual message content</li>
+              </ul>
+              
+              <h4>SMPP Versions</h4>
+              <p>
+                The most commonly used versions of SMPP are:
+              </p>
+              <ul>
+                <li><strong>SMPP v3.3</strong>: Introduced TLV (Tag-Length-Value) parameters</li>
+                <li><strong>SMPP v3.4</strong>: The most widely deployed version with additional features</li>
+                <li><strong>SMPP v5.0</strong>: Added broadcast messaging capabilities</li>
+              </ul>
+              
+              <h4>TLV Parameters</h4>
+              <p>
+                SMPP v3.3 and later allows optional parameters in a TLV format:
+              </p>
+              <ul>
+                <li><strong>Tag</strong>: 2-byte identifier</li>
+                <li><strong>Length</strong>: 2-byte length of the value</li>
+                <li><strong>Value</strong>: Parameter value of specified length</li>
+              </ul>
+              <p>
+                Common TLVs include message_payload (for longer messages), receipted_message_id (in delivery receipts), and sar_* parameters (for multipart messages).
+              </p>
+              
+              <h4>SMPP in the Messaging Ecosystem</h4>
+              <p>
+                SMPP is widely used in the telecommunication industry for integrating with SMS services:
+              </p>
+              <ul>
+                <li>Enterprises use SMPP to send notifications, alerts, and marketing messages</li>
+                <li>Messaging aggregators connect to multiple operators via SMPP</li>
+                <li>Mobile network operators use SMPP to interconnect their messaging infrastructure</li>
+                <li>Application-to-Person (A2P) messaging services typically use SMPP</li>
+              </ul>
+            </>
+          )}
+
+          {section === "sms-flow" && (
+            <>
+              <h3>SMS Flow: From SIM to Recipient</h3>
+              <p>
+                The journey of an SMS message involves multiple components and protocols. Here's a comprehensive 
+                overview of how a message travels from the sender's SIM card to the recipient's device.
+              </p>
+              
+              <h4>SMS Message Journey</h4>
+              
+              <div className="bg-muted/50 p-4 rounded-md border mb-4">
+                <h5 className="mt-0">1. Message Creation and SIM Card</h5>
+                <p className="mb-1">
+                  The process begins when a user composes a message on their mobile phone:
+                </p>
+                <ul className="mb-0">
+                  <li>The mobile device's operating system handles the user interface</li>
+                  <li>The SIM card may be involved if applications on the SIM (via SIM Application Toolkit) initiate the message</li>
+                  <li>The device prepares the message for transmission, applying the appropriate character encoding</li>
+                </ul>
+              </div>
+              
+              <div className="bg-muted/50 p-4 rounded-md border mb-4">
+                <h5 className="mt-0">2. Mobile Station to Network</h5>
+                <p className="mb-1">
+                  The mobile station (MS) formats the message as an SMS-SUBMIT PDU according to 3GPP 23.040:
+                </p>
+                <ul className="mb-0">
+                  <li>The MS encapsulates the SMS PDU within lower-level protocols</li>
+                  <li>The message is sent over the air interface to the base station using control channels</li>
+                  <li>For GSM, the message uses the Cell Broadcast Control Channel (CBCH) or Stand-alone Dedicated Control Channel (SDCCH)</li>
+                </ul>
+              </div>
+              
+              <div className="bg-muted/50 p-4 rounded-md border mb-4">
+                <h5 className="mt-0">3. Mobile Switching Center</h5>
+                <p className="mb-1">
+                  The Base Station forwards the message to the Mobile Switching Center (MSC):
+                </p>
+                <ul className="mb-0">
+                  <li>The MSC identifies that it's an SMS message</li>
+                  <li>The MSC forwards the message to the SMS Center (SMSC) using protocols like SS7 MAP (Mobile Application Part)</li>
+                </ul>
+              </div>
+              
+              <div className="bg-muted/50 p-4 rounded-md border mb-4">
+                <h5 className="mt-0">4. SMS Center (SMSC) Processing</h5>
+                <p className="mb-1">
+                  The SMSC is responsible for handling the message:
+                </p>
+                <ul className="mb-0">
+                  <li>The SMSC receives the SMS-SUBMIT PDU from the MSC</li>
+                  <li>The SMSC validates the message, checks routing, and prepares for delivery</li>
+                  <li>The SMSC may interact with other systems using SMPP (Short Message Peer-to-Peer) protocol</li>
+                  <li>The SMSC stores the message if it cannot be delivered immediately (store-and-forward)</li>
+                  <li>For delivery, the SMSC transforms the SMS-SUBMIT PDU into an SMS-DELIVER PDU</li>
+                </ul>
+              </div>
+              
+              <div className="bg-muted/50 p-4 rounded-md border mb-4">
+                <h5 className="mt-0">5. Delivery to Recipient</h5>
+                <p className="mb-1">
+                  To deliver the message, the SMSC follows these steps:
+                </p>
+                <ul className="mb-0">
+                  <li>The SMSC queries the Home Location Register (HLR) to determine the recipient's location</li>
+                  <li>The SMSC forwards the SMS-DELIVER PDU to the appropriate MSC serving the recipient</li>
+                  <li>The MSC sends a paging request to locate the recipient's mobile device</li>
+                  <li>Once the device responds, the MSC sends the SMS-DELIVER PDU to the base station</li>
+                  <li>The base station transmits the message to the recipient's mobile device</li>
+                </ul>
+              </div>
+              
+              <div className="bg-muted/50 p-4 rounded-md border mb-4">
+                <h5 className="mt-0">6. Recipient Mobile Device Processing</h5>
+                <p className="mb-1">
+                  When the message reaches the recipient's device:
+                </p>
+                <ul className="mb-0">
+                  <li>The device's baseband processor receives the SMS-DELIVER PDU</li>
+                  <li>The SMS stack in the device's software processes the PDU</li>
+                  <li>If it's a multi-part message, the device stores and waits for all parts</li>
+                  <li>The device decodes the message using the specified character encoding</li>
+                  <li>The device displays the message to the user or processes it programmatically</li>
+                  <li>The device may store the message on the SIM card or in its internal memory</li>
+                </ul>
+              </div>
+              
+              <h4>Protocol Stack in SMS Transmission</h4>
+              <p>
+                SMS uses a complex stack of protocols at different stages:
+              </p>
+              <ol>
+                <li><strong>Application Layer</strong>: SMS PDU formats (3GPP 23.040)</li>
+                <li><strong>Transport Layer</strong>: SMS Transport Protocol (SMS-TP)</li>
+                <li><strong>Relay Layer</strong>: SMS Relay Protocol (SMS-RP)</li>
+                <li><strong>Connection Layer</strong>: Connection Management (CM) sublayer</li>
+                <li><strong>Network Layer</strong>: Mobile Application Part (MAP) for inter-network communication</li>
+                <li><strong>External Systems</strong>: SMPP for communication with external entities</li>
+              </ol>
+              
+              <h4>Advanced Features in the SMS Flow</h4>
+              <ul>
+                <li><strong>Status Reports</strong>: Optional delivery receipts that follow the same path in reverse</li>
+                <li><strong>Flash SMS</strong>: Messages that appear directly on the screen without being stored</li>
+                <li><strong>Class 0-3 Messages</strong>: Different storage behaviors based on message class</li>
+                <li><strong>SIM Toolkit Interactions</strong>: Messages that trigger or are triggered by SIM applications</li>
+                <li><strong>SMS Gateways</strong>: Interfaces between SMS networks and other communication systems (email, internet apps)</li>
+              </ul>
             </>
           )}
         </div>
