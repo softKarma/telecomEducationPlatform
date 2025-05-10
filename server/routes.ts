@@ -1,10 +1,11 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { pduSchema, encodePduSchema, satSchema, smppSchema } from "@shared/schema";
+import { pduSchema, encodePduSchema, satSchema, smppSchema, efSmsSchema } from "@shared/schema";
 import { parse7BitCharacters, parseUCS2Characters, parsePDU, encodePDU } from "../client/src/lib/pduUtils";
 import { parseSAT } from "../client/src/lib/satUtils";
 import { parseSMPP } from "../client/src/lib/smppUtils";
+import { parseEFSMS } from "../client/src/lib/efSmsUtils";
 import { ZodError } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -103,6 +104,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       return res.status(400).json({ 
         message: error instanceof Error ? error.message : "Failed to parse SMPP PDU" 
+      });
+    }
+  });
+  
+  // Parse EF_SMS (SIM card SMS storage format)
+  app.post("/api/parse-efsms", async (req, res) => {
+    try {
+      const { hexData, recordNum } = efSmsSchema.parse(req.body);
+      
+      const parsedEFSMS = parseEFSMS(hexData, recordNum || 1);
+      
+      return res.json(parsedEFSMS);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return res.status(400).json({ 
+          message: "Validation error", 
+          errors: error.errors 
+        });
+      }
+      
+      return res.status(400).json({ 
+        message: error instanceof Error ? error.message : "Failed to parse EF_SMS data" 
       });
     }
   });

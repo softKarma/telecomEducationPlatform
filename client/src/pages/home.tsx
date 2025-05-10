@@ -4,8 +4,9 @@ import PDUEncoder from "@/components/PDUEncoder";
 import PDULearn from "@/components/PDULearn";
 import SATParser from "@/components/SATParser";
 import SMPPParser from "@/components/SMPPParser";
+import EFSMSParser from "@/components/EFSMSParser";
 
-type TabType = "parser" | "encoder" | "learn" | "sat" | "smpp";
+type TabType = "parser" | "encoder" | "learn" | "sat" | "smpp" | "efsms";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<TabType>("parser");

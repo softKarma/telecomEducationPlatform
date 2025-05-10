@@ -63,6 +63,12 @@ export const smppSchema = z.object({
   ]).default("submit_sm")
 });
 
+// EF_SMS (Elementary File SMS) schema
+export const efSmsSchema = z.object({
+  hexData: z.string().min(2, "EF_SMS hexadecimal data is required"),
+  recordNum: z.number().min(1).optional()
+});
+
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 
@@ -70,6 +76,7 @@ export type PDUParseRequest = z.infer<typeof pduSchema>;
 export type PDUEncodeRequest = z.infer<typeof encodePduSchema>;
 export type SATParseRequest = z.infer<typeof satSchema>;
 export type SMPPParseRequest = z.infer<typeof smppSchema>;
+export type EFSMSParseRequest = z.infer<typeof efSmsSchema>;
 
 // PDU parse result interfaces
 export interface PDUField {
@@ -159,6 +166,29 @@ export interface SMPPParseResult {
   sourceAddr?: string;
   destAddr?: string;
   servicetype?: string;
+  properties: PDUField[];
+  structureBreakdown: {
+    bytes: string[];
+    descriptions: string[];
+    colors: string[];
+    tooltips: string[];
+  };
+}
+
+// EF_SMS Storage interfaces
+export interface EFSMSHeader {
+  status: string;
+  statusDescription: string;
+  messageType: string;
+  recordNumber: number;
+  recordSize: number;
+  smsType: string;
+}
+
+export interface EFSMSParseResult {
+  header: EFSMSHeader;
+  pdu?: PDUParseResult;
+  message?: string;
   properties: PDUField[];
   structureBreakdown: {
     bytes: string[];
