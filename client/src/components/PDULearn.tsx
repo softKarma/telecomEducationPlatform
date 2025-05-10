@@ -778,149 +778,185 @@ export default function PDULearn() {
               </p>
               
               {/* SMS Flow Diagram */}
-              <div className="my-6 bg-background p-4 rounded-md border shadow-sm overflow-x-auto">
-                <h4 className="text-center mb-4">SMS Message Flow Diagram</h4>
+              <div className="my-6 bg-background p-6 rounded-md border shadow-sm overflow-x-auto">
+                <h4 className="text-center mb-5 text-xl font-bold">SMS Message Flow Diagram</h4>
                 <div className="min-w-[800px] flex justify-center">
-                  <svg width="800" height="500" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
-                    {/* Background Grid */}
-                    <pattern id="smallGrid" width="10" height="10" patternUnits="userSpaceOnUse">
-                      <path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(200, 200, 200, 0.2)" strokeWidth="0.5" />
-                    </pattern>
+                  <svg width="800" height="550" viewBox="0 0 800 550" xmlns="http://www.w3.org/2000/svg">
+                    {/* Background Style */}
+                    <defs>
+                      <pattern id="smallGrid" width="20" height="20" patternUnits="userSpaceOnUse">
+                        <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(180, 180, 180, 0.15)" strokeWidth="0.5" />
+                      </pattern>
+                      <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                        <feGaussianBlur stdDeviation="2" result="blur" />
+                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                      </filter>
+                      <linearGradient id="phoneGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#4b5563" />
+                        <stop offset="100%" stopColor="#1f2937" />
+                      </linearGradient>
+                      <linearGradient id="mscGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#6d28d9" />
+                        <stop offset="100%" stopColor="#4c1d95" />
+                      </linearGradient>
+                      <linearGradient id="smscGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#059669" />
+                        <stop offset="100%" stopColor="#065f46" />
+                      </linearGradient>
+                      <linearGradient id="hlrGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#2563eb" />
+                        <stop offset="100%" stopColor="#1e40af" />
+                      </linearGradient>
+                    </defs>
+                    <rect width="100%" height="100%" fill="#111827" />
                     <rect width="100%" height="100%" fill="url(#smallGrid)" />
+                    
+                    {/* Title and Subtitle */}
+                    <text x="400" y="30" textAnchor="middle" fill="#f9fafb" fontWeight="bold" fontSize="16" filter="url(#glow)">
+                      3GPP SMS Message Flow
+                    </text>
+                    <text x="400" y="50" textAnchor="middle" fill="#d1d5db" fontSize="12">
+                      Telecommunication Network Protocol Visualization
+                    </text>
                     
                     {/* Network Entities */}
                     {/* Mobile Phone - Sender */}
-                    <g transform="translate(50, 100)">
-                      <rect x="0" y="0" width="60" height="100" rx="10" fill="#374151" stroke="#9ca3af" strokeWidth="2" />
-                      <rect x="5" y="10" width="50" height="70" rx="5" fill="#1e293b" stroke="#9ca3af" strokeWidth="1" />
-                      <circle cx="30" cy="90" r="8" fill="#9ca3af" />
-                      <text x="30" y="130" textAnchor="middle" fill="#e5e7eb" fontWeight="bold">Sender</text>
+                    <g transform="translate(50, 110)">
+                      <rect x="0" y="0" width="70" height="110" rx="12" fill="url(#phoneGradient)" stroke="#d1d5db" strokeWidth="1.5" />
+                      <rect x="5" y="10" width="60" height="75" rx="5" fill="#111827" stroke="#d1d5db" strokeWidth="1" />
+                      <circle cx="35" cy="98" r="8" fill="#f9fafb" />
+                      <text x="35" y="138" textAnchor="middle" fill="#f9fafb" fontWeight="bold" fontSize="14">Sender MS</text>
+                      <text x="35" y="155" textAnchor="middle" fill="#d1d5db" fontSize="10">(Mobile Station)</text>
                       {/* Line down for message flow */}
-                      <line x1="30" y1="150" x2="30" y2="350" stroke="#9ca3af" strokeWidth="2" strokeDasharray="5,5" />
+                      <line x1="35" y1="170" x2="35" y2="400" stroke="#6b7280" strokeWidth="1.5" strokeDasharray="6,3" />
                     </g>
                     
                     {/* BTS (Base Transceiver Station) */}
-                    <g transform="translate(150, 50)">
-                      <polygon points="0,100 50,0 100,100" fill="#374151" stroke="#9ca3af" strokeWidth="2" />
-                      <rect x="40" y="100" width="20" height="60" fill="#374151" stroke="#9ca3af" strokeWidth="2" />
-                      <text x="50" y="190" textAnchor="middle" fill="#e5e7eb" fontWeight="bold">BTS</text>
+                    <g transform="translate(160, 100)">
+                      <polygon points="0,85 50,0 100,85" fill="#374151" stroke="#d1d5db" strokeWidth="1.5" />
+                      <rect x="40" y="85" width="20" height="65" fill="#374151" stroke="#d1d5db" strokeWidth="1.5" />
+                      <text x="50" y="170" textAnchor="middle" fill="#f9fafb" fontWeight="bold" fontSize="14">BTS</text>
+                      <text x="50" y="187" textAnchor="middle" fill="#d1d5db" fontSize="10">(Base Station)</text>
                       {/* Line down for message flow */}
-                      <line x1="50" y1="200" x2="50" y2="350" stroke="#9ca3af" strokeWidth="2" strokeDasharray="5,5" />
+                      <line x1="50" y1="200" x2="50" y2="400" stroke="#6b7280" strokeWidth="1.5" strokeDasharray="6,3" />
                     </g>
                     
                     {/* MSC (Mobile Switching Center) */}
-                    <g transform="translate(280, 80)">
-                      <rect x="0" y="0" width="120" height="90" rx="5" fill="#4c1d95" stroke="#9ca3af" strokeWidth="2" />
-                      <text x="60" y="50" textAnchor="middle" fill="#e5e7eb" fontWeight="bold">MSC</text>
-                      <text x="60" y="120" textAnchor="middle" fill="#e5e7eb" fontWeight="bold">Mobile Switching Center</text>
+                    <g transform="translate(290, 100)">
+                      <rect x="0" y="0" width="130" height="90" rx="8" fill="url(#mscGradient)" stroke="#d1d5db" strokeWidth="1.5" />
+                      <text x="65" y="50" textAnchor="middle" fill="#f9fafb" fontWeight="bold" fontSize="16">MSC</text>
+                      <text x="65" y="115" textAnchor="middle" fill="#f9fafb" fontWeight="bold" fontSize="14">Mobile Switching Center</text>
                       {/* Line down for message flow */}
-                      <line x1="60" y1="150" x2="60" y2="350" stroke="#9ca3af" strokeWidth="2" strokeDasharray="5,5" />
+                      <line x1="65" y1="130" x2="65" y2="400" stroke="#6b7280" strokeWidth="1.5" strokeDasharray="6,3" />
                     </g>
                     
                     {/* SMSC (SMS Center) */}
-                    <g transform="translate(450, 50)">
-                      <rect x="0" y="0" width="120" height="120" rx="10" fill="#065f46" stroke="#9ca3af" strokeWidth="2" />
-                      <text x="60" y="65" textAnchor="middle" fill="#e5e7eb" fontWeight="bold">SMSC</text>
-                      <text x="60" y="150" textAnchor="middle" fill="#e5e7eb" fontWeight="bold">SMS Center</text>
+                    <g transform="translate(450, 80)">
+                      <rect x="0" y="0" width="130" height="120" rx="10" fill="url(#smscGradient)" stroke="#d1d5db" strokeWidth="1.5" />
+                      <text x="65" y="65" textAnchor="middle" fill="#f9fafb" fontWeight="bold" fontSize="16">SMSC</text>
+                      <text x="65" y="145" textAnchor="middle" fill="#f9fafb" fontWeight="bold" fontSize="14">SMS Center</text>
                       {/* Line down for message flow */}
-                      <line x1="60" y1="180" x2="60" y2="350" stroke="#9ca3af" strokeWidth="2" strokeDasharray="5,5" />
+                      <line x1="65" y1="170" x2="65" y2="400" stroke="#6b7280" strokeWidth="1.5" strokeDasharray="6,3" />
                     </g>
                     
                     {/* HLR (Home Location Register) */}
-                    <g transform="translate(620, 80)">
-                      <rect x="0" y="0" width="80" height="80" rx="5" fill="#1e40af" stroke="#9ca3af" strokeWidth="2" />
-                      <circle cx="40" cy="40" r="25" fill="#1e293b" stroke="#9ca3af" strokeWidth="1" />
-                      <text x="40" y="45" textAnchor="middle" fill="#e5e7eb" fontWeight="bold">HLR</text>
-                      <text x="40" y="120" textAnchor="middle" fill="#e5e7eb" fontWeight="bold">Home Location Register</text>
+                    <g transform="translate(620, 90)">
+                      <rect x="0" y="0" width="90" height="90" rx="8" fill="url(#hlrGradient)" stroke="#d1d5db" strokeWidth="1.5" />
+                      <circle cx="45" cy="45" r="30" fill="#111827" stroke="#d1d5db" strokeWidth="1" />
+                      <text x="45" y="50" textAnchor="middle" fill="#f9fafb" fontWeight="bold" fontSize="16">HLR</text>
+                      <text x="45" y="110" textAnchor="middle" fill="#f9fafb" fontWeight="bold" fontSize="14">Home Location Register</text>
                     </g>
                     
                     {/* Mobile Phone - Receiver */}
-                    <g transform="translate(730, 100)">
-                      <rect x="0" y="0" width="60" height="100" rx="10" fill="#374151" stroke="#9ca3af" strokeWidth="2" />
-                      <rect x="5" y="10" width="50" height="70" rx="5" fill="#1e293b" stroke="#9ca3af" strokeWidth="1" />
-                      <circle cx="30" cy="90" r="8" fill="#9ca3af" />
-                      <text x="30" y="130" textAnchor="middle" fill="#e5e7eb" fontWeight="bold">Receiver</text>
+                    <g transform="translate(720, 110)">
+                      <rect x="0" y="0" width="70" height="110" rx="12" fill="url(#phoneGradient)" stroke="#d1d5db" strokeWidth="1.5" />
+                      <rect x="5" y="10" width="60" height="75" rx="5" fill="#111827" stroke="#d1d5db" strokeWidth="1" />
+                      <circle cx="35" cy="98" r="8" fill="#f9fafb" />
+                      <text x="35" y="138" textAnchor="middle" fill="#f9fafb" fontWeight="bold" fontSize="14">Receiver MS</text>
+                      <text x="35" y="155" textAnchor="middle" fill="#d1d5db" fontSize="10">(Mobile Station)</text>
                       {/* Line down for message flow */}
-                      <line x1="30" y1="150" x2="30" y2="350" stroke="#9ca3af" strokeWidth="2" strokeDasharray="5,5" />
+                      <line x1="35" y1="170" x2="35" y2="400" stroke="#6b7280" strokeWidth="1.5" strokeDasharray="6,3" />
                     </g>
                     
                     {/* Flow Timeline */}
-                    <line x1="30" y1="350" x2="750" y2="350" stroke="#9ca3af" strokeWidth="2" />
-                    <text x="400" y="370" textAnchor="middle" fill="#e5e7eb" fontWeight="bold">Time →</text>
+                    <line x1="35" y1="400" x2="755" y2="400" stroke="#d1d5db" strokeWidth="2" />
+                    <text x="395" y="420" textAnchor="middle" fill="#f9fafb" fontWeight="bold" fontSize="14">Timeline</text>
+                    <text x="760" y="400" textAnchor="start" fill="#f9fafb" fontWeight="bold" fontSize="16">→</text>
                     
                     {/* Message Flow Arrows - Mobile Originated */}
                     {/* 1. SMS-SUBMIT from Phone to BTS */}
                     <g>
-                      <line x1="80" y1="220" x2="145" y2="220" stroke="#16a34a" strokeWidth="3" />
-                      <polygon points="145,220 135,215 135,225" fill="#16a34a" />
-                      <text x="110" y="210" textAnchor="middle" fill="#e5e7eb" fontSize="12">SMS-SUBMIT</text>
+                      <line x1="85" y1="240" x2="205" y2="240" stroke="#22c55e" strokeWidth="3" />
+                      <polygon points="205,240 190,233 190,247" fill="#22c55e" />
+                      <rect x="120" y="220" width="60" height="18" rx="4" fill="#111827" stroke="#22c55e" strokeWidth="1" />
+                      <text x="150" y="233" textAnchor="middle" fill="#ffffff" fontWeight="bold" fontSize="11">SMS-SUBMIT</text>
                     </g>
                     
                     {/* 2. BTS to MSC */}
                     <g>
-                      <line x1="200" y1="230" x2="275" y2="230" stroke="#16a34a" strokeWidth="3" />
-                      <polygon points="275,230 265,225 265,235" fill="#16a34a" />
+                      <line x1="212" y1="260" x2="350" y2="260" stroke="#22c55e" strokeWidth="3" />
+                      <polygon points="350,260 335,253 335,267" fill="#22c55e" />
                     </g>
                     
                     {/* 3. MSC to SMSC */}
                     <g>
-                      <line x1="340" y1="240" x2="445" y2="240" stroke="#16a34a" strokeWidth="3" />
-                      <polygon points="445,240 435,235 435,245" fill="#16a34a" />
+                      <line x1="357" y1="275" x2="513" y2="275" stroke="#22c55e" strokeWidth="3" />
+                      <polygon points="513,275 498,268 498,282" fill="#22c55e" />
                     </g>
                     
                     {/* 4. SMSC to HLR Query */}
                     <g>
-                      <line x1="510" y1="210" x2="615" y2="210" stroke="#0891b2" strokeWidth="3" strokeDasharray="5,3" />
-                      <polygon points="615,210 605,205 605,215" fill="#0891b2" />
-                      <text x="565" y="200" textAnchor="middle" fill="#e5e7eb" fontSize="12">Routing Info Query</text>
+                      <line x1="515" y1="225" x2="664" y2="225" stroke="#06b6d4" strokeWidth="3" strokeDasharray="8,4" />
+                      <polygon points="664,225 649,218 649,232" fill="#06b6d4" />
+                      <rect x="545" y="205" width="90" height="18" rx="4" fill="#111827" stroke="#06b6d4" strokeWidth="1" />
+                      <text x="590" y="218" textAnchor="middle" fill="#ffffff" fontWeight="bold" fontSize="11">Routing Query</text>
                     </g>
                     
                     {/* 5. HLR to SMSC Response */}
                     <g>
-                      <line x1="615" y1="225" x2="510" y2="225" stroke="#0891b2" strokeWidth="3" strokeDasharray="5,3" />
-                      <polygon points="510,225 520,220 520,230" fill="#0891b2" />
+                      <line x1="664" y1="245" x2="515" y2="245" stroke="#06b6d4" strokeWidth="3" strokeDasharray="8,4" />
+                      <polygon points="515,245 530,238 530,252" fill="#06b6d4" />
+                      <rect x="555" y="247" width="70" height="18" rx="4" fill="#111827" stroke="#06b6d4" strokeWidth="1" />
+                      <text x="590" y="260" textAnchor="middle" fill="#ffffff" fontWeight="bold" fontSize="11">Response</text>
                     </g>
                     
                     {/* Message Flow Arrows - Mobile Terminated */}
-                    {/* 6. SMSC to MSC (for delivery) */}
+                    {/* 6. SMSC to Receiver's MSC */}
                     <g>
-                      <line x1="510" y1="260" x2="655" y2="260" stroke="#dc2626" strokeWidth="3" />
-                      <polygon points="655,260 645,255 645,265" fill="#dc2626" />
-                      <text x="580" y="250" textAnchor="middle" fill="#e5e7eb" fontSize="12">SMS-DELIVER</text>
+                      <line x1="515" y1="310" x2="720" y2="310" stroke="#ef4444" strokeWidth="3" />
+                      <polygon points="720,310 705,303 705,317" fill="#ef4444" />
+                      <rect x="580" y="290" width="75" height="18" rx="4" fill="#111827" stroke="#ef4444" strokeWidth="1" />
+                      <text x="617" y="303" textAnchor="middle" fill="#ffffff" fontWeight="bold" fontSize="11">SMS-DELIVER</text>
                     </g>
                     
-                    {/* 7. MSC to BTS (Receiver's) */}
+                    {/* 7. Acknowledgment */}
                     <g>
-                      <line x1="655" y1="270" x2="725" y2="270" stroke="#dc2626" strokeWidth="3" />
-                      <polygon points="725,270 715,265 715,275" fill="#dc2626" />
-                    </g>
-                    
-                    {/* 9. Delivery Report Path (if requested) */}
-                    <g>
-                      <line x1="725" y1="300" x2="510" y2="300" stroke="#a855f7" strokeWidth="2" strokeDasharray="5,3" />
-                      <polygon points="510,300 520,295 520,305" fill="#a855f7" />
-                      <text x="625" y="315" textAnchor="middle" fill="#e5e7eb" fontSize="12">Delivery Report (optional)</text>
+                      <line x1="720" y1="350" x2="515" y2="350" stroke="#a855f7" strokeWidth="3" strokeDasharray="8,4" />
+                      <polygon points="515,350 530,343 530,357" fill="#a855f7" />
+                      <rect x="570" y="330" width="95" height="18" rx="4" fill="#111827" stroke="#a855f7" strokeWidth="1" />
+                      <text x="617" y="343" textAnchor="middle" fill="#ffffff" fontWeight="bold" fontSize="11">Delivery Report</text>
                     </g>
                     
                     {/* Legend */}
-                    <g transform="translate(40, 400)">
-                      <text x="0" y="0" fill="#e5e7eb" fontWeight="bold">Legend:</text>
+                    <g transform="translate(60, 440)">
+                      <rect x="-20" y="-10" width="700" height="75" rx="8" fill="rgba(17, 24, 39, 0.7)" stroke="#6b7280" strokeWidth="1" />
+                      <text x="330" y="5" textAnchor="middle" fill="#f9fafb" fontWeight="bold" fontSize="14">Legend</text>
                       
-                      <rect x="0" y="10" width="20" height="10" fill="#16a34a" />
-                      <text x="30" y="20" fill="#e5e7eb" fontSize="12">SMS-SUBMIT Flow (Outgoing)</text>
+                      <rect x="10" y="20" width="24" height="12" rx="2" fill="#22c55e" />
+                      <text x="45" y="30" textAnchor="start" fill="#f9fafb" fontWeight="normal" fontSize="13">SMS-SUBMIT Flow (Mobile Originated)</text>
                       
-                      <rect x="200" y="10" width="20" height="10" fill="#dc2626" />
-                      <text x="230" y="20" fill="#e5e7eb" fontSize="12">SMS-DELIVER Flow (Incoming)</text>
+                      <rect x="10" y="45" width="24" height="12" rx="2" fill="#ef4444" />
+                      <text x="45" y="55" textAnchor="start" fill="#f9fafb" fontWeight="normal" fontSize="13">SMS-DELIVER Flow (Mobile Terminated)</text>
                       
-                      <rect x="400" y="10" width="20" height="10" fill="#0891b2" />
-                      <text x="430" y="20" fill="#e5e7eb" fontSize="12">Routing Queries</text>
+                      <rect x="320" y="20" width="24" height="12" rx="2" fill="#06b6d4" />
+                      <text x="355" y="30" textAnchor="start" fill="#f9fafb" fontWeight="normal" fontSize="13">Routing Information Queries</text>
                       
-                      <rect x="570" y="10" width="20" height="10" fill="#a855f7" />
-                      <text x="600" y="20" fill="#e5e7eb" fontSize="12">Delivery Reports</text>
+                      <rect x="320" y="45" width="24" height="12" rx="2" fill="#a855f7" />
+                      <text x="355" y="55" textAnchor="start" fill="#f9fafb" fontWeight="normal" fontSize="13">Delivery Reports (optional)</text>
                     </g>
                   </svg>
                 </div>
-                <p className="text-sm text-center text-muted-foreground mt-2">Visualization of SMS message flow between network entities</p>
+                <p className="text-sm text-center text-muted-foreground mt-4">Visualization of SMS message flow between network entities according to 3GPP specifications</p>
               </div>
               
               <h4>SMS Message Journey</h4>
