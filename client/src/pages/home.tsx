@@ -2,8 +2,10 @@ import { useState } from "react";
 import PDUParser from "@/components/PDUParser";
 import PDUEncoder from "@/components/PDUEncoder";
 import PDULearn from "@/components/PDULearn";
+import SATParser from "@/components/SATParser";
+import SMPPParser from "@/components/SMPPParser";
 
-type TabType = "parser" | "encoder" | "learn";
+type TabType = "parser" | "encoder" | "learn" | "sat" | "smpp";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<TabType>("parser");
@@ -50,11 +52,11 @@ export default function Home() {
       <main className="container mx-auto px-4 py-6">
         {/* Tab Navigation */}
         <div className="mb-6">
-          <div className="border-b border-border">
-            <ul className="flex flex-wrap -mb-px" id="tab-nav">
+          <div className="border-b border-border overflow-x-auto">
+            <ul className="flex flex-nowrap -mb-px" id="tab-nav">
               <li className="mr-2">
                 <button 
-                  className={`inline-block py-2 px-4 border-b-2 font-medium ${
+                  className={`inline-block py-2 px-4 border-b-2 font-medium whitespace-nowrap ${
                     activeTab === "parser" 
                       ? "text-primary border-primary" 
                       : "text-muted-foreground border-transparent hover:text-foreground hover:border-muted"
@@ -65,12 +67,12 @@ export default function Home() {
                     <polyline points="16 18 22 12 16 6"></polyline>
                     <polyline points="8 6 2 12 8 18"></polyline>
                   </svg>
-                  PDU Parser
+                  SMS PDU Parser
                 </button>
               </li>
               <li className="mr-2">
                 <button 
-                  className={`inline-block py-2 px-4 border-b-2 font-medium ${
+                  className={`inline-block py-2 px-4 border-b-2 font-medium whitespace-nowrap ${
                     activeTab === "encoder" 
                       ? "text-primary border-primary" 
                       : "text-muted-foreground border-transparent hover:text-foreground hover:border-muted"
@@ -81,12 +83,48 @@ export default function Home() {
                     <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                     <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                   </svg>
-                  PDU Encoder
+                  SMS PDU Encoder
                 </button>
               </li>
               <li className="mr-2">
                 <button 
-                  className={`inline-block py-2 px-4 border-b-2 font-medium ${
+                  className={`inline-block py-2 px-4 border-b-2 font-medium whitespace-nowrap ${
+                    activeTab === "sat" 
+                      ? "text-primary border-primary" 
+                      : "text-muted-foreground border-transparent hover:text-foreground hover:border-muted"
+                  }`}
+                  onClick={() => setActiveTab("sat")}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-block mr-1">
+                    <rect width="16" height="10" x="4" y="4" rx="2" />
+                    <rect width="4" height="2" x="10" y="14" />
+                    <rect width="8" height="2" x="8" y="16" />
+                    <path d="M17 18h1a4 4 0 0 1 0 8h-1" />
+                    <circle cx="5" cy="22" r="2" />
+                  </svg>
+                  SIM Application Toolkit
+                </button>
+              </li>
+              <li className="mr-2">
+                <button 
+                  className={`inline-block py-2 px-4 border-b-2 font-medium whitespace-nowrap ${
+                    activeTab === "smpp" 
+                      ? "text-primary border-primary" 
+                      : "text-muted-foreground border-transparent hover:text-foreground hover:border-muted"
+                  }`}
+                  onClick={() => setActiveTab("smpp")}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="inline-block mr-1">
+                    <path d="M4 11a9 9 0 0 1 9 9"></path>
+                    <path d="M4 4a16 16 0 0 1 16 16"></path>
+                    <circle cx="5" cy="19" r="2"></circle>
+                  </svg>
+                  SMPP Protocol
+                </button>
+              </li>
+              <li className="mr-2">
+                <button 
+                  className={`inline-block py-2 px-4 border-b-2 font-medium whitespace-nowrap ${
                     activeTab === "learn" 
                       ? "text-primary border-primary" 
                       : "text-muted-foreground border-transparent hover:text-foreground hover:border-muted"
@@ -97,7 +135,7 @@ export default function Home() {
                     <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
                     <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
                   </svg>
-                  Learn 3GPP 23.040
+                  Learn SMS Specifications
                 </button>
               </li>
             </ul>
@@ -107,6 +145,8 @@ export default function Home() {
         {/* Tab Content */}
         {activeTab === "parser" && <PDUParser />}
         {activeTab === "encoder" && <PDUEncoder />}
+        {activeTab === "sat" && <SATParser />}
+        {activeTab === "smpp" && <SMPPParser />}
         {activeTab === "learn" && <PDULearn />}
       </main>
 
@@ -114,7 +154,7 @@ export default function Home() {
         <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
           <p>SMS PDU Parser & Encoder based on 3GPP 23.040 Specification</p>
           <p className="mt-1">
-            This tool is for educational purposes to understand the SMS PDU format.
+            This tool is for educational purposes to understand SMS PDU formats and related protocols.
           </p>
         </div>
       </footer>

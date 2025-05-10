@@ -1,14 +1,16 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { pduSchema, encodePduSchema } from "@shared/schema";
+import { pduSchema, encodePduSchema, satSchema, smppSchema } from "@shared/schema";
 import { parse7BitCharacters, parseUCS2Characters, parsePDU, encodePDU } from "../client/src/lib/pduUtils";
+import { parseSAT } from "../client/src/lib/satUtils";
+import { parseSMPP } from "../client/src/lib/smppUtils";
 import { ZodError } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // prefix all routes with /api
   
-  // Parse PDU
+  // Parse SMS PDU
   app.post("/api/parse-pdu", async (req, res) => {
     try {
       const { pduString, pduType } = pduSchema.parse(req.body);
@@ -30,7 +32,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  // Encode PDU
+  // Encode SMS PDU
   app.post("/api/encode-pdu", async (req, res) => {
     try {
       const pduRequest = encodePduSchema.parse(req.body);
@@ -57,6 +59,50 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       return res.status(400).json({ 
         message: error instanceof Error ? error.message : "Failed to encode PDU" 
+      });
+    }
+  });
+
+  // Parse SIM Application Toolkit command
+  app.post("/api/parse-sat", async (req, res) => {
+    try {
+      const { pduString } = satSchema.parse(req.body);
+      
+      const parsedSAT = parseSAT(pduString);
+      
+      return res.json(parsedSAT);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return res.status(400).json({ 
+          message: "Validation error", 
+          errors: error.errors 
+        });
+      }
+      
+      return res.status(400).json({ 
+        message: error instanceof Error ? error.message : "Failed to parse SIM Application Toolkit command" 
+      });
+    }
+  });
+
+  // Parse SMPP PDU
+  app.post("/api/parse-smpp", async (req, res) => {
+    try {
+      const { pduString } = smppSchema.parse(req.body);
+      
+      const parsedSMPP = parseSMPP(pduString);
+      
+      return res.json(parsedSMPP);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return res.status(400).json({ 
+          message: "Validation error", 
+          errors: error.errors 
+        });
+      }
+      
+      return res.status(400).json({ 
+        message: error instanceof Error ? error.message : "Failed to parse SMPP PDU" 
       });
     }
   });

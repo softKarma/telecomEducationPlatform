@@ -31,11 +31,45 @@ export const encodePduSchema = z.object({
   encoding: z.enum(["7bit", "8bit", "ucs2"]).default("7bit"),
 });
 
+// SIM Application Toolkit schema
+export const satSchema = z.object({
+  pduString: z.string().min(2, "SAT command PDU string is required"),
+  commandType: z.enum([
+    "refresh",
+    "setup-menu",
+    "select-item",
+    "send-sms",
+    "display-text",
+    "get-input",
+    "setup-call",
+    "other"
+  ]).default("other")
+});
+
+// SMPP Protocol parsing schema
+export const smppSchema = z.object({
+  pduString: z.string().min(2, "SMPP PDU string is required"),
+  pduType: z.enum([
+    "submit_sm",
+    "deliver_sm",
+    "submit_sm_resp",
+    "deliver_sm_resp",
+    "bind_transmitter",
+    "bind_receiver",
+    "bind_transceiver",
+    "unbind",
+    "enquire_link",
+    "other"
+  ]).default("submit_sm")
+});
+
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 
 export type PDUParseRequest = z.infer<typeof pduSchema>;
 export type PDUEncodeRequest = z.infer<typeof encodePduSchema>;
+export type SATParseRequest = z.infer<typeof satSchema>;
+export type SMPPParseRequest = z.infer<typeof smppSchema>;
 
 // PDU parse result interfaces
 export interface PDUField {
@@ -84,4 +118,52 @@ export interface PDUEncodeResult {
   header: PDUHeader;
   message: string;
   breakdown: PDUField[];
+}
+
+// SIM Application Toolkit interfaces
+export interface SATHeader {
+  commandType: string;
+  commandQualifier: string;
+  deviceIdentities: {
+    source: string;
+    destination: string;
+  };
+  proactiveCommand: boolean;
+}
+
+export interface SATParseResult {
+  header: SATHeader;
+  command: string;
+  commandDetails: string;
+  properties: PDUField[];
+  structureBreakdown: {
+    bytes: string[];
+    descriptions: string[];
+    colors: string[];
+    tooltips: string[];
+  };
+}
+
+// SMPP Protocol interfaces
+export interface SMPPHeader {
+  commandId: string;
+  commandStatus: string;
+  sequenceNumber: number;
+  commandLength: number;
+  commandName: string;
+}
+
+export interface SMPPParseResult {
+  header: SMPPHeader;
+  messageContent?: string;
+  sourceAddr?: string;
+  destAddr?: string;
+  servicetype?: string;
+  properties: PDUField[];
+  structureBreakdown: {
+    bytes: string[];
+    descriptions: string[];
+    colors: string[];
+    tooltips: string[];
+  };
 }
