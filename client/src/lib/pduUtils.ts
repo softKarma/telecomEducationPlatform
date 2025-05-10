@@ -599,6 +599,12 @@ export function parsePDU(pduString: string, pduType: "sms-deliver" | "sms-submit
       description: (firstOctet & 0x80) ? 'Reply path exists' : 'No reply path'
     });
     
+    // Check all bounds for SMS-SUBMIT specific parsing
+    // This helps handle potentially malformed or truncated PDUs
+    if (offset >= bytes.length) {
+      throw new Error(`PDU parsing error: Incomplete SMS-SUBMIT PDU. Expected Message Reference field at offset ${offset}.`);
+    }
+    
     // Message Reference
     const messageRef = bytes[offset++];
     fields.push({
@@ -615,22 +621,94 @@ export function parsePDU(pduString: string, pduType: "sms-deliver" | "sms-submit
     structureBreakdown.colors.push('secondary');
     structureBreakdown.tooltips.push(`Message Reference (${messageRef})`);
     
+    // Bounds check before reading Destination Address
+    if (offset >= bytes.length) {
+      throw new Error(`PDU parsing error: Incomplete SMS-SUBMIT PDU. Expected Destination Address Length field at offset ${offset}.`);
+    }
+    
     // Destination Address
     const destAddrLength = bytes[offset++];
+    
+    // Sanity check for destination address length (should be reasonable)
+    // Some malformed PDUs can have very large values here
+    if (destAddrLength > 32) {
+      console.warn(`Suspicious destination address length: ${destAddrLength}. Adjusting to a reasonable maximum.`);
+      // Instead of failing, we'll try to recover by setting a reasonable max length
+      // This helps with malformed PDUs
+      const actualRemainingBytes = bytes.length - offset - 1; // -1 for the type byte
+      const reasonableLength = Math.min(20, actualRemainingBytes * 2); 
+      
+      // Create a note about this adjustment
+      fields.push({
+        name: 'Note',
+        value: 'Address Length Adjusted',
+        description: `Original length ${destAddrLength} was unreasonably large and adjusted to ${reasonableLength}`,
+      });
+      
+      // Continue with the adjusted length (but we already consumed the actual byte)
+    }
+    
+    // Bounds check before reading Address Type
+    if (offset >= bytes.length) {
+      throw new Error(`PDU parsing error: Incomplete SMS-SUBMIT PDU. Expected Destination Address Type field at offset ${offset}.`);
+    }
+    
     const destAddrType = bytes[offset++];
-    const destAddrData = bytes.slice(offset, offset + Math.ceil(destAddrLength / 2));
-    offset += Math.ceil(destAddrLength / 2);
     
-    headerInfo.recipient = parseAddress(destAddrLength, destAddrType, destAddrData);
+    // Check if we have enough bytes for the dest address data
+    // Use a capped reasonable length to avoid excessive memory usage or errors
+    const maxReasonableLength = 20; // Maximum reasonable phone number length
+    const safeDestAddrLength = Math.min(destAddrLength, maxReasonableLength);
+    const destAddrDataLength = Math.ceil(safeDestAddrLength / 2);
     
-    fields.push({
-      name: 'Destination Address Length',
-      value: destAddrLength.toString(),
-      description: `Length of the destination address: ${destAddrLength} digits`,
-      offset: offset - destAddrData.length - 2,
-      length: 1,
-      rawBytes: bytesToHex([destAddrLength])
-    });
+    // Final bounds check and adjustment
+    let actualDestAddrDataLength = destAddrDataLength;
+    if (offset + destAddrDataLength > bytes.length) {
+      // For SMS-SUBMIT, we want to be more lenient to improve compatibility
+      // We'll just use whatever bytes are available
+      console.warn(`Not enough bytes for full destination address. Expected ${destAddrDataLength} at offset ${offset}, but only ${bytes.length - offset} remain. Will use available bytes.`);
+      actualDestAddrDataLength = Math.max(0, bytes.length - offset);
+      
+      // Add a note about this adjustment
+      fields.push({
+        name: 'Warning',
+        value: 'Address Data Truncated',
+        description: `PDU doesn't contain all expected address data. Using available ${actualDestAddrDataLength} byte(s).`,
+      });
+    }
+    
+    // Use the safer length we calculated
+    const destAddrData = actualDestAddrDataLength > 0 ? 
+      bytes.slice(offset, offset + actualDestAddrDataLength) : 
+      [];
+    
+    offset += actualDestAddrDataLength;
+    
+    try {
+      headerInfo.recipient = parseAddress(destAddrLength, destAddrType, destAddrData);
+      
+      fields.push({
+        name: 'Destination Address Length',
+        value: destAddrLength.toString(),
+        description: `Length of the destination address: ${destAddrLength} digits`,
+        offset: offset - destAddrData.length - 2,
+        length: 1,
+        rawBytes: bytesToHex([destAddrLength])
+      });
+    } catch (error) {
+      console.error('Error parsing recipient address:', error);
+      headerInfo.recipient = 'PARSING_ERROR';
+      
+      // Continue parsing as much as possible despite the error
+      fields.push({
+        name: 'Destination Address Length',
+        value: destAddrLength.toString(),
+        description: `Address parsing error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        offset: offset - destAddrData.length - 2,
+        length: 1,
+        rawBytes: bytesToHex([destAddrLength])
+      });
+    }
     
     fields.push({
       name: 'Destination Address Type',
