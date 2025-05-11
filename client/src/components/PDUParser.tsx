@@ -571,15 +571,45 @@ export default function PDUParser() {
                         </div>
                         <div className="flex items-center">
                           <span className="w-4 h-4 bg-muted border border-muted-foreground/30 inline-block mr-2"></span>
-                          <span>Protocol Identifiers</span>
+                          <div className="flex items-center">
+                            <span>Protocol Identifiers</span>
+                            {getKnowledgeBaseLink("Protocol Identifier") && (
+                              <button 
+                                onClick={() => openKnowledgeSection(getKnowledgeBaseLink("Protocol Identifier")!)}
+                                className="ml-1 inline-flex"
+                              >
+                                <Info size={12} className="text-blue-400 hover:text-blue-500" />
+                              </button>
+                            )}
+                          </div>
                         </div>
                         <div className="flex items-center">
                           <span className="w-4 h-4 bg-accent/20 border border-accent/30 inline-block mr-2"></span>
-                          <span>{parsedData.header.messageType === 'sms-deliver' ? 'Timestamp' : 'Validity Period'}</span>
+                          <div className="flex items-center">
+                            <span>{parsedData.header.messageType === 'sms-deliver' ? 'Timestamp' : 'Validity Period'}</span>
+                            {getKnowledgeBaseLink(parsedData.header.messageType === 'sms-deliver' ? "Service Centre Time Stamp" : "Validity Period") && (
+                              <button 
+                                onClick={() => openKnowledgeSection(getKnowledgeBaseLink(parsedData.header.messageType === 'sms-deliver' ? "Service Centre Time Stamp" : "Validity Period")!)}
+                                className="ml-1 inline-flex"
+                              >
+                                <Info size={12} className="text-blue-400 hover:text-blue-500" />
+                              </button>
+                            )}
+                          </div>
                         </div>
                         <div className="flex items-center">
                           <span className="w-4 h-4 bg-destructive/20 border border-destructive/30 inline-block mr-2"></span>
-                          <span>User Data</span>
+                          <div className="flex items-center">
+                            <span>User Data</span>
+                            {getKnowledgeBaseLink("TP-UD") && (
+                              <button 
+                                onClick={() => openKnowledgeSection(getKnowledgeBaseLink("TP-UD")!)}
+                                className="ml-1 inline-flex"
+                              >
+                                <Info size={12} className="text-blue-400 hover:text-blue-500" />
+                              </button>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
