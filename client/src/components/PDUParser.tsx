@@ -24,30 +24,101 @@ const examplePdus = {
   "submit-multipart-2": "0051000B916407281553F80000A005000301024D532053554D4954206D6573736167657320627920627265616B696E67207468656D20696E746F20736D616C6C6572206368756E6B732E2054686973206973207061727420322E",
 }
 
-// Knowledge base mapping for PDU fields
-const fieldToKnowledgeSection: Record<string, string> = {
-  "TP-MTI": "pdu-formats",
-  "TP-MMS": "pdu-formats",
-  "TP-RP": "pdu-formats",
-  "TP-UDHI": "pdu-formats",
-  "TP-SRR": "pdu-formats",
-  "TP-VPF": "pdu-formats",
-  "TP-RD": "pdu-formats",
-  "TP-DA": "fields",
-  "TP-OA": "fields",
-  "TP-PID": "fields",
-  "TP-DCS": "encodings",
-  "TP-SCTS": "fields",
-  "TP-UDL": "fields",
-  "TP-UD": "fields",
-  "TP-VP": "fields",
-  "SMSC Address": "sms-architecture",
-  "First Octet": "pdu-formats",
-  "User Data Header": "multipart",
-  "Data Coding Scheme": "encodings",
-  "Protocol Identifier": "fields",
-  "Validity Period": "fields",
-  "Service Centre Time Stamp": "fields"
+// Knowledge base mapping for PDU fields with descriptions
+interface KnowledgeItem {
+  section: string;
+  summary: string;
+}
+
+const fieldToKnowledgeSection: Record<string, KnowledgeItem> = {
+  "TP-MTI": { 
+    section: "pdu-formats", 
+    summary: "Message Type Indicator - Defines PDU type (DELIVER, SUBMIT, etc.)" 
+  },
+  "TP-MMS": { 
+    section: "pdu-formats", 
+    summary: "More Messages to Send - Flag for additional messages" 
+  },
+  "TP-RP": { 
+    section: "pdu-formats", 
+    summary: "Reply Path - Request/grant reply path" 
+  },
+  "TP-UDHI": { 
+    section: "pdu-formats", 
+    summary: "User Data Header Indicator - Present when UDH exists" 
+  },
+  "TP-SRR": { 
+    section: "pdu-formats", 
+    summary: "Status Report Request - Request delivery status" 
+  },
+  "TP-VPF": { 
+    section: "pdu-formats", 
+    summary: "Validity Period Format - Format of validity period field" 
+  },
+  "TP-RD": { 
+    section: "pdu-formats", 
+    summary: "Reject Duplicates - Network should reject duplicate messages" 
+  },
+  "TP-DA": { 
+    section: "fields", 
+    summary: "Destination Address - Recipient's phone number" 
+  },
+  "TP-OA": { 
+    section: "fields", 
+    summary: "Originating Address - Sender's phone number" 
+  },
+  "TP-PID": { 
+    section: "fields", 
+    summary: "Protocol Identifier - Specifies messaging protocol" 
+  },
+  "TP-DCS": { 
+    section: "encodings", 
+    summary: "Data Coding Scheme - Specifies message encoding (7-bit, UCS2, etc.)" 
+  },
+  "TP-SCTS": { 
+    section: "fields", 
+    summary: "Service Centre Time Stamp - When SMSC received the message" 
+  },
+  "TP-UDL": { 
+    section: "fields", 
+    summary: "User Data Length - Length of the user data field" 
+  },
+  "TP-UD": { 
+    section: "fields", 
+    summary: "User Data - The actual message content" 
+  },
+  "TP-VP": { 
+    section: "fields", 
+    summary: "Validity Period - How long message is valid if undeliverable" 
+  },
+  "SMSC Address": { 
+    section: "sms-architecture", 
+    summary: "Short Message Service Center - Network entity for store & forward" 
+  },
+  "First Octet": { 
+    section: "pdu-formats", 
+    summary: "First byte containing various PDU flags and type indicators" 
+  },
+  "User Data Header": { 
+    section: "multipart", 
+    summary: "Header within UD for special features like concatenated messages" 
+  },
+  "Data Coding Scheme": { 
+    section: "encodings", 
+    summary: "Defines how message data is encoded (7-bit, 8-bit, UCS2)" 
+  },
+  "Protocol Identifier": { 
+    section: "fields", 
+    summary: "Indicates messaging protocol and interworking with other services" 
+  },
+  "Validity Period": { 
+    section: "fields", 
+    summary: "Time period message remains valid if undeliverable" 
+  },
+  "Service Centre Time Stamp": { 
+    section: "fields", 
+    summary: "Timestamp when SMSC received the message" 
+  }
 };
 
 export default function PDUParser() {
@@ -57,14 +128,38 @@ export default function PDUParser() {
   const [clipboardStatus, setClipboardStatus] = useState<"idle" | "copied">("idle");
   const [, setLocation] = useLocation();
   
-  // Function to get the knowledge base section for a field
-  const getKnowledgeBaseLink = (fieldName: string): string | null => {
+  // Function to get the knowledge base item for a field
+  const getKnowledgeBaseItem = (fieldName: string): KnowledgeItem | null => {
     return fieldToKnowledgeSection[fieldName] || null;
   };
   
   // Function to navigate to the knowledge base section
   const openKnowledgeSection = (sectionId: string) => {
-    setLocation(`/?tab=learn&section=${sectionId}`);
+    // First make sure we're on the home page
+    setLocation('/');
+    
+    // Use setTimeout to ensure we're on home page before trying to navigate to the learn tab
+    setTimeout(() => {
+      // Find the learn tab and click it
+      const learnTab = document.querySelector('[data-state="inactive"][data-value="learn"]');
+      if (learnTab) {
+        (learnTab as HTMLElement).click();
+        
+        // Then try to find and click the specific section
+        setTimeout(() => {
+          const sectionButton = document.querySelector(`[data-section="${sectionId}"]`);
+          if (sectionButton) {
+            (sectionButton as HTMLElement).click();
+            
+            // Scroll the section into view if needed
+            const sectionContent = document.getElementById(sectionId);
+            if (sectionContent) {
+              sectionContent.scrollIntoView({ behavior: 'smooth' });
+            }
+          }
+        }, 100);
+      }
+    }, 100);
   };
 
   // PDU Parse mutation
@@ -273,19 +368,19 @@ export default function PDUParser() {
                               <td className="pb-1 pr-3 text-muted-foreground">
                                 <div className="flex items-center">
                                   Message Type:
-                                  {getKnowledgeBaseLink("TP-MTI") && (
+                                  {getKnowledgeBaseItem("TP-MTI") && (
                                     <TooltipProvider>
                                       <Tooltip>
                                         <TooltipTrigger asChild>
                                           <button 
-                                            onClick={() => openKnowledgeSection(getKnowledgeBaseLink("TP-MTI")!)}
+                                            onClick={() => openKnowledgeSection(getKnowledgeBaseItem("TP-MTI")!.section)}
                                             className="ml-1 inline-flex"
                                           >
                                             <Info size={12} className="text-blue-400 hover:text-blue-500" />
                                           </button>
                                         </TooltipTrigger>
                                         <TooltipContent>
-                                          <p className="text-xs">Learn more about Message Types</p>
+                                          <p className="text-xs">{getKnowledgeBaseItem("TP-MTI")!.summary}</p>
                                         </TooltipContent>
                                       </Tooltip>
                                     </TooltipProvider>
@@ -298,12 +393,12 @@ export default function PDUParser() {
                               <td className="pb-1 pr-3 text-muted-foreground">
                                 <div className="flex items-center">
                                   SMSC:
-                                  {getKnowledgeBaseLink("SMSC Address") && (
+                                  {getKnowledgeBaseItem("SMSC Address") && (
                                     <TooltipProvider>
                                       <Tooltip>
                                         <TooltipTrigger asChild>
                                           <button 
-                                            onClick={() => openKnowledgeSection(getKnowledgeBaseLink("SMSC Address")!)}
+                                            onClick={() => openKnowledgeSection(getKnowledgeBaseItem("SMSC Address")!.section)}
                                             className="ml-1 inline-flex"
                                           >
                                             <Info size={12} className="text-blue-400 hover:text-blue-500" />
@@ -324,12 +419,12 @@ export default function PDUParser() {
                                 <td className="pb-1 pr-3 text-muted-foreground">
                                   <div className="flex items-center">
                                     Sender:
-                                    {getKnowledgeBaseLink("TP-OA") && (
+                                    {getKnowledgeBaseItem("TP-OA") && (
                                       <TooltipProvider>
                                         <Tooltip>
                                           <TooltipTrigger asChild>
                                             <button 
-                                              onClick={() => openKnowledgeSection(getKnowledgeBaseLink("TP-OA")!)}
+                                              onClick={() => openKnowledgeSection(getKnowledgeBaseItem("TP-OA")!)}
                                               className="ml-1 inline-flex"
                                             >
                                               <Info size={12} className="text-blue-400 hover:text-blue-500" />
@@ -351,12 +446,12 @@ export default function PDUParser() {
                                 <td className="pb-1 pr-3 text-muted-foreground align-top">
                                   <div className="flex items-center">
                                     Recipient:
-                                    {getKnowledgeBaseLink("TP-DA") && (
+                                    {getKnowledgeBaseItem("TP-DA") && (
                                       <TooltipProvider>
                                         <Tooltip>
                                           <TooltipTrigger asChild>
                                             <button 
-                                              onClick={() => openKnowledgeSection(getKnowledgeBaseLink("TP-DA")!)}
+                                              onClick={() => openKnowledgeSection(getKnowledgeBaseItem("TP-DA")!)}
                                               className="ml-1 inline-flex"
                                             >
                                               <Info size={12} className="text-blue-400 hover:text-blue-500" />
@@ -382,12 +477,12 @@ export default function PDUParser() {
                                 <td className="pb-1 pr-3 text-muted-foreground">
                                   <div className="flex items-center">
                                     Timestamp:
-                                    {getKnowledgeBaseLink("Service Centre Time Stamp") && (
+                                    {getKnowledgeBaseItem("Service Centre Time Stamp") && (
                                       <TooltipProvider>
                                         <Tooltip>
                                           <TooltipTrigger asChild>
                                             <button 
-                                              onClick={() => openKnowledgeSection(getKnowledgeBaseLink("Service Centre Time Stamp")!)}
+                                              onClick={() => openKnowledgeSection(getKnowledgeBaseItem("Service Centre Time Stamp")!)}
                                               className="ml-1 inline-flex"
                                             >
                                               <Info size={12} className="text-blue-400 hover:text-blue-500" />
@@ -408,12 +503,12 @@ export default function PDUParser() {
                               <td className="pb-1 pr-3 text-muted-foreground">
                                 <div className="flex items-center">
                                   Encoding:
-                                  {getKnowledgeBaseLink("Data Coding Scheme") && (
+                                  {getKnowledgeBaseItem("Data Coding Scheme") && (
                                     <TooltipProvider>
                                       <Tooltip>
                                         <TooltipTrigger asChild>
                                           <button 
-                                            onClick={() => openKnowledgeSection(getKnowledgeBaseLink("Data Coding Scheme")!)}
+                                            onClick={() => openKnowledgeSection(getKnowledgeBaseItem("Data Coding Scheme")!)}
                                             className="ml-1 inline-flex"
                                           >
                                             <Info size={12} className="text-blue-400 hover:text-blue-500" />
@@ -433,12 +528,12 @@ export default function PDUParser() {
                               <td className="pb-1 pr-3 text-muted-foreground">
                                 <div className="flex items-center">
                                   Multipart:
-                                  {getKnowledgeBaseLink("User Data Header") && (
+                                  {getKnowledgeBaseItem("User Data Header") && (
                                     <TooltipProvider>
                                       <Tooltip>
                                         <TooltipTrigger asChild>
                                           <button 
-                                            onClick={() => openKnowledgeSection(getKnowledgeBaseLink("User Data Header")!)}
+                                            onClick={() => openKnowledgeSection(getKnowledgeBaseItem("User Data Header")!)}
                                             className="ml-1 inline-flex"
                                           >
                                             <Info size={12} className="text-blue-400 hover:text-blue-500" />
@@ -495,12 +590,12 @@ export default function PDUParser() {
                                 <td className="px-4 py-2">
                                   <div className="flex items-center">
                                     {property.name}
-                                    {getKnowledgeBaseLink(property.name) && (
+                                    {getKnowledgeBaseItem(property.name) && (
                                       <TooltipProvider>
                                         <Tooltip>
                                           <TooltipTrigger asChild>
                                             <button 
-                                              onClick={() => openKnowledgeSection(getKnowledgeBaseLink(property.name)!)}
+                                              onClick={() => openKnowledgeSection(getKnowledgeBaseItem(property.name)!)}
                                               className="ml-1 inline-flex"
                                             >
                                               <Info size={14} className="text-blue-400 hover:text-blue-500" />
@@ -545,9 +640,9 @@ export default function PDUParser() {
                           <span className="w-4 h-4 bg-primary/20 border border-primary/30 inline-block mr-2"></span>
                           <div className="flex items-center">
                             <span>SMSC Information</span>
-                            {getKnowledgeBaseLink("SMSC Address") && (
+                            {getKnowledgeBaseItem("SMSC Address") && (
                               <button 
-                                onClick={() => openKnowledgeSection(getKnowledgeBaseLink("SMSC Address")!)}
+                                onClick={() => openKnowledgeSection(getKnowledgeBaseItem("SMSC Address")!)}
                                 className="ml-1 inline-flex"
                               >
                                 <Info size={12} className="text-blue-400 hover:text-blue-500" />
@@ -559,9 +654,9 @@ export default function PDUParser() {
                           <span className="w-4 h-4 bg-secondary/20 border border-secondary/30 inline-block mr-2"></span>
                           <div className="flex items-center">
                             <span>{parsedData.header.messageType === 'sms-deliver' ? 'Originating Address' : 'Destination Address'}</span>
-                            {getKnowledgeBaseLink(parsedData.header.messageType === 'sms-deliver' ? "TP-OA" : "TP-DA") && (
+                            {getKnowledgeBaseItem(parsedData.header.messageType === 'sms-deliver' ? "TP-OA" : "TP-DA") && (
                               <button 
-                                onClick={() => openKnowledgeSection(getKnowledgeBaseLink(parsedData.header.messageType === 'sms-deliver' ? "TP-OA" : "TP-DA")!)}
+                                onClick={() => openKnowledgeSection(getKnowledgeBaseItem(parsedData.header.messageType === 'sms-deliver' ? "TP-OA" : "TP-DA")!)}
                                 className="ml-1 inline-flex"
                               >
                                 <Info size={12} className="text-blue-400 hover:text-blue-500" />
@@ -573,9 +668,9 @@ export default function PDUParser() {
                           <span className="w-4 h-4 bg-muted border border-muted-foreground/30 inline-block mr-2"></span>
                           <div className="flex items-center">
                             <span>Protocol Identifiers</span>
-                            {getKnowledgeBaseLink("Protocol Identifier") && (
+                            {getKnowledgeBaseItem("Protocol Identifier") && (
                               <button 
-                                onClick={() => openKnowledgeSection(getKnowledgeBaseLink("Protocol Identifier")!)}
+                                onClick={() => openKnowledgeSection(getKnowledgeBaseItem("Protocol Identifier")!)}
                                 className="ml-1 inline-flex"
                               >
                                 <Info size={12} className="text-blue-400 hover:text-blue-500" />
@@ -587,9 +682,9 @@ export default function PDUParser() {
                           <span className="w-4 h-4 bg-accent/20 border border-accent/30 inline-block mr-2"></span>
                           <div className="flex items-center">
                             <span>{parsedData.header.messageType === 'sms-deliver' ? 'Timestamp' : 'Validity Period'}</span>
-                            {getKnowledgeBaseLink(parsedData.header.messageType === 'sms-deliver' ? "Service Centre Time Stamp" : "Validity Period") && (
+                            {getKnowledgeBaseItem(parsedData.header.messageType === 'sms-deliver' ? "Service Centre Time Stamp" : "Validity Period") && (
                               <button 
-                                onClick={() => openKnowledgeSection(getKnowledgeBaseLink(parsedData.header.messageType === 'sms-deliver' ? "Service Centre Time Stamp" : "Validity Period")!)}
+                                onClick={() => openKnowledgeSection(getKnowledgeBaseItem(parsedData.header.messageType === 'sms-deliver' ? "Service Centre Time Stamp" : "Validity Period")!)}
                                 className="ml-1 inline-flex"
                               >
                                 <Info size={12} className="text-blue-400 hover:text-blue-500" />
@@ -601,9 +696,9 @@ export default function PDUParser() {
                           <span className="w-4 h-4 bg-destructive/20 border border-destructive/30 inline-block mr-2"></span>
                           <div className="flex items-center">
                             <span>User Data</span>
-                            {getKnowledgeBaseLink("TP-UD") && (
+                            {getKnowledgeBaseItem("TP-UD") && (
                               <button 
-                                onClick={() => openKnowledgeSection(getKnowledgeBaseLink("TP-UD")!)}
+                                onClick={() => openKnowledgeSection(getKnowledgeBaseItem("TP-UD")!)}
                                 className="ml-1 inline-flex"
                               >
                                 <Info size={12} className="text-blue-400 hover:text-blue-500" />
