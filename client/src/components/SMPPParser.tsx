@@ -273,25 +273,37 @@ export default function SMPPParser() {
                         <tbody>
                           {parsedData.sourceAddr && (
                             <tr>
-                              <td className="pb-1 pr-3 text-muted-foreground">Source:</td>
+                              <td className="pb-1 pr-3 text-muted-foreground">
+                                Source:
+                                <FieldInfo tooltip={fieldDescriptions.sourceAddr} />
+                              </td>
                               <td className="pb-1 font-medium">{parsedData.sourceAddr}</td>
                             </tr>
                           )}
                           {parsedData.destAddr && (
                             <tr>
-                              <td className="pb-1 pr-3 text-muted-foreground">Destination:</td>
+                              <td className="pb-1 pr-3 text-muted-foreground">
+                                Destination:
+                                <FieldInfo tooltip={fieldDescriptions.destAddr} />
+                              </td>
                               <td className="pb-1 font-medium">{parsedData.destAddr}</td>
                             </tr>
                           )}
                           {parsedData.servicetype && (
                             <tr>
-                              <td className="pb-1 pr-3 text-muted-foreground">Service Type:</td>
+                              <td className="pb-1 pr-3 text-muted-foreground">
+                                Service Type:
+                                <FieldInfo tooltip={fieldDescriptions.serviceType} />
+                              </td>
                               <td className="pb-1 font-medium">{parsedData.servicetype || "Default"}</td>
                             </tr>
                           )}
                           {parsedData.messageContent && (
                             <tr>
-                              <td className="pb-1 pr-3 text-muted-foreground">Message:</td>
+                              <td className="pb-1 pr-3 text-muted-foreground">
+                                Message:
+                                <FieldInfo tooltip={fieldDescriptions.shortMessage} />
+                              </td>
                               <td className="pb-1 font-medium">{parsedData.messageContent}</td>
                             </tr>
                           )}
