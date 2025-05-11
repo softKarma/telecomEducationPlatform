@@ -443,32 +443,65 @@ export function parseSAT(pduString: string): SATParseResult {
         });
         break;
         
-      case TAG_RESPONSE_TYPE:
-        if (length > 0) {
-          const responseTypes = [
-            "Any key",
-            "Digits (0-9, *, #, +) only",
-            "Alphabet characters only",
-            "UCS2 alphabet characters only",
-            "Yes/No",
-            "Immediate digit response",
-            "Digits (0-9, *, # only) only",
-            "SMS default alphabet characters only",
-            "Launch browser"
-          ];
-          
-          const responseValue = tagData[0];
-          const responseDesc = responseValue < responseTypes.length ? 
-            responseTypes[responseValue] : `Unknown response type (0x${responseValue.toString(16)})`;
-          
-          fields.push({
-            name: "Response Type",
-            value: responseDesc,
-            description: `Expected response type: ${responseDesc}`,
-            offset: offset - 2,
-            length: length + 2,
-            rawBytes: bytesToHex([tag, length, ...tagData])
-          });
+      case TAG_ITEM:
+        // Special case: If tag is 0x8F and we're in a GET INPUT command context
+        if (tag === 0x8F && header.commandType === "GET INPUT") {
+          // This is a response type tag (0x8F) in GET INPUT command context
+          if (length > 0) {
+            const responseTypes = [
+              "Any key",
+              "Digits (0-9, *, #, +) only",
+              "Alphabet characters only",
+              "UCS2 alphabet characters only",
+              "Yes/No",
+              "Immediate digit response",
+              "Digits (0-9, *, # only) only",
+              "SMS default alphabet characters only",
+              "Launch browser"
+            ];
+            
+            const responseValue = tagData[0];
+            const responseDesc = responseValue < responseTypes.length ? 
+              responseTypes[responseValue] : `Unknown response type (0x${responseValue.toString(16)})`;
+            
+            fields.push({
+              name: "Response Type",
+              value: responseDesc,
+              description: `Expected response type: ${responseDesc}`,
+              offset: offset - 2,
+              length: length + 2,
+              rawBytes: bytesToHex([tag, length, ...tagData])
+            });
+          }
+        } else {
+          // Standard ITEM tag processing for menu structures
+          if (length > 0) {
+            let identifier = "";
+            let text = "";
+            
+            if (tagData.length > 1) {
+              identifier = tagData[0].toString();
+              text = decodeGSMAlphabet(tagData.slice(1));
+            }
+            
+            fields.push({
+              name: "Menu Item",
+              value: text,
+              description: `Item Identifier: ${identifier}, Text: ${text}`,
+              offset: offset - 2,
+              length: length + 2,
+              rawBytes: bytesToHex([tag, length, ...tagData])
+            });
+          } else {
+            fields.push({
+              name: "Menu Item",
+              value: bytesToHex(tagData),
+              description: "Invalid menu item format",
+              offset: offset - 2,
+              length: length + 2,
+              rawBytes: bytesToHex([tag, length, ...tagData])
+            });
+          }
         }
         break;
         
@@ -548,29 +581,7 @@ export function parseSAT(pduString: string): SATParseResult {
         }
         break;
         
-      case TAG_ITEM:
-        if (length >= 2) {
-          const identifier = tagData[0];
-          const itemText = decodeGSMAlphabet(tagData.slice(1));
-          
-          fields.push({
-            name: "Menu Item",
-            value: itemText,
-            description: `Item ID: ${identifier}, Text: "${itemText}"`,
-            offset: offset - 2,
-            length: length + 2,
-            rawBytes: bytesToHex([tag, length, ...tagData])
-          });
-        } else {
-          fields.push({
-            name: "Menu Item",
-            value: bytesToHex(tagData),
-            description: "Invalid menu item format",
-            offset: offset - 2,
-            length: length + 2,
-            rawBytes: bytesToHex([tag, length, ...tagData])
-          });
-        }
+      // This case is handled earlier
         break;
         
       case TAG_ITEM_IDENTIFIER:
