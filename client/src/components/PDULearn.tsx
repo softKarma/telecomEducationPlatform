@@ -3,9 +3,21 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { CheckCircle2, XCircle } from "lucide-react";
 
 // Learning content sections
-type LearnSection = "overview" | "pdu-formats" | "encodings" | "fields" | "multipart" | "sat" | "smpp" | "sms-flow" | "efsms";
+type LearnSection = 
+  // Core SMS concepts
+  "overview" | "pdu-formats" | "encodings" | "fields" | "multipart" | 
+  // Advanced protocols
+  "sat" | "smpp" | "sms-flow" | "efsms" |
+  // Interactive learning modules
+  "learning-beginner" | "learning-intermediate" | "learning-advanced" | "learning-expert" |
+  // Practical exercises
+  "exercises-encoding" | "exercises-decoding" | "exercises-multipart" | "exercises-validation";
 
 export default function PDULearn() {
   const [section, setSection] = useState<LearnSection>("overview");
@@ -15,73 +27,283 @@ export default function PDULearn() {
       <CardContent className="pt-6">
         <h2 className="text-lg font-medium mb-4">SMS Protocol & Specification Guide</h2>
         
-        <div className="flex flex-wrap gap-2 mb-4">
-          <Button 
-            variant={section === "overview" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setSection("overview")}
-          >
-            Overview
-          </Button>
-          <Button 
-            variant={section === "pdu-formats" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setSection("pdu-formats")}
-          >
-            PDU Formats
-          </Button>
-          <Button 
-            variant={section === "encodings" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setSection("encodings")}
-          >
-            Character Encodings
-          </Button>
-          <Button 
-            variant={section === "fields" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setSection("fields")}
-          >
-            Fields Reference
-          </Button>
-          <Button 
-            variant={section === "multipart" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setSection("multipart")}
-          >
-            Multipart SMS
-          </Button>
-          <Button 
-            variant={section === "sat" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setSection("sat")}
-          >
-            SIM Toolkit
-          </Button>
-          <Button 
-            variant={section === "smpp" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setSection("smpp")}
-          >
-            SMPP Protocol
-          </Button>
-          <Button 
-            variant={section === "sms-flow" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setSection("sms-flow")}
-          >
-            SMS Flow
-          </Button>
-          <Button 
-            variant={section === "efsms" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setSection("efsms")}
-          >
-            EF_SMS Storage
-          </Button>
-        </div>
+        <Tabs defaultValue="reference" className="mb-4">
+          <TabsList className="grid grid-cols-3 mb-2">
+            <TabsTrigger value="reference">Technical Reference</TabsTrigger>
+            <TabsTrigger value="learning">Interactive Learning</TabsTrigger>
+            <TabsTrigger value="exercises">Practical Exercises</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="reference">
+            <div className="flex flex-wrap gap-2 mb-4">
+              <Button 
+                variant={section === "overview" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setSection("overview")}
+              >
+                Overview
+              </Button>
+              <Button 
+                variant={section === "pdu-formats" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setSection("pdu-formats")}
+              >
+                PDU Formats
+              </Button>
+              <Button 
+                variant={section === "encodings" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setSection("encodings")}
+              >
+                Character Encodings
+              </Button>
+              <Button 
+                variant={section === "fields" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setSection("fields")}
+              >
+                Fields Reference
+              </Button>
+              <Button 
+                variant={section === "multipart" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setSection("multipart")}
+              >
+                Multipart SMS
+              </Button>
+              <Button 
+                variant={section === "sat" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setSection("sat")}
+              >
+                SIM Toolkit
+              </Button>
+              <Button 
+                variant={section === "smpp" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setSection("smpp")}
+              >
+                SMPP Protocol
+              </Button>
+              <Button 
+                variant={section === "sms-flow" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setSection("sms-flow")}
+              >
+                SMS Flow
+              </Button>
+              <Button 
+                variant={section === "efsms" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setSection("efsms")}
+              >
+                EF_SMS Storage
+              </Button>
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="learning">
+            <div className="flex flex-wrap gap-2 mb-4">
+              <Button 
+                variant={section === "learning-beginner" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setSection("learning-beginner")}
+              >
+                Beginner Course
+              </Button>
+              <Button 
+                variant={section === "learning-intermediate" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setSection("learning-intermediate")}
+              >
+                Intermediate Course
+              </Button>
+              <Button 
+                variant={section === "learning-advanced" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setSection("learning-advanced")}
+              >
+                Advanced Course
+              </Button>
+              <Button 
+                variant={section === "learning-expert" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setSection("learning-expert")}
+              >
+                Expert Topics
+              </Button>
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="exercises">
+            <div className="flex flex-wrap gap-2 mb-4">
+              <Button 
+                variant={section === "exercises-encoding" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setSection("exercises-encoding")}
+              >
+                SMS Encoding Practice
+              </Button>
+              <Button 
+                variant={section === "exercises-decoding" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setSection("exercises-decoding")}
+              >
+                SMS Decoding Challenges
+              </Button>
+              <Button 
+                variant={section === "exercises-multipart" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setSection("exercises-multipart")}
+              >
+                Multipart SMS Exercises
+              </Button>
+              <Button 
+                variant={section === "exercises-validation" ? "default" : "outline"}
+                size="sm"
+                onClick={() => setSection("exercises-validation")}
+              >
+                PDU Validation Challenges
+              </Button>
+            </div>
+          </TabsContent>
+        </Tabs>
         
         <div className="prose prose-sm max-w-none dark:prose-invert">
+          {section === "learning-beginner" && (
+            <>
+              <h3>Beginner's Guide to SMS Protocols</h3>
+              <p>
+                Welcome to the interactive learning module for beginners! This course will introduce you to the fundamental 
+                concepts of SMS protocols and help you understand how text messages are sent and received across mobile networks.
+              </p>
+              
+              <div className="bg-primary/5 p-4 rounded-md border border-primary/20 mb-4">
+                <h4 className="mt-0 text-primary">Learning Objectives</h4>
+                <ol className="mb-2">
+                  <li>Understand what SMS PDUs are and why they're important</li>
+                  <li>Learn the basic structure of SMS messages</li>
+                  <li>Recognize different types of SMS messages</li>
+                  <li>Understand character encoding in SMS</li>
+                </ol>
+                <p className="mb-0 text-sm">
+                  <strong>Estimated completion time:</strong> 20-30 minutes
+                </p>
+              </div>
+              
+              <div className="my-6">
+                <h4>Lesson 1: Introduction to SMS PDUs</h4>
+                <p>
+                  SMS was developed in the 1980s as part of the GSM standard. Unlike modern messaging apps, 
+                  SMS operates through the cellular network's signaling paths, allowing messages to be sent even 
+                  when the network is congested with voice calls.
+                </p>
+                
+                <div className="bg-muted p-4 rounded-md my-4">
+                  <h5 className="mt-0 mb-2 font-medium">What is a PDU?</h5>
+                  <p className="mb-0">
+                    <strong>PDU (Protocol Data Unit)</strong> is a binary format used to transmit SMS messages 
+                    between devices and the network. This binary format contains not just the message text, but also:
+                  </p>
+                  <ul className="mb-0">
+                    <li>Sender and recipient information</li>
+                    <li>Timestamps</li>
+                    <li>Protocol information</li>
+                    <li>Character encoding details</li>
+                  </ul>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                  <div className="border rounded-md p-4 bg-secondary/5">
+                    <h5 className="mt-0 mb-2 font-medium">Why use PDUs?</h5>
+                    <ul className="mb-0">
+                      <li>Efficient use of network bandwidth</li>
+                      <li>Standardized format across all devices</li>
+                      <li>Supports multiple character encodings</li>
+                      <li>Allows for metadata and control information</li>
+                    </ul>
+                  </div>
+                  <div className="border rounded-md p-4 bg-secondary/5">
+                    <h5 className="mt-0 mb-2 font-medium">PDU vs. Text Mode</h5>
+                    <p className="mb-0">
+                      Mobile phones can process SMS in two modes:
+                    </p>
+                    <ul className="mb-0">
+                      <li><strong>Text Mode:</strong> Human-readable format (handled by the phone)</li>
+                      <li><strong>PDU Mode:</strong> Binary format (how messages actually travel over the network)</li>
+                    </ul>
+                  </div>
+                </div>
+                
+                <div className="border-l-4 border-info pl-4 my-6">
+                  <h5 className="mt-0 text-info">Interactive Example</h5>
+                  <p>
+                    Consider this simple text message: <strong>"Hello, World!"</strong>
+                  </p>
+                  <p>
+                    In PDU format, it might look something like this (simplified):
+                  </p>
+                  <pre className="bg-muted/50 p-2 rounded text-xs overflow-auto">
+                    <code>07911326040000F0040B911346610089F60000FF0E48656C6C6F2C20576F726C6421</code>
+                  </pre>
+                  <p className="mb-0">
+                    Don't worry about understanding this yet! We'll break it down step by step in the following lessons.
+                  </p>
+                </div>
+                
+                <div className="bg-muted/30 p-4 rounded-md mt-6">
+                  <h5 className="mt-0 mb-3">Knowledge Check</h5>
+                  <div className="space-y-3">
+                    <div>
+                      <p className="font-medium mb-2">1. What does PDU stand for in the context of SMS?</p>
+                      <div className="space-y-1">
+                        <div className="flex items-center">
+                          <input type="radio" id="q1a" name="q1" className="mr-2" />
+                          <label htmlFor="q1a">Personal Data Upload</label>
+                        </div>
+                        <div className="flex items-center">
+                          <input type="radio" id="q1b" name="q1" className="mr-2" />
+                          <label htmlFor="q1b">Protocol Data Unit</label>
+                        </div>
+                        <div className="flex items-center">
+                          <input type="radio" id="q1c" name="q1" className="mr-2" />
+                          <label htmlFor="q1c">Phone Display Unit</label>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <p className="font-medium mb-2">2. Why are PDUs used for SMS transmission?</p>
+                      <div className="space-y-1">
+                        <div className="flex items-center">
+                          <input type="radio" id="q2a" name="q2" className="mr-2" />
+                          <label htmlFor="q2a">To make messages harder to read</label>
+                        </div>
+                        <div className="flex items-center">
+                          <input type="radio" id="q2b" name="q2" className="mr-2" />
+                          <label htmlFor="q2b">For efficient use of network bandwidth and standardization</label>
+                        </div>
+                        <div className="flex items-center">
+                          <input type="radio" id="q2c" name="q2" className="mr-2" />
+                          <label htmlFor="q2c">It's an optional format rarely used in practice</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-4">
+                    <Button size="sm">Check Answers</Button>
+                  </div>
+                </div>
+                
+                <div className="flex justify-between mt-8">
+                  <Button variant="outline" disabled>Previous Lesson</Button>
+                  <Button>Next Lesson: SMS Message Types</Button>
+                </div>
+              </div>
+            </>
+          )}
+          
           {section === "overview" && (
             <>
               <h3>What is 3GPP 23.040?</h3>
