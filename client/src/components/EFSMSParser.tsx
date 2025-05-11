@@ -46,6 +46,9 @@ export default function EFSMSParser() {
         const result = await apiRequest("/api/parse-efsms", {
           method: "POST",
           body: JSON.stringify({ hexData, recordNumber }),
+          headers: {
+            "Content-Type": "application/json",
+          },
         });
         return result as EFSMSParseResult;
       } catch (e) {
@@ -232,27 +235,87 @@ export default function EFSMSParser() {
                     <h3 className="text-lg font-medium mb-2">Embedded PDU Information</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <p className="text-sm text-muted-foreground">Message Type:</p>
+                        <p className="text-sm text-muted-foreground">
+                          Message Type: 
+                          <FieldInfo tooltip={findTooltip('messageType', {
+                            'messageType': 'Indicates the type of SMS message (SMS-DELIVER from network to phone, or SMS-SUBMIT from phone to network).',
+                            'encoding': 'The character encoding used for the message text, such as 7-bit GSM, 8-bit data, or UCS-2 (Unicode).',
+                            'sender': 'The originating address (phone number) of the message sender.',
+                            'recipient': 'The destination address (phone number) of the message recipient.',
+                            'timestamp': 'The service center timestamp indicating when the message was received by the SMSC.',
+                            'smsc': 'The Service Message Service Center address that handled this message.'
+                          })} />
+                        </p>
                         <p className="font-mono">{data.pdu.header.messageType}</p>
                       </div>
                       <div>
-                        <p className="text-sm text-muted-foreground">Encoding:</p>
+                        <p className="text-sm text-muted-foreground">
+                          Encoding:
+                          <FieldInfo tooltip={findTooltip('encoding', {
+                            'messageType': 'Indicates the type of SMS message (SMS-DELIVER from network to phone, or SMS-SUBMIT from phone to network).',
+                            'encoding': 'The character encoding used for the message text, such as 7-bit GSM, 8-bit data, or UCS-2 (Unicode).',
+                            'sender': 'The originating address (phone number) of the message sender.',
+                            'recipient': 'The destination address (phone number) of the message recipient.',
+                            'timestamp': 'The service center timestamp indicating when the message was received by the SMSC.',
+                            'smsc': 'The Service Message Service Center address that handled this message.'
+                          })} />
+                        </p>
                         <p className="font-mono">{data.pdu.header.encoding}</p>
                       </div>
                       <div>
-                        <p className="text-sm text-muted-foreground">Sender:</p>
+                        <p className="text-sm text-muted-foreground">
+                          Sender:
+                          <FieldInfo tooltip={findTooltip('sender', {
+                            'messageType': 'Indicates the type of SMS message (SMS-DELIVER from network to phone, or SMS-SUBMIT from phone to network).',
+                            'encoding': 'The character encoding used for the message text, such as 7-bit GSM, 8-bit data, or UCS-2 (Unicode).',
+                            'sender': 'The originating address (phone number) of the message sender.',
+                            'recipient': 'The destination address (phone number) of the message recipient.',
+                            'timestamp': 'The service center timestamp indicating when the message was received by the SMSC.',
+                            'smsc': 'The Service Message Service Center address that handled this message.'
+                          })} />
+                        </p>
                         <p className="font-mono">{data.pdu.header.sender || 'N/A'}</p>
                       </div>
                       <div>
-                        <p className="text-sm text-muted-foreground">Recipient:</p>
+                        <p className="text-sm text-muted-foreground">
+                          Recipient:
+                          <FieldInfo tooltip={findTooltip('recipient', {
+                            'messageType': 'Indicates the type of SMS message (SMS-DELIVER from network to phone, or SMS-SUBMIT from phone to network).',
+                            'encoding': 'The character encoding used for the message text, such as 7-bit GSM, 8-bit data, or UCS-2 (Unicode).',
+                            'sender': 'The originating address (phone number) of the message sender.',
+                            'recipient': 'The destination address (phone number) of the message recipient.',
+                            'timestamp': 'The service center timestamp indicating when the message was received by the SMSC.',
+                            'smsc': 'The Service Message Service Center address that handled this message.'
+                          })} />
+                        </p>
                         <p className="font-mono">{data.pdu.header.recipient || 'N/A'}</p>
                       </div>
                       <div>
-                        <p className="text-sm text-muted-foreground">Timestamp:</p>
+                        <p className="text-sm text-muted-foreground">
+                          Timestamp:
+                          <FieldInfo tooltip={findTooltip('timestamp', {
+                            'messageType': 'Indicates the type of SMS message (SMS-DELIVER from network to phone, or SMS-SUBMIT from phone to network).',
+                            'encoding': 'The character encoding used for the message text, such as 7-bit GSM, 8-bit data, or UCS-2 (Unicode).',
+                            'sender': 'The originating address (phone number) of the message sender.',
+                            'recipient': 'The destination address (phone number) of the message recipient.',
+                            'timestamp': 'The service center timestamp indicating when the message was received by the SMSC.',
+                            'smsc': 'The Service Message Service Center address that handled this message.'
+                          })} />
+                        </p>
                         <p className="font-mono">{data.pdu.header.timestamp || 'N/A'}</p>
                       </div>
                       <div>
-                        <p className="text-sm text-muted-foreground">SMSC:</p>
+                        <p className="text-sm text-muted-foreground">
+                          SMSC:
+                          <FieldInfo tooltip={findTooltip('smsc', {
+                            'messageType': 'Indicates the type of SMS message (SMS-DELIVER from network to phone, or SMS-SUBMIT from phone to network).',
+                            'encoding': 'The character encoding used for the message text, such as 7-bit GSM, 8-bit data, or UCS-2 (Unicode).',
+                            'sender': 'The originating address (phone number) of the message sender.',
+                            'recipient': 'The destination address (phone number) of the message recipient.',
+                            'timestamp': 'The service center timestamp indicating when the message was received by the SMSC.',
+                            'smsc': 'The Service Message Service Center address that handled this message.'
+                          })} />
+                        </p>
                         <p className="font-mono">{data.pdu.header.smsc}</p>
                       </div>
                     </div>
