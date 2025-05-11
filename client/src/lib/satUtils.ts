@@ -252,9 +252,11 @@ export function parseSAT(pduString: string): SATParseResult {
     structureBreakdown.tooltips.push(`Tag: ${tag.toString(16).padStart(2, '0')}`, `Length: ${length} bytes`);
     
     // Process the tag data according to tag type
-    switch (tag) {
+    // Use getBerTag to normalize the tag value (handle high bit set in BER-TLV)
+    const normalizedTag = getBerTag(tag);
+    
+    switch (normalizedTag) {
       case TAG_COMMAND_DETAILS:
-      case 0x81:  // Alternative encoding for command details
         if (length >= 3) {
           const commandNumber = tagData[0];
           const typeValue = tagData[1];
@@ -278,7 +280,6 @@ export function parseSAT(pduString: string): SATParseResult {
         break;
         
       case TAG_DEVICE_IDENTITIES:
-      case 0x82:  // Alternative encoding for device identities
         if (length >= 2) {
           const sourceDevice = tagData[0];
           const destinationDevice = tagData[1];
@@ -298,7 +299,6 @@ export function parseSAT(pduString: string): SATParseResult {
         break;
         
       case TAG_ALPHA_IDENTIFIER:
-      case 0x85:  // Alternative encoding for alpha identifier
         let alphaText = "";
         
         // Try to decode based on first byte (DCS indicator might be present)
@@ -323,7 +323,6 @@ export function parseSAT(pduString: string): SATParseResult {
         break;
         
       case TAG_TEXT_STRING:
-      case 0x8D:  // Alternative encoding for text string
         if (length > 0) {
           const dcs = tagData[0]; // Data coding scheme
           const textData = tagData.slice(1);
