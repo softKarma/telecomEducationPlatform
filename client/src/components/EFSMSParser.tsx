@@ -9,6 +9,29 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { exampleEfSmsPdus } from "@/lib/efSmsUtils";
 import ByteDisplay from "./ByteDisplay";
+import { findTooltip, hasTooltip } from "@/lib/tooltipUtils";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Info } from "lucide-react";
+
+// Field Info component
+interface FieldInfoProps {
+  tooltip: string;
+}
+
+function FieldInfo({ tooltip }: FieldInfoProps) {
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Info className="h-3.5 w-3.5 ml-1 inline-block text-muted-foreground cursor-help" />
+        </TooltipTrigger>
+        <TooltipContent className="max-w-sm">
+          <p>{tooltip}</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
+}
 
 export default function EFSMSParser() {
   const [hexData, setHexData] = useState("");
@@ -147,19 +170,51 @@ export default function EFSMSParser() {
                   <h3 className="text-lg font-medium mb-2">EF_SMS Header Information</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <p className="text-sm text-muted-foreground">Status:</p>
+                      <p className="text-sm text-muted-foreground">
+                        Status:
+                        <FieldInfo tooltip={findTooltip('status', {
+                          'status': 'The Status field indicates whether the SMS storage location is free, occupied by a message ready to be read, or occupied by a message that has been read.',
+                          'smsType': 'Indicates whether this is an SMS-DELIVER (received) or SMS-SUBMIT (sent) message stored on the SIM card.',
+                          'recordNumber': 'The index of this record in the EF_SMS file on the SIM card.',
+                          'recordSize': 'The size in bytes of this SMS storage record on the SIM card.'
+                        })} />
+                      </p>
                       <p className="font-mono">{data.header.status} ({data.header.statusDescription})</p>
                     </div>
                     <div>
-                      <p className="text-sm text-muted-foreground">SMS Type:</p>
+                      <p className="text-sm text-muted-foreground">
+                        SMS Type:
+                        <FieldInfo tooltip={findTooltip('smsType', {
+                          'status': 'The Status field indicates whether the SMS storage location is free, occupied by a message ready to be read, or occupied by a message that has been read.',
+                          'smsType': 'Indicates whether this is an SMS-DELIVER (received) or SMS-SUBMIT (sent) message stored on the SIM card.',
+                          'recordNumber': 'The index of this record in the EF_SMS file on the SIM card.',
+                          'recordSize': 'The size in bytes of this SMS storage record on the SIM card.'
+                        })} />
+                      </p>
                       <p className="font-mono">{data.header.smsType}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-muted-foreground">Record Number:</p>
+                      <p className="text-sm text-muted-foreground">
+                        Record Number:
+                        <FieldInfo tooltip={findTooltip('recordNumber', {
+                          'status': 'The Status field indicates whether the SMS storage location is free, occupied by a message ready to be read, or occupied by a message that has been read.',
+                          'smsType': 'Indicates whether this is an SMS-DELIVER (received) or SMS-SUBMIT (sent) message stored on the SIM card.',
+                          'recordNumber': 'The index of this record in the EF_SMS file on the SIM card.',
+                          'recordSize': 'The size in bytes of this SMS storage record on the SIM card.'
+                        })} />
+                      </p>
                       <p className="font-mono">{data.header.recordNumber}</p>
                     </div>
                     <div>
-                      <p className="text-sm text-muted-foreground">Record Size:</p>
+                      <p className="text-sm text-muted-foreground">
+                        Record Size:
+                        <FieldInfo tooltip={findTooltip('recordSize', {
+                          'status': 'The Status field indicates whether the SMS storage location is free, occupied by a message ready to be read, or occupied by a message that has been read.',
+                          'smsType': 'Indicates whether this is an SMS-DELIVER (received) or SMS-SUBMIT (sent) message stored on the SIM card.',
+                          'recordNumber': 'The index of this record in the EF_SMS file on the SIM card.',
+                          'recordSize': 'The size in bytes of this SMS storage record on the SIM card.'
+                        })} />
+                      </p>
                       <p className="font-mono">{data.header.recordSize} bytes</p>
                     </div>
                   </div>
