@@ -54,7 +54,22 @@ const fieldDescriptions = {
   duration: "Specifies how long an action should be performed",
   responseLength: "Expected length of the response from the user or device",
   itemIdentifier: "Reference to a specific item in a menu or list",
-  responseRequested: "Indicates whether a response is expected from the device"
+  responseRequested: "Indicates whether a response is expected from the device",
+  
+  // Common variants
+  "command type": "Identifies the specific SIM Application Toolkit command being issued",
+  "command qualifier": "Contains flags that modify the behavior of the command",
+  "device identities": "Specifies the source and destination devices for the command",
+  "command details": "Contains the command type, qualifier, and other control parameters",
+  "tag": "Tag value identifying a specific data object in the command",
+  "length": "Length of a data object or command component",
+  "value": "Value of a data object or command parameter",
+  "alpha identifier": "Text label for the command that may be displayed to the user",
+  "icon identifier": "Reference to an icon that should be displayed with the command",
+  "item identifier": "Reference to a specific item in a menu or list",
+  "text string": "Text content to be displayed or processed as part of the command",
+  "text string tag": "Tag value identifying the text string data object",
+  "text string length": "Length of the text string in bytes or characters"
 };
 
 export default function SATParser() {
@@ -417,8 +432,17 @@ export default function SATParser() {
                           <tr key={index}>
                             <td className="px-4 py-2 flex items-center">
                               {property.name}
-                              {fieldDescriptions[property.name.toLowerCase().replace(/\s+/g, '')] && (
-                                <FieldInfo tooltip={fieldDescriptions[property.name.toLowerCase().replace(/\s+/g, '')]} />
+                              {(fieldDescriptions[property.name] || 
+                                fieldDescriptions[property.name.toLowerCase()] || 
+                                fieldDescriptions[property.name.toLowerCase().replace(/\s+/g, '')] ||
+                                fieldDescriptions[property.name.toLowerCase().replace(/[-_]/g, '')]) && (
+                                <FieldInfo tooltip={
+                                  fieldDescriptions[property.name] || 
+                                  fieldDescriptions[property.name.toLowerCase()] || 
+                                  fieldDescriptions[property.name.toLowerCase().replace(/\s+/g, '')] ||
+                                  fieldDescriptions[property.name.toLowerCase().replace(/[-_]/g, '')] ||
+                                  "Field information"
+                                } />
                               )}
                             </td>
                             <td className="px-4 py-2 font-mono">{property.value}</td>

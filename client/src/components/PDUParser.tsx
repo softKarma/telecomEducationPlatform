@@ -59,7 +59,25 @@ const fieldDescriptions = {
   validityPeriod: "Period during which the message is valid if it cannot be delivered immediately",
   userDataLength: "Length of the user data section in the appropriate units based on encoding",
   userDataHeader: "Optional header containing information for concatenated messages, port addressing, etc.",
-  userData: "The actual message content encoded according to the data coding scheme"
+  userData: "The actual message content encoded according to the data coding scheme",
+  
+  // Common field variants
+  "smsc length": "Length of the SMSC information in bytes",
+  "smsc type of address": "Type of SMSC address (international, national, alphanumeric)",
+  "first octet": "Contains message flags including reply path, user data header indicator, and status report request",
+  "message reference": "Reference number for identifying the SMS-SUBMIT message",
+  "destination address length": "Length of the destination address in digits",
+  "destination address type": "Type of destination address (international, national, alphanumeric)",
+  "protocol identifier": "Protocol identifier parameter indicating how the SC is to process the message",
+  "data coding scheme": "Indicates the message encoding scheme and message class",
+  "validity period": "Period during which the message is valid if it cannot be delivered immediately",
+  "user data length": "Length of the user data section in the appropriate units based on encoding",
+  "user data header": "Optional header containing information for concatenated messages, port addressing, etc.",
+  "user data": "The actual message content encoded according to the data coding scheme",
+  "tp-pid": "Protocol identifier parameter indicating how the SC is to process the message",
+  "tp-dcs": "Data coding scheme indicating the message encoding scheme and message class",
+  "tp-udl": "User data length in the appropriate units based on encoding",
+  "tp-udhi": "User data header indicator flag"
 };
 
 // Example PDUs
@@ -379,8 +397,17 @@ export default function PDUParser() {
                               <tr key={index}>
                                 <td className="px-4 py-2 flex items-center">
                                   {property.name}
-                                  {fieldDescriptions[property.name.toLowerCase().replace(/\s+/g, '')] && (
-                                    <FieldInfo tooltip={fieldDescriptions[property.name.toLowerCase().replace(/\s+/g, '')]} />
+                                  {(fieldDescriptions[property.name] || 
+                                    fieldDescriptions[property.name.toLowerCase()] || 
+                                    fieldDescriptions[property.name.toLowerCase().replace(/\s+/g, '')] ||
+                                    fieldDescriptions[property.name.toLowerCase().replace(/[-_]/g, '')]) && (
+                                    <FieldInfo tooltip={
+                                      fieldDescriptions[property.name] || 
+                                      fieldDescriptions[property.name.toLowerCase()] || 
+                                      fieldDescriptions[property.name.toLowerCase().replace(/\s+/g, '')] ||
+                                      fieldDescriptions[property.name.toLowerCase().replace(/[-_]/g, '')] ||
+                                      "Field information"
+                                    } />
                                   )}
                                 </td>
                                 <td className="px-4 py-2 font-mono">{property.value}</td>

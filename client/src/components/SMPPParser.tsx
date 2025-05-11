@@ -62,7 +62,34 @@ const fieldDescriptions = {
   dataCoding: "Encoding scheme used for the message content",
   smDefaultMsgId: "Indicates a pre-defined message stored on the SMSC",
   smLength: "Length of the short message in bytes",
-  shortMessage: "The actual SMS content"
+  shortMessage: "The actual SMS content",
+  
+  // Common field variants
+  "command id": "Identifies the SMPP operation to be performed (e.g., bind_transmitter, submit_sm)",
+  "command status": "Indicates the success or failure status of an SMPP operation",
+  "sequence number": "Used to correlate requests and responses in asynchronous transactions",
+  "command length": "Total length of the SMPP PDU in bytes, including the header",
+  "command name": "The human-readable name of the SMPP command",
+  "source address": "Address (usually phone number) of the message sender",
+  "destination address": "Address (usually phone number) of the message recipient",
+  "dest address": "Address (usually phone number) of the message recipient",
+  "service type": "Indicates the SMS application service associated with the message",
+  "source addr ton": "Type of Number for source address (international, national, alphanumeric)",
+  "source addr npi": "Numbering Plan Indicator for source address (e.g., E.164, private)",
+  "dest addr ton": "Type of Number for destination address (international, national, alphanumeric)",
+  "dest addr npi": "Numbering Plan Indicator for destination address (e.g., E.164, private)",
+  "esm class": "Indicates message mode, message type, and GSM network features",
+  "protocol id": "GSM protocol identifier (network specific)",
+  "priority flag": "Designates the priority level of the message",
+  "schedule delivery time": "Time when message is scheduled for delivery (YYMMDDhhmmsstnnp)",
+  "validity period": "Message validity period (YYMMDDhhmmsstnnp)",
+  "registered delivery": "Controls delivery receipt and acknowledgement requests",
+  "replace if present flag": "Instructs if message should replace existing message with same ID",
+  "data coding": "Encoding scheme used for the message content",
+  "sm default msg id": "Indicates a pre-defined message stored on the SMSC",
+  "sm length": "Length of the short message in bytes",
+  "short message": "The actual SMS content",
+  "message": "The actual SMS content"
 };
 
 export default function SMPPParser() {
