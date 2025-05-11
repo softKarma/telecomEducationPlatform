@@ -141,25 +141,38 @@ export default function PDUParser() {
     // Use setTimeout to ensure we're on home page before trying to navigate to the learn tab
     setTimeout(() => {
       // Find the learn tab and click it
-      const learnTab = document.querySelector('[data-state="inactive"][data-value="learn"]');
+      const learnTab = document.querySelector('[data-value="learn"]');
       if (learnTab) {
         (learnTab as HTMLElement).click();
         
         // Then try to find and click the specific section
         setTimeout(() => {
+          console.log(`Looking for section: ${sectionId}`);
+          
+          // First try to find a button with data-section attribute
           const sectionButton = document.querySelector(`[data-section="${sectionId}"]`);
           if (sectionButton) {
+            console.log("Found section button, clicking it");
             (sectionButton as HTMLElement).click();
+          } else {
+            // If we can't find a button with the data-section attribute, try other approaches
+            console.log("Section button not found, trying other approaches");
             
-            // Scroll the section into view if needed
-            const sectionContent = document.getElementById(sectionId);
-            if (sectionContent) {
-              sectionContent.scrollIntoView({ behavior: 'smooth' });
+            // Approach 2: Look for buttons that have the section name in their text content
+            const buttons = document.querySelectorAll('button');
+            for (const button of buttons) {
+              if (button.textContent?.toLowerCase().includes(sectionId.toLowerCase().replace(/-/g, ' '))) {
+                console.log("Found button by text content, clicking it");
+                (button as HTMLElement).click();
+                break;
+              }
             }
           }
-        }, 100);
+        }, 500);
+      } else {
+        console.log("Learn tab not found");
       }
-    }, 100);
+    }, 300);
   };
 
   // PDU Parse mutation

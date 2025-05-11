@@ -288,6 +288,7 @@ export default function PDULearn() {
                     variant={section === "fields" ? "default" : "outline"}
                     size="sm"
                     onClick={() => setSection("fields")}
+                    data-section="fields"
                   >
                     Fields Reference
                   </Button>
@@ -295,6 +296,7 @@ export default function PDULearn() {
                     variant={section === "multipart" ? "default" : "outline"}
                     size="sm"
                     onClick={() => setSection("multipart")}
+                    data-section="multipart"
                   >
                     Multipart SMS
                   </Button>
