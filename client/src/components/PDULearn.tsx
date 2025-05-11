@@ -7,15 +7,24 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { CheckCircle2, XCircle } from "lucide-react";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 // Learning content sections
 type LearnSection = 
-  // Core SMS concepts
-  "overview" | "pdu-formats" | "encodings" | "fields" | "multipart" | 
-  // Advanced protocols
-  "sat" | "smpp" | "sms-flow" | "efsms" |
-  // Additional telecom topics
-  "network-architecture" | "gsm-concepts" | "encoding-tool";
+  // Level 1: High-level telecom overview
+  "telecom-overview" | "cellular-networks" | "network-evolution" |
+  // Level 2: Network architecture
+  "network-architecture" | "gsm-concepts" | "signaling-protocols" |
+  // Level 3: Mobile services
+  "voice-services" | "data-services" | "messaging-services" |
+  // Level 4: SMS technology
+  "sms-overview" | "sms-architecture" | "sms-flow" |
+  // Level 5: SMS protocols
+  "pdu-formats" | "encodings" | "fields" | "multipart" |
+  // Level 6: Advanced protocols
+  "sat" | "smpp" | "efsms" |
+  // Tools
+  "encoding-tool" | "external-resources";
 
 // Simple utility functions for encoding exercises
 const encode7Bit = (text: string): string => {
@@ -41,7 +50,7 @@ const encodeUCS2 = (text: string): string => {
 };
 
 export default function PDULearn() {
-  const [section, setSection] = useState<LearnSection>("overview");
+  const [section, setSection] = useState<LearnSection>("telecom-overview");
   const [encodingText, setEncodingText] = useState<string>("");
   const [encodingResult, setEncodingResult] = useState<string>("");
   const [encodingFeedback, setEncodingFeedback] = useState<{success: boolean; message: string} | null>(null);
@@ -85,95 +94,417 @@ export default function PDULearn() {
         
         <div className="mb-6">
           <h3 className="text-lg font-medium mb-4">Telecom Knowledge Base</h3>
-          <div className="flex flex-wrap gap-2 mb-4">
-            <Button 
-              variant={section === "overview" ? "default" : "outline"}
-              size="sm"
-              onClick={() => setSection("overview")}
-            >
-              Overview
-            </Button>
-            <Button 
-              variant={section === "pdu-formats" ? "default" : "outline"}
-              size="sm"
-              onClick={() => setSection("pdu-formats")}
-            >
-              PDU Formats
-            </Button>
-            <Button 
-              variant={section === "encodings" ? "default" : "outline"}
-              size="sm"
-              onClick={() => setSection("encodings")}
-            >
-              Character Encodings
-            </Button>
-            <Button 
-              variant={section === "fields" ? "default" : "outline"}
-              size="sm"
-              onClick={() => setSection("fields")}
-            >
-              Fields Reference
-            </Button>
-            <Button 
-              variant={section === "multipart" ? "default" : "outline"}
-              size="sm"
-              onClick={() => setSection("multipart")}
-            >
-              Multipart SMS
-            </Button>
-            <Button 
-              variant={section === "sat" ? "default" : "outline"}
-              size="sm"
-              onClick={() => setSection("sat")}
-            >
-              SIM Toolkit
-            </Button>
-            <Button 
-              variant={section === "smpp" ? "default" : "outline"}
-              size="sm"
-              onClick={() => setSection("smpp")}
-            >
-              SMPP Protocol
-            </Button>
-            <Button 
-              variant={section === "sms-flow" ? "default" : "outline"}
-              size="sm"
-              onClick={() => setSection("sms-flow")}
-            >
-              SMS Flow
-            </Button>
-            <Button 
-              variant={section === "efsms" ? "default" : "outline"}
-              size="sm"
-              onClick={() => setSection("efsms")}
-            >
-              EF_SMS Storage
-            </Button>
-            <Button 
-              variant={section === "network-architecture" ? "default" : "outline"}
-              size="sm"
-              onClick={() => setSection("network-architecture")}
-            >
-              Network Architecture
-            </Button>
-            <Button 
-              variant={section === "gsm-concepts" ? "default" : "outline"}
-              size="sm"
-              onClick={() => setSection("gsm-concepts")}
-            >
-              GSM Concepts
-            </Button>
-            <Button 
-              variant={section === "encoding-tool" ? "default" : "outline"}
-              size="sm"
-              onClick={() => setSection("encoding-tool")}
-            >
-              Encoding Tool
-            </Button>
-          </div>
+          
+          <Accordion type="single" collapsible className="w-full mb-4">
+            {/* Level 1: High-level telecom overview */}
+            <AccordionItem value="level1">
+              <AccordionTrigger>
+                <div className="flex items-center">
+                  <span className="bg-primary/20 text-primary rounded-full w-6 h-6 flex items-center justify-center text-xs mr-2">1</span>
+                  <span>Telecom Fundamentals</span>
+                </div>
+              </AccordionTrigger>
+              <AccordionContent>
+                <div className="flex flex-wrap gap-2 pt-2 pl-8">
+                  <Button 
+                    variant={section === "telecom-overview" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSection("telecom-overview")}
+                  >
+                    Telecom Overview
+                  </Button>
+                  <Button 
+                    variant={section === "cellular-networks" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSection("cellular-networks")}
+                  >
+                    Cellular Networks
+                  </Button>
+                  <Button 
+                    variant={section === "network-evolution" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSection("network-evolution")}
+                  >
+                    Network Evolution
+                  </Button>
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+            
+            {/* Level 2: Network architecture */}
+            <AccordionItem value="level2">
+              <AccordionTrigger>
+                <div className="flex items-center">
+                  <span className="bg-primary/20 text-primary rounded-full w-6 h-6 flex items-center justify-center text-xs mr-2">2</span>
+                  <span>Network Architecture</span>
+                </div>
+              </AccordionTrigger>
+              <AccordionContent>
+                <div className="flex flex-wrap gap-2 pt-2 pl-8">
+                  <Button 
+                    variant={section === "network-architecture" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSection("network-architecture")}
+                  >
+                    Network Components
+                  </Button>
+                  <Button 
+                    variant={section === "gsm-concepts" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSection("gsm-concepts")}
+                  >
+                    GSM Concepts
+                  </Button>
+                  <Button 
+                    variant={section === "signaling-protocols" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSection("signaling-protocols")}
+                  >
+                    Signaling Protocols
+                  </Button>
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+            
+            {/* Level 3: Mobile services */}
+            <AccordionItem value="level3">
+              <AccordionTrigger>
+                <div className="flex items-center">
+                  <span className="bg-primary/20 text-primary rounded-full w-6 h-6 flex items-center justify-center text-xs mr-2">3</span>
+                  <span>Mobile Services</span>
+                </div>
+              </AccordionTrigger>
+              <AccordionContent>
+                <div className="flex flex-wrap gap-2 pt-2 pl-8">
+                  <Button 
+                    variant={section === "voice-services" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSection("voice-services")}
+                  >
+                    Voice Services
+                  </Button>
+                  <Button 
+                    variant={section === "data-services" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSection("data-services")}
+                  >
+                    Data Services
+                  </Button>
+                  <Button 
+                    variant={section === "messaging-services" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSection("messaging-services")}
+                  >
+                    Messaging Services
+                  </Button>
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+            
+            {/* Level 4: SMS technology */}
+            <AccordionItem value="level4">
+              <AccordionTrigger>
+                <div className="flex items-center">
+                  <span className="bg-primary/20 text-primary rounded-full w-6 h-6 flex items-center justify-center text-xs mr-2">4</span>
+                  <span>SMS Technology</span>
+                </div>
+              </AccordionTrigger>
+              <AccordionContent>
+                <div className="flex flex-wrap gap-2 pt-2 pl-8">
+                  <Button 
+                    variant={section === "sms-overview" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSection("sms-overview")}
+                  >
+                    SMS Overview
+                  </Button>
+                  <Button 
+                    variant={section === "sms-architecture" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSection("sms-architecture")}
+                  >
+                    SMS Architecture
+                  </Button>
+                  <Button 
+                    variant={section === "sms-flow" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSection("sms-flow")}
+                  >
+                    SMS Flow
+                  </Button>
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+            
+            {/* Level 5: SMS protocols */}
+            <AccordionItem value="level5">
+              <AccordionTrigger>
+                <div className="flex items-center">
+                  <span className="bg-primary/20 text-primary rounded-full w-6 h-6 flex items-center justify-center text-xs mr-2">5</span>
+                  <span>SMS Protocols</span>
+                </div>
+              </AccordionTrigger>
+              <AccordionContent>
+                <div className="flex flex-wrap gap-2 pt-2 pl-8">
+                  <Button 
+                    variant={section === "pdu-formats" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSection("pdu-formats")}
+                  >
+                    PDU Formats
+                  </Button>
+                  <Button 
+                    variant={section === "encodings" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSection("encodings")}
+                  >
+                    Character Encodings
+                  </Button>
+                  <Button 
+                    variant={section === "fields" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSection("fields")}
+                  >
+                    Fields Reference
+                  </Button>
+                  <Button 
+                    variant={section === "multipart" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSection("multipart")}
+                  >
+                    Multipart SMS
+                  </Button>
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+            
+            {/* Level 6: Advanced protocols */}
+            <AccordionItem value="level6">
+              <AccordionTrigger>
+                <div className="flex items-center">
+                  <span className="bg-primary/20 text-primary rounded-full w-6 h-6 flex items-center justify-center text-xs mr-2">6</span>
+                  <span>Advanced Protocols</span>
+                </div>
+              </AccordionTrigger>
+              <AccordionContent>
+                <div className="flex flex-wrap gap-2 pt-2 pl-8">
+                  <Button 
+                    variant={section === "sat" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSection("sat")}
+                  >
+                    SIM Toolkit
+                  </Button>
+                  <Button 
+                    variant={section === "smpp" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSection("smpp")}
+                  >
+                    SMPP Protocol
+                  </Button>
+                  <Button 
+                    variant={section === "efsms" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSection("efsms")}
+                  >
+                    EF_SMS Storage
+                  </Button>
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+            
+            {/* Tools */}
+            <AccordionItem value="tools">
+              <AccordionTrigger>
+                <div className="flex items-center">
+                  <span className="bg-primary/20 text-primary rounded-full w-6 h-6 flex items-center justify-center text-xs mr-2">T</span>
+                  <span>Tools & Resources</span>
+                </div>
+              </AccordionTrigger>
+              <AccordionContent>
+                <div className="flex flex-wrap gap-2 pt-2 pl-8">
+                  <Button 
+                    variant={section === "encoding-tool" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSection("encoding-tool")}
+                  >
+                    Encoding Tool
+                  </Button>
+                  <Button 
+                    variant={section === "external-resources" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSection("external-resources")}
+                  >
+                    External Resources
+                  </Button>
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
         </div>
         
         <div className="prose prose-sm max-w-none dark:prose-invert">
+          {section === "telecom-overview" && (
+            <>
+              <h3>Introduction to Telecommunications</h3>
+              <p>
+                Telecommunications is the transmission of information over significant distances using electronic means. 
+                This field encompasses a wide range of technologies that have transformed how we communicate, from traditional 
+                telephone systems to modern mobile networks and the internet.
+              </p>
+              
+              <div className="bg-primary/5 p-4 rounded-md border border-primary/20 mb-4">
+                <h4 className="mt-0 text-primary">Key Telecommunications Concepts</h4>
+                <p className="mb-2">
+                  Telecommunications systems typically consist of these fundamental components:
+                </p>
+                <ul className="mb-0">
+                  <li><strong>Transmitter:</strong> Converts information into signals</li>
+                  <li><strong>Transmission Medium:</strong> Carries signals (wire, fiber optic, wireless)</li>
+                  <li><strong>Receiver:</strong> Converts signals back into usable information</li>
+                  <li><strong>Protocols:</strong> Rules governing communication between systems</li>
+                  <li><strong>Network Infrastructure:</strong> Interconnected systems enabling end-to-end communication</li>
+                </ul>
+              </div>
+              
+              <h4>Evolution of Telecommunications</h4>
+              <p>
+                Telecommunications has undergone remarkable evolution over the centuries:
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">Early Era (1800s-1950s)</h5>
+                  <ul className="mb-0">
+                    <li>Telegraph systems (1830s+)</li>
+                    <li>Telephone networks (1870s+)</li>
+                    <li>Radio broadcasting (1900s+)</li>
+                    <li>Television broadcasting (1930s+)</li>
+                    <li>Early switched telephone networks</li>
+                  </ul>
+                </div>
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">Modern Era (1960s-Present)</h5>
+                  <ul className="mb-0">
+                    <li>Digital transmission technologies</li>
+                    <li>Satellite communications</li>
+                    <li>Fiber optic networks</li>
+                    <li>Cellular networks (1G to 5G)</li>
+                    <li>Internet and packet-switched networks</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div className="border-l-4 border-info pl-4 my-6">
+                <h5 className="mt-0 text-info">The Mobile Revolution</h5>
+                <p className="mb-2">
+                  Mobile telecommunications has seen rapid advancement through multiple generations:
+                </p>
+                <ul className="mb-0">
+                  <li><strong>1G (1980s):</strong> Analog voice only, no data capabilities</li>
+                  <li><strong>2G (1990s):</strong> Digital voice, SMS, basic data (GSM, CDMA)</li>
+                  <li><strong>3G (2000s):</strong> Enhanced data capabilities, mobile internet</li>
+                  <li><strong>4G (2010s):</strong> High-speed data, video streaming, VoIP</li>
+                  <li><strong>5G (2020s):</strong> Ultra-low latency, massive capacity, IoT support</li>
+                </ul>
+              </div>
+              
+              <h4>Telecommunications Industry Structure</h4>
+              <p>
+                The modern telecommunications industry consists of several key segments:
+              </p>
+              
+              <table className="min-w-full divide-y divide-gray-300 text-sm mb-4">
+                <thead>
+                  <tr>
+                    <th className="py-2 px-4 text-left">Segment</th>
+                    <th className="py-2 px-4 text-left">Examples</th>
+                    <th className="py-2 px-4 text-left">Function</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  <tr>
+                    <td className="py-2 px-4">Network Operators</td>
+                    <td className="py-2 px-4">AT&T, Vodafone, NTT</td>
+                    <td className="py-2 px-4">Own and operate telecom networks</td>
+                  </tr>
+                  <tr>
+                    <td className="py-2 px-4">Equipment Vendors</td>
+                    <td className="py-2 px-4">Ericsson, Nokia, Huawei</td>
+                    <td className="py-2 px-4">Provide telecom infrastructure</td>
+                  </tr>
+                  <tr>
+                    <td className="py-2 px-4">Service Providers</td>
+                    <td className="py-2 px-4">MVNOs, ISPs, OTT providers</td>
+                    <td className="py-2 px-4">Deliver services over networks</td>
+                  </tr>
+                  <tr>
+                    <td className="py-2 px-4">Device Manufacturers</td>
+                    <td className="py-2 px-4">Apple, Samsung, Xiaomi</td>
+                    <td className="py-2 px-4">Create end-user telecommunications devices</td>
+                  </tr>
+                </tbody>
+              </table>
+              
+              <h4>Key Standard-Setting Organizations</h4>
+              <p>
+                Several organizations play crucial roles in setting telecommunications standards:
+              </p>
+              <ul>
+                <li><strong>ITU (International Telecommunication Union):</strong> UN agency for information and communication technologies</li>
+                <li><strong>3GPP (3rd Generation Partnership Project):</strong> Develops mobile broadband standards (GSM, UMTS, LTE, 5G)</li>
+                <li><strong>ETSI (European Telecommunications Standards Institute):</strong> Produces globally-applicable standards for ICT</li>
+                <li><strong>IETF (Internet Engineering Task Force):</strong> Develops and promotes internet standards</li>
+                <li><strong>IEEE (Institute of Electrical and Electronics Engineers):</strong> Technical standards for various technologies</li>
+              </ul>
+              
+              <div className="bg-muted p-4 rounded-md my-6">
+                <h4 className="mt-0 mb-2 font-medium">Explore Deeper</h4>
+                <p className="mb-2">
+                  To understand telecommunications in more detail, explore these fundamental areas:
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="border rounded-md p-3 bg-muted/30">
+                    <h5 className="mt-0 mb-1 font-medium text-sm">Cellular Networks</h5>
+                    <p className="text-xs mb-2">Learn how mobile networks are structured and operate</p>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="w-full text-xs"
+                      onClick={() => setSection("cellular-networks")}
+                    >
+                      Explore Cellular Networks
+                    </Button>
+                  </div>
+                  <div className="border rounded-md p-3 bg-muted/30">
+                    <h5 className="mt-0 mb-1 font-medium text-sm">Network Architecture</h5>
+                    <p className="text-xs mb-2">Understand the components that make up telecom networks</p>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="w-full text-xs"
+                      onClick={() => setSection("network-architecture")}
+                    >
+                      Explore Network Architecture
+                    </Button>
+                  </div>
+                  <div className="border rounded-md p-3 bg-muted/30">
+                    <h5 className="mt-0 mb-1 font-medium text-sm">Messaging Services</h5>
+                    <p className="text-xs mb-2">Dive into SMS and other mobile messaging technologies</p>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="w-full text-xs"
+                      onClick={() => setSection("messaging-services")}
+                    >
+                      Explore Messaging Services
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+          
           {section === "encoding-tool" && (
             <>
               <h3>SMS Character Encoding Tool</h3>
