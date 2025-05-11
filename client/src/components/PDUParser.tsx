@@ -458,7 +458,7 @@ export default function PDUParser() {
                                             </button>
                                           </TooltipTrigger>
                                           <TooltipContent>
-                                            <p className="text-xs">Learn more about Destination Address</p>
+                                            <p className="text-xs">{getKnowledgeBaseItem("TP-DA")?.summary || "Learn more about Destination Address"}</p>
                                           </TooltipContent>
                                         </Tooltip>
                                       </TooltipProvider>
@@ -489,7 +489,7 @@ export default function PDUParser() {
                                             </button>
                                           </TooltipTrigger>
                                           <TooltipContent>
-                                            <p className="text-xs">Learn more about Timestamps</p>
+                                            <p className="text-xs">{getKnowledgeBaseItem("Service Centre Time Stamp")?.summary || "Learn more about Timestamps"}</p>
                                           </TooltipContent>
                                         </Tooltip>
                                       </TooltipProvider>
@@ -515,7 +515,7 @@ export default function PDUParser() {
                                           </button>
                                         </TooltipTrigger>
                                         <TooltipContent>
-                                          <p className="text-xs">Learn more about SMS Encodings</p>
+                                          <p className="text-xs">{getKnowledgeBaseItem("Data Coding Scheme")?.summary || "Learn more about SMS Encodings"}</p>
                                         </TooltipContent>
                                       </Tooltip>
                                     </TooltipProvider>
@@ -540,7 +540,7 @@ export default function PDUParser() {
                                           </button>
                                         </TooltipTrigger>
                                         <TooltipContent>
-                                          <p className="text-xs">Learn more about Multipart SMS</p>
+                                          <p className="text-xs">{getKnowledgeBaseItem("User Data Header")?.summary || "Learn more about Multipart SMS"}</p>
                                         </TooltipContent>
                                       </Tooltip>
                                     </TooltipProvider>
@@ -602,7 +602,7 @@ export default function PDUParser() {
                                             </button>
                                           </TooltipTrigger>
                                           <TooltipContent>
-                                            <p className="text-xs">Learn more about {property.name}</p>
+                                            <p className="text-xs">{getKnowledgeBaseItem(property.name)?.summary || `Learn more about ${property.name}`}</p>
                                           </TooltipContent>
                                         </Tooltip>
                                       </TooltipProvider>
