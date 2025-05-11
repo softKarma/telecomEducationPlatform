@@ -45,6 +45,7 @@ const TAG_LANGUAGE = 0x2D;
 
 // Proactive SIM command types (as defined in 3GPP TS 31.111 and ETSI TS 102 223)
 const commandTypes: Record<number, string> = {
+  // Command Types (numeric values can vary between specifications)
   0x01: "REFRESH",
   0x02: "MORE TIME",
   0x03: "POLL INTERVAL",
@@ -60,16 +61,6 @@ const commandTypes: Record<number, string> = {
   0x0D: "DISPLAY TEXT",
   0x0E: "GET INKEY",
   0x0F: "GET INPUT",
-  0x10: "SELECT ITEM",
-  0x11: "SET UP MENU",
-  0x12: "PROVIDE LOCAL INFORMATION",
-  0x13: "TIMER MANAGEMENT",
-  0x14: "SET UP IDLE MODE TEXT",
-  0x15: "PERFORM CARD APDU",
-  0x16: "POWER OFF CARD",
-  0x17: "POWER ON CARD",
-  0x18: "GET READER STATUS",
-  0x19: "RUN AT COMMAND",
   0x1A: "LANGUAGE NOTIFICATION",
   0x1B: "OPEN CHANNEL",
   0x1C: "CLOSE CHANNEL",
@@ -77,17 +68,46 @@ const commandTypes: Record<number, string> = {
   0x1E: "SEND DATA",
   0x1F: "GET CHANNEL STATUS",
   0x20: "SERVICE SEARCH",
-  0x21: "GET SERVICE INFORMATION",
-  0x22: "DECLARE SERVICE",
-  0x23: "SET FRAMES",
-  0x24: "GET FRAMES STATUS",
-  0x25: "RETRIEVE MULTIMEDIA MESSAGE",
-  0x26: "SUBMIT MULTIMEDIA MESSAGE",
-  0x27: "DISPLAY MULTIMEDIA MESSAGE",
-  0x28: "SET MULTIMEDIA MESSAGE",
   0x29: "ACTIVATE",
   0x2A: "CONTACTLESS STATE CHANGED",
   0x2B: "COMMAND CONTAINER"
+};
+
+// Alternative command type values commonly seen in the wild
+// These are added separately to avoid duplicates in the Record type
+function getCommandType(typeValue: number): string {
+  // Check standard values first
+  if (commandTypes[typeValue]) {
+    return commandTypes[typeValue];
+  }
+  
+  // Check alternative values - these vary by specification
+  switch (typeValue) {
+    // Main alternative command values
+    case 0x10: return "SET UP CALL";       // Also seen as 0x06
+    case 0x11: return "SEND SS";           // Also seen as 0x07
+    case 0x12: return "SEND USSD";         // Also seen as 0x08
+    case 0x13: return "SEND SHORT MESSAGE"; // Also seen as 0x09
+    case 0x14: return "SET UP IDLE MODE TEXT";
+    case 0x15: return "PERFORM CARD APDU";
+    case 0x16: return "POWER OFF CARD";
+    case 0x17: return "POWER ON CARD";
+    case 0x18: return "GET READER STATUS";
+    case 0x19: return "RUN AT COMMAND";
+    
+    // SIM Application Toolkit spec values
+    case 0x21: return "DISPLAY TEXT";      // Also seen as 0x0D
+    case 0x22: return "GET INKEY";         // Also seen as 0x0E
+    case 0x23: return "GET INPUT";         // Also seen as 0x0F
+    case 0x24: return "SELECT ITEM";       // Also seen as 0x10
+    case 0x25: return "SET UP MENU";       // Also seen as 0x11
+    case 0x26: return "SUBMIT MULTIMEDIA MESSAGE";
+    case 0x27: return "DISPLAY MULTIMEDIA MESSAGE";
+    case 0x28: return "SET MULTIMEDIA MESSAGE";
+    
+    // Default for unknown command types
+    default: return `UNKNOWN (${typeValue.toString(16)})`;
+  }
 };
 
 // Device identities (as defined in 3GPP TS 31.111 and ETSI TS 102 223)
@@ -225,7 +245,8 @@ export function parseSAT(pduString: string): SATParseResult {
           const typeValue = tagData[1];
           const qualifier = tagData[2];
           
-          header.commandType = commandTypes[typeValue] || `UNKNOWN (${typeValue.toString(16)})`;
+          // Use our enhanced command type function
+          header.commandType = getCommandType(typeValue);
           header.commandQualifier = qualifier.toString(16).padStart(2, '0');
           
           commandDetails = `Command: ${header.commandType}, Qualifier: 0x${header.commandQualifier}`;
@@ -261,7 +282,17 @@ export function parseSAT(pduString: string): SATParseResult {
         break;
         
       case TAG_ALPHA_IDENTIFIER:
-        const alphaText = decodeGSMAlphabet(tagData);
+        let alphaText = "";
+        
+        // Try to decode based on first byte (DCS indicator might be present)
+        if (tagData.length > 0 && tagData[0] === 0x04) {
+          // If first byte is 0x04, it's an 8-bit encoded string
+          alphaText = tagData.slice(1).map(b => String.fromCharCode(b)).join('');
+        } else {
+          // Default to GSM 7-bit
+          alphaText = decodeGSMAlphabet(tagData);
+        }
+        
         commandText = alphaText;
         
         fields.push({
@@ -279,11 +310,17 @@ export function parseSAT(pduString: string): SATParseResult {
           const dcs = tagData[0]; // Data coding scheme
           const textData = tagData.slice(1);
           let decodedText = "";
+          let dcsDescription = "";
           
           // Decode based on data coding scheme
-          if (dcs === 0x04) {
+          if (dcs === 0x00) {
+            // GSM 7-bit default alphabet
+            decodedText = decodeGSMAlphabet(textData);
+            dcsDescription = "GSM 7-bit default alphabet";
+          } else if (dcs === 0x04) {
             // 8-bit data, treat as ASCII
             decodedText = textData.map(b => String.fromCharCode(b)).join('');
+            dcsDescription = "8-bit data (ASCII)";
           } else if (dcs === 0x08) {
             // UCS2 (16-bit) encoding
             decodedText = "";
@@ -293,9 +330,18 @@ export function parseSAT(pduString: string): SATParseResult {
                 decodedText += String.fromCharCode(charCode);
               }
             }
+            dcsDescription = "UCS2 (16-bit Unicode)";
           } else {
-            // Default to GSM 7-bit
-            decodedText = decodeGSMAlphabet(textData);
+            // Unknown DCS, try to guess based on content
+            if (textData.every(b => b >= 0x20 && b <= 0x7F)) {
+              // Printable ASCII
+              decodedText = textData.map(b => String.fromCharCode(b)).join('');
+              dcsDescription = "Unknown DCS, treated as ASCII";
+            } else {
+              // Default to GSM 7-bit
+              decodedText = decodeGSMAlphabet(textData);
+              dcsDescription = "Unknown DCS, treated as GSM 7-bit";
+            }
           }
           
           commandText = decodedText;
@@ -303,7 +349,7 @@ export function parseSAT(pduString: string): SATParseResult {
           fields.push({
             name: "Text String",
             value: decodedText,
-            description: `Text (DCS: 0x${dcs.toString(16)}): "${decodedText}"`,
+            description: `Text (DCS: 0x${dcs.toString(16)}, ${dcsDescription}): "${decodedText}"`,
             offset: offset - 2,
             length: length + 2,
             rawBytes: bytesToHex([tag, length, ...tagData])
