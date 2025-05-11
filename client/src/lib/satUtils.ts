@@ -18,6 +18,8 @@ const TAG_TEXT_STRING = 0x0D;
 const TAG_TONE = 0x0E;
 const TAG_ITEM = 0x0F;
 const TAG_ITEM_IDENTIFIER = 0x10;
+// According to ETSI TS 102 223, Response Type is tag 0x0F with high bit set (0x8F) in GET INPUT commands
+const TAG_RESPONSE_TYPE = 0x0F;
 const TAG_RESPONSE_LENGTH = 0x11;
 const TAG_FILE_LIST = 0x12;
 const TAG_LOCATION_INFORMATION = 0x13;
@@ -441,6 +443,35 @@ export function parseSAT(pduString: string): SATParseResult {
         });
         break;
         
+      case TAG_RESPONSE_TYPE:
+        if (length > 0) {
+          const responseTypes = [
+            "Any key",
+            "Digits (0-9, *, #, +) only",
+            "Alphabet characters only",
+            "UCS2 alphabet characters only",
+            "Yes/No",
+            "Immediate digit response",
+            "Digits (0-9, *, # only) only",
+            "SMS default alphabet characters only",
+            "Launch browser"
+          ];
+          
+          const responseValue = tagData[0];
+          const responseDesc = responseValue < responseTypes.length ? 
+            responseTypes[responseValue] : `Unknown response type (0x${responseValue.toString(16)})`;
+          
+          fields.push({
+            name: "Response Type",
+            value: responseDesc,
+            description: `Expected response type: ${responseDesc}`,
+            offset: offset - 2,
+            length: length + 2,
+            rawBytes: bytesToHex([tag, length, ...tagData])
+          });
+        }
+        break;
+        
       case TAG_RESPONSE_LENGTH:
         if (length > 0) {
           fields.push({
@@ -608,28 +639,7 @@ export function parseSAT(pduString: string): SATParseResult {
         });
         break;
         
-      case TAG_EVENT_LIST:
-        const events = [
-          "MT call", "Call connected", "Call disconnected", "Location status", 
-          "User activity", "Idle screen available", "Card reader status",
-          "Language selection", "Browser termination", "Data available", 
-          "Channel status", "Access Technology Change", "Display parameters changed",
-          "Local connection", "Network Search Mode Change", "Browsing status",
-          "Frames Information Change"
-        ];
-        
-        const eventsList = tagData.map(eventId => {
-          return eventId < events.length ? events[eventId] : `Unknown event (${eventId})`;
-        }).join(", ");
-        
-        fields.push({
-          name: "Event List",
-          value: bytesToHex(tagData),
-          description: `Events: ${eventsList}`,
-          offset: offset - 2,
-          length: length + 2,
-          rawBytes: bytesToHex([tag, length, ...tagData])
-        });
+      // EVENT_LIST is handled in another case
         break;
         
       default:
