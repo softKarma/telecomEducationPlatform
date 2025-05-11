@@ -39,7 +39,7 @@ function FieldInfo({ tooltip }: FieldInfoProps) {
 const fieldDescriptions = {
   // Header fields
   commandType: "Identifies the specific SIM Application Toolkit command being issued",
-  commandQualifier: "Contains flags that modify the behavior of the command",
+  commandQualifier: "Contains flags that modify the behavior of the command. Different bits have different meanings depending on the command type. For example, in DISPLAY TEXT command, bit 1 = 0 means 'normal priority' and bit 1 = 1 means 'high priority'. In SELECT ITEM, bit 1 controls whether selection using a soft key is allowed.",
   deviceIdentities: "Specifies the source and destination devices for the command",
   proactiveCommand: "Indicates if this is a command initiated by the SIM card (proactive) or the mobile device",
   

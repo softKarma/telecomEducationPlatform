@@ -1335,25 +1335,7 @@ export default function PDULearn() {
                   <li><strong>SIM data download</strong>: Data from the network can be directed to SAT applications</li>
                 </ol>
                 
-                <div className="border-t pt-3">
-                  <h5 className="font-medium">Example SAT Session Flow:</h5>
-                  <pre className="text-xs overflow-x-auto bg-black/5 p-2 rounded">
-{`1. SIM → ME:  SETUP MENU (Bank Service App)
-2. ME → SIM:  Terminal Response (Success)
-3. [User selects "Bank Service" from phone menu]
-4. ME → SIM:  MENU SELECTION (Bank Service selected)
-5. SIM → ME:  SELECT ITEM (Options: Check Balance, Transfer, Pay Bill)
-6. ME → SIM:  Terminal Response (Command performed)
-7. [User selects "Check Balance"]
-8. ME → SIM:  ITEM SELECTION (Check Balance)
-9. SIM → ME:  SEND SMS (To banking service number with balance request)
-10. ME → SIM: Terminal Response (SMS sent)
-11. [SMS response arrives from bank]
-12. ME → SIM: SMS-PP DATA DOWNLOAD (Bank data)
-13. SIM → ME: DISPLAY TEXT (Your balance is $1,245.00)
-14. ME → SIM: Terminal Response (Command performed)`}
-                  </pre>
-                </div>
+
               </div>
               
               <h4>SAT Applications in Real-World Use</h4>
@@ -1740,6 +1722,213 @@ export default function PDULearn() {
                 <li>Mobile network operators use SMPP to interconnect their messaging infrastructure</li>
                 <li>Application-to-Person (A2P) messaging services typically use SMPP</li>
               </ul>
+            </>
+          )}
+
+          {section === "sms-architecture" && (
+            <>
+              <h3>SMS Network Architecture</h3>
+              <p>
+                The SMS service relies on a complex network architecture that involves multiple components working together.
+                Understanding this architecture is essential for comprehending how SMS messages are processed and delivered.
+              </p>
+              
+              <div className="bg-muted/50 p-4 rounded-md border mb-6">
+                <h4 className="mt-0">Core SMS Network Components</h4>
+                <div className="flex justify-center my-6">
+                  <div className="border rounded-lg p-3 bg-black/5 max-w-4xl">
+                    <div className="grid grid-cols-3 gap-4">
+                      {/* Sender side */}
+                      <div className="border p-3 rounded bg-background">
+                        <div className="font-bold mb-2 text-center">Sender Side</div>
+                        <div className="flex flex-col gap-3">
+                          <div className="border border-dashed p-2 rounded text-center">
+                            <div className="text-sm font-medium">Mobile Station (MS)</div>
+                            <div className="text-xs text-muted-foreground">Mobile device + SIM</div>
+                          </div>
+                          <div className="flex justify-center">↓</div>
+                          <div className="border border-dashed p-2 rounded text-center">
+                            <div className="text-sm font-medium">Base Station (BTS)</div>
+                            <div className="text-xs text-muted-foreground">Radio interface</div>
+                          </div>
+                          <div className="flex justify-center">↓</div>
+                          <div className="border border-dashed p-2 rounded text-center">
+                            <div className="text-sm font-medium">MSC/VLR</div>
+                            <div className="text-xs text-muted-foreground">Mobile Switching Center</div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Middle/Core Network */}
+                      <div className="border p-3 rounded bg-background">
+                        <div className="font-bold mb-2 text-center">Core Network</div>
+                        <div className="flex flex-col gap-3 h-full justify-center">
+                          <div className="border border-primary p-2 rounded text-center">
+                            <div className="text-sm font-medium">SMSC</div>
+                            <div className="text-xs text-muted-foreground">Short Message Service Center</div>
+                            <ul className="text-xs text-left mt-1 mb-0">
+                              <li>Store & Forward</li>
+                              <li>Message Queuing</li>
+                              <li>Delivery Retries</li>
+                              <li>Protocol Conversion</li>
+                            </ul>
+                          </div>
+                          <div className="flex flex-row justify-center gap-2 items-center">
+                            <div>↔</div>
+                            <div className="text-xs text-muted-foreground">SMS Gateway</div>
+                            <div>↔</div>
+                          </div>
+                          <div className="border border-dashed p-2 rounded text-center">
+                            <div className="text-sm font-medium">HLR/HSS</div>
+                            <div className="text-xs text-muted-foreground">Home Location Register</div>
+                            <div className="text-xs text-muted-foreground">Subscriber Database</div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Receiver side */}
+                      <div className="border p-3 rounded bg-background">
+                        <div className="font-bold mb-2 text-center">Receiver Side</div>
+                        <div className="flex flex-col gap-3">
+                          <div className="border border-dashed p-2 rounded text-center">
+                            <div className="text-sm font-medium">MSC/VLR</div>
+                            <div className="text-xs text-muted-foreground">Mobile Switching Center</div>
+                          </div>
+                          <div className="flex justify-center">↓</div>
+                          <div className="border border-dashed p-2 rounded text-center">
+                            <div className="text-sm font-medium">Base Station (BTS)</div>
+                            <div className="text-xs text-muted-foreground">Radio interface</div>
+                          </div>
+                          <div className="flex justify-center">↓</div>
+                          <div className="border border-dashed p-2 rounded text-center">
+                            <div className="text-sm font-medium">Mobile Station (MS)</div>
+                            <div className="text-xs text-muted-foreground">Mobile device + SIM</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <h5 className="font-medium mt-4">Key Components:</h5>
+                <ul className="mb-0">
+                  <li><strong>Mobile Station (MS):</strong> The mobile device (handset) and SIM card</li>
+                  <li><strong>Base Transceiver Station (BTS):</strong> The radio tower that connects to mobile devices</li>
+                  <li><strong>Mobile Switching Center (MSC):</strong> Manages call setup and routing</li>
+                  <li><strong>Visitor Location Register (VLR):</strong> Temporary database of subscribers in the current area</li>
+                  <li><strong>Home Location Register (HLR):</strong> Permanent database of subscriber information</li>
+                  <li><strong>Short Message Service Center (SMSC):</strong> Stores, forwards, and manages SMS messages</li>
+                  <li><strong>SMS Gateway:</strong> Interfaces between the SMSC and external networks or applications</li>
+                </ul>
+              </div>
+              
+              <h4>SMS Protocol Layers</h4>
+              <p>
+                SMS uses a layered protocol architecture following the OSI model:
+              </p>
+              
+              <div className="overflow-x-auto">
+                <table className="min-w-full border-collapse">
+                  <thead>
+                    <tr className="bg-muted">
+                      <th className="px-4 py-2 border">Layer</th>
+                      <th className="px-4 py-2 border">Protocol</th>
+                      <th className="px-4 py-2 border">Function</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="px-4 py-2 border font-medium">Application</td>
+                      <td className="px-4 py-2 border">SMS Transfer Protocol (SMS-TP)</td>
+                      <td className="px-4 py-2 border">End-to-end communication between MS and SMSC (PDU format)</td>
+                    </tr>
+                    <tr className="bg-muted/10">
+                      <td className="px-4 py-2 border font-medium">Transport</td>
+                      <td className="px-4 py-2 border">SMS Relay Protocol (SMS-RP)</td>
+                      <td className="px-4 py-2 border">Relay functionality between MS and SMSC</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 border font-medium">Network</td>
+                      <td className="px-4 py-2 border">Connection Management (CM)</td>
+                      <td className="px-4 py-2 border">Management of signaling connections</td>
+                    </tr>
+                    <tr className="bg-muted/10">
+                      <td className="px-4 py-2 border font-medium">Network Core</td>
+                      <td className="px-4 py-2 border">Mobile Application Part (MAP)</td>
+                      <td className="px-4 py-2 border">Communication between network elements</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 border font-medium">Underlying</td>
+                      <td className="px-4 py-2 border">SS7, SIGTRAN, or IP</td>
+                      <td className="px-4 py-2 border">Physical transport of signaling messages</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              
+              <h4 className="mt-6">Evolution of SMS Architecture</h4>
+              <p>
+                The SMS architecture has evolved across different generations of mobile networks:
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-4">
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">2G (GSM) SMS</h5>
+                  <ul className="mb-0 text-sm">
+                    <li>Uses SS7 signaling</li>
+                    <li>Circuit-switched</li>
+                    <li>SMS over signaling channels</li>
+                    <li>140 bytes per message</li>
+                    <li>Limited to text only</li>
+                  </ul>
+                </div>
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">3G (UMTS) SMS</h5>
+                  <ul className="mb-0 text-sm">
+                    <li>Backward compatibility with 2G</li>
+                    <li>Improved reliability</li>
+                    <li>Higher capacity</li>
+                    <li>Support for enhanced messaging</li>
+                    <li>MMS introduction</li>
+                  </ul>
+                </div>
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">4G/5G SMS</h5>
+                  <ul className="mb-0 text-sm">
+                    <li>SMS over IMS (IP Multimedia Subsystem)</li>
+                    <li>SMS over SGs interface</li>
+                    <li>Rich Communication Services (RCS)</li>
+                    <li>Integration with IP-based services</li>
+                    <li>Enhanced security features</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <h4>SMS Routing and Addressing</h4>
+              <p>
+                The SMS architecture uses several identifiers for routing messages:
+              </p>
+              <ul>
+                <li><strong>MSISDN (Mobile Station ISDN Number):</strong> The subscriber's phone number</li>
+                <li><strong>IMSI (International Mobile Subscriber Identity):</strong> Unique subscriber identifier</li>
+                <li><strong>SMSC Address:</strong> Address of the service center handling the message</li>
+                <li><strong>Global Title (GT):</strong> Used in SS7 networks for routing</li>
+                <li><strong>E.164 Address:</strong> International number format for routing messages</li>
+              </ul>
+              
+              <div className="mt-6 border p-4 rounded bg-muted/20">
+                <h4 className="mt-0">SMS Security in the Network Architecture</h4>
+                <p className="mb-2">
+                  Security mechanisms in the SMS architecture vary by network generation:
+                </p>
+                <ul className="mb-0">
+                  <li><strong>Air Interface Encryption:</strong> Protects messages over the radio interface</li>
+                  <li><strong>Authentication:</strong> Verifies the identity of the sending device</li>
+                  <li><strong>Message Origin Validation:</strong> Verifies the sender's identity</li>
+                  <li><strong>Network Core Security:</strong> SS7/SIGTRAN security measures</li>
+                  <li><strong>SMS Firewalls:</strong> Protect against spam and fraud in modern networks</li>
+                </ul>
+              </div>
             </>
           )}
 
