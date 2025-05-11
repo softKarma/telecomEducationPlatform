@@ -22,7 +22,7 @@ type LearnSection =
   // Level 5: SMS protocols
   "pdu-formats" | "encodings" | "fields" | "multipart" |
   // Level 6: Advanced protocols
-  "sat" | "smpp" | "efsms" |
+  "sat" | "smpp" |
   // Tools
   "encoding-tool" | "external-resources";
 
@@ -302,13 +302,7 @@ export default function PDULearn() {
                   >
                     SMPP Protocol
                   </Button>
-                  <Button 
-                    variant={section === "efsms" ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setSection("efsms")}
-                  >
-                    EF_SMS Storage
-                  </Button>
+
                 </div>
               </AccordionContent>
             </AccordionItem>
