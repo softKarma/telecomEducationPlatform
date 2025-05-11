@@ -2,7 +2,7 @@ import { SATParseResult, PDUField, SATHeader } from "@shared/schema";
 import { hexToBytes, bytesToHex } from "./pduUtils";
 
 // SIM Application Toolkit tag values (as defined in ETSI TS 101 267 and 3GPP TS 31.111)
-const TAG_COMMAND_DETAILS = 0x01;
+const TAG_COMMAND_DETAILS = 0x01;  // Can also be 0x81 in some implementations
 const TAG_DEVICE_IDENTITIES = 0x02;
 const TAG_RESULT = 0x03;
 const TAG_DURATION = 0x04;
@@ -159,6 +159,20 @@ const deviceIdentities: Record<number, string> = {
 };
 
 /**
+ * Handle BER-TLV tag structure with high bit set
+ * Many SIM Application Toolkit implementations use BER-TLV encoding where the high bit is set
+ * This function identifies the actual tag value by checking if the high bit is set
+ */
+function getBerTag(tag: number): number {
+  // If the high bit is set (0x80), it's a non-standard tag
+  if (tag & 0x80) {
+    // Strip off the high bit to get the standard tag value
+    return tag & 0x7F;
+  }
+  return tag;
+}
+
+/**
  * Parse SIM Application Toolkit command
  */
 export function parseSAT(pduString: string): SATParseResult {
@@ -240,6 +254,7 @@ export function parseSAT(pduString: string): SATParseResult {
     // Process the tag data according to tag type
     switch (tag) {
       case TAG_COMMAND_DETAILS:
+      case 0x81:  // Alternative encoding for command details
         if (length >= 3) {
           const commandNumber = tagData[0];
           const typeValue = tagData[1];
@@ -263,6 +278,7 @@ export function parseSAT(pduString: string): SATParseResult {
         break;
         
       case TAG_DEVICE_IDENTITIES:
+      case 0x82:  // Alternative encoding for device identities
         if (length >= 2) {
           const sourceDevice = tagData[0];
           const destinationDevice = tagData[1];
@@ -282,6 +298,7 @@ export function parseSAT(pduString: string): SATParseResult {
         break;
         
       case TAG_ALPHA_IDENTIFIER:
+      case 0x85:  // Alternative encoding for alpha identifier
         let alphaText = "";
         
         // Try to decode based on first byte (DCS indicator might be present)
@@ -306,6 +323,7 @@ export function parseSAT(pduString: string): SATParseResult {
         break;
         
       case TAG_TEXT_STRING:
+      case 0x8D:  // Alternative encoding for text string
         if (length > 0) {
           const dcs = tagData[0]; // Data coding scheme
           const textData = tagData.slice(1);
