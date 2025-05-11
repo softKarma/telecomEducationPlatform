@@ -7,11 +7,63 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { AlertCircle, Check, Copy } from "lucide-react";
+import { AlertCircle, Check, Copy, Info } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import ByteDisplay from "./ByteDisplay";
 import { exampleSmppPdus } from "@/lib/smppUtils";
+
+// Field Info component
+interface FieldInfoProps {
+  tooltip: string;
+}
+
+function FieldInfo({ tooltip }: FieldInfoProps) {
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <span className="inline-flex ml-1 cursor-help">
+            <Info className="h-3.5 w-3.5 text-muted-foreground" />
+          </span>
+        </TooltipTrigger>
+        <TooltipContent side="right" className="max-w-xs">
+          <p className="text-xs">{tooltip}</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
+}
+
+// SMPP field descriptions
+const fieldDescriptions = {
+  // Header fields
+  commandId: "Identifies the SMPP operation to be performed (e.g., bind_transmitter, submit_sm)",
+  commandStatus: "Indicates the success or failure status of an SMPP operation",
+  sequenceNumber: "Used to correlate requests and responses in asynchronous transactions",
+  commandLength: "Total length of the SMPP PDU in bytes, including the header",
+  commandName: "The human-readable name of the SMPP command",
+  
+  // Message fields
+  sourceAddr: "Address (usually phone number) of the message sender",
+  destAddr: "Address (usually phone number) of the message recipient",
+  serviceType: "Indicates the SMS application service associated with the message",
+  sourceAddrTon: "Type of Number for source address (international, national, alphanumeric)",
+  sourceAddrNpi: "Numbering Plan Indicator for source address (e.g., E.164, private)",
+  destAddrTon: "Type of Number for destination address (international, national, alphanumeric)",
+  destAddrNpi: "Numbering Plan Indicator for destination address (e.g., E.164, private)",
+  esmClass: "Indicates message mode, message type, and GSM network features",
+  protocolId: "GSM protocol identifier (network specific)",
+  priorityFlag: "Designates the priority level of the message",
+  scheduleDeliveryTime: "Time when message is scheduled for delivery (YYMMDDhhmmsstnnp)",
+  validityPeriod: "Message validity period (YYMMDDhhmmsstnnp)",
+  registeredDelivery: "Controls delivery receipt and acknowledgement requests",
+  replaceIfPresentFlag: "Instructs if message should replace existing message with same ID",
+  dataCoding: "Encoding scheme used for the message content",
+  smDefaultMsgId: "Indicates a pre-defined message stored on the SMSC",
+  smLength: "Length of the short message in bytes",
+  shortMessage: "The actual SMS content"
+};
 
 export default function SMPPParser() {
   const [pduString, setPduString] = useState<string>("0000003B00000004000000000000000100010101313233343536373839000101013132333435363738390000000000000000040548656C6C6F");
@@ -175,23 +227,38 @@ export default function SMPPParser() {
                       <table className="w-full text-sm">
                         <tbody>
                           <tr>
-                            <td className="pb-1 pr-3 text-muted-foreground">Command Name:</td>
+                            <td className="pb-1 pr-3 text-muted-foreground">
+                              Command Name:
+                              <FieldInfo tooltip={fieldDescriptions.commandName} />
+                            </td>
                             <td className="pb-1 font-medium">{parsedData.header.commandName}</td>
                           </tr>
                           <tr>
-                            <td className="pb-1 pr-3 text-muted-foreground">Command ID:</td>
+                            <td className="pb-1 pr-3 text-muted-foreground">
+                              Command ID:
+                              <FieldInfo tooltip={fieldDescriptions.commandId} />
+                            </td>
                             <td className="pb-1 font-medium">{parsedData.header.commandId}</td>
                           </tr>
                           <tr>
-                            <td className="pb-1 pr-3 text-muted-foreground">Command Status:</td>
+                            <td className="pb-1 pr-3 text-muted-foreground">
+                              Command Status:
+                              <FieldInfo tooltip={fieldDescriptions.commandStatus} />
+                            </td>
                             <td className="pb-1 font-medium">{parsedData.header.commandStatus}</td>
                           </tr>
                           <tr>
-                            <td className="pb-1 pr-3 text-muted-foreground">Command Length:</td>
+                            <td className="pb-1 pr-3 text-muted-foreground">
+                              Command Length:
+                              <FieldInfo tooltip={fieldDescriptions.commandLength} />
+                            </td>
                             <td className="pb-1 font-medium">{parsedData.header.commandLength} bytes</td>
                           </tr>
                           <tr>
-                            <td className="pb-1 pr-3 text-muted-foreground">Sequence Number:</td>
+                            <td className="pb-1 pr-3 text-muted-foreground">
+                              Sequence Number:
+                              <FieldInfo tooltip={fieldDescriptions.sequenceNumber} />
+                            </td>
                             <td className="pb-1 font-medium">{parsedData.header.sequenceNumber}</td>
                           </tr>
                         </tbody>
@@ -289,7 +356,12 @@ export default function SMPPParser() {
                       <tbody className="divide-y divide-border">
                         {parsedData.properties.map((property, index) => (
                           <tr key={index}>
-                            <td className="px-4 py-2">{property.name}</td>
+                            <td className="px-4 py-2 flex items-center">
+                              {property.name}
+                              {fieldDescriptions[property.name.toLowerCase().replace(/\s+/g, '')] && (
+                                <FieldInfo tooltip={fieldDescriptions[property.name.toLowerCase().replace(/\s+/g, '')]} />
+                              )}
+                            </td>
                             <td className="px-4 py-2 font-mono">{property.value}</td>
                             <td className="px-4 py-2 text-muted-foreground">{property.description}</td>
                           </tr>
