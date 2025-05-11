@@ -405,7 +405,7 @@ export default function PDUParser() {
                                           </button>
                                         </TooltipTrigger>
                                         <TooltipContent>
-                                          <p className="text-xs">Learn more about SMSC</p>
+                                          <p className="text-xs">{getKnowledgeBaseItem("SMSC Address")?.summary || "Learn more about SMSC"}</p>
                                         </TooltipContent>
                                       </Tooltip>
                                     </TooltipProvider>
@@ -431,7 +431,7 @@ export default function PDUParser() {
                                             </button>
                                           </TooltipTrigger>
                                           <TooltipContent>
-                                            <p className="text-xs">Learn more about Originating Address</p>
+                                            <p className="text-xs">{getKnowledgeBaseItem("TP-OA")?.summary || "Learn more about Originating Address"}</p>
                                           </TooltipContent>
                                         </Tooltip>
                                       </TooltipProvider>
@@ -656,7 +656,7 @@ export default function PDUParser() {
                             <span>{parsedData.header.messageType === 'sms-deliver' ? 'Originating Address' : 'Destination Address'}</span>
                             {getKnowledgeBaseItem(parsedData.header.messageType === 'sms-deliver' ? "TP-OA" : "TP-DA") && (
                               <button 
-                                onClick={() => openKnowledgeSection(getKnowledgeBaseItem(parsedData.header.messageType === 'sms-deliver' ? "TP-OA" : "TP-DA")!)}
+                                onClick={() => openKnowledgeSection(getKnowledgeBaseItem(parsedData.header.messageType === 'sms-deliver' ? "TP-OA" : "TP-DA")!.section)}
                                 className="ml-1 inline-flex"
                               >
                                 <Info size={12} className="text-blue-400 hover:text-blue-500" />
@@ -670,7 +670,7 @@ export default function PDUParser() {
                             <span>Protocol Identifiers</span>
                             {getKnowledgeBaseItem("Protocol Identifier") && (
                               <button 
-                                onClick={() => openKnowledgeSection(getKnowledgeBaseItem("Protocol Identifier")!)}
+                                onClick={() => openKnowledgeSection(getKnowledgeBaseItem("Protocol Identifier")!.section)}
                                 className="ml-1 inline-flex"
                               >
                                 <Info size={12} className="text-blue-400 hover:text-blue-500" />
@@ -684,7 +684,7 @@ export default function PDUParser() {
                             <span>{parsedData.header.messageType === 'sms-deliver' ? 'Timestamp' : 'Validity Period'}</span>
                             {getKnowledgeBaseItem(parsedData.header.messageType === 'sms-deliver' ? "Service Centre Time Stamp" : "Validity Period") && (
                               <button 
-                                onClick={() => openKnowledgeSection(getKnowledgeBaseItem(parsedData.header.messageType === 'sms-deliver' ? "Service Centre Time Stamp" : "Validity Period")!)}
+                                onClick={() => openKnowledgeSection(getKnowledgeBaseItem(parsedData.header.messageType === 'sms-deliver' ? "Service Centre Time Stamp" : "Validity Period")!.section)}
                                 className="ml-1 inline-flex"
                               >
                                 <Info size={12} className="text-blue-400 hover:text-blue-500" />
@@ -698,7 +698,7 @@ export default function PDUParser() {
                             <span>User Data</span>
                             {getKnowledgeBaseItem("TP-UD") && (
                               <button 
-                                onClick={() => openKnowledgeSection(getKnowledgeBaseItem("TP-UD")!)}
+                                onClick={() => openKnowledgeSection(getKnowledgeBaseItem("TP-UD")!.section)}
                                 className="ml-1 inline-flex"
                               >
                                 <Info size={12} className="text-blue-400 hover:text-blue-500" />
