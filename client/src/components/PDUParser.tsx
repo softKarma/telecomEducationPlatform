@@ -379,16 +379,79 @@ export default function PDUParser() {
                             )}
                             {parsedData.header.timestamp && (
                               <tr>
-                                <td className="pb-1 pr-3 text-muted-foreground">Timestamp:</td>
+                                <td className="pb-1 pr-3 text-muted-foreground">
+                                  <div className="flex items-center">
+                                    Timestamp:
+                                    {getKnowledgeBaseLink("Service Centre Time Stamp") && (
+                                      <TooltipProvider>
+                                        <Tooltip>
+                                          <TooltipTrigger asChild>
+                                            <button 
+                                              onClick={() => openKnowledgeSection(getKnowledgeBaseLink("Service Centre Time Stamp")!)}
+                                              className="ml-1 inline-flex"
+                                            >
+                                              <Info size={12} className="text-blue-400 hover:text-blue-500" />
+                                            </button>
+                                          </TooltipTrigger>
+                                          <TooltipContent>
+                                            <p className="text-xs">Learn more about Timestamps</p>
+                                          </TooltipContent>
+                                        </Tooltip>
+                                      </TooltipProvider>
+                                    )}
+                                  </div>
+                                </td>
                                 <td className="pb-1 font-medium">{parsedData.header.timestamp}</td>
                               </tr>
                             )}
                             <tr>
-                              <td className="pb-1 pr-3 text-muted-foreground">Encoding:</td>
+                              <td className="pb-1 pr-3 text-muted-foreground">
+                                <div className="flex items-center">
+                                  Encoding:
+                                  {getKnowledgeBaseLink("Data Coding Scheme") && (
+                                    <TooltipProvider>
+                                      <Tooltip>
+                                        <TooltipTrigger asChild>
+                                          <button 
+                                            onClick={() => openKnowledgeSection(getKnowledgeBaseLink("Data Coding Scheme")!)}
+                                            className="ml-1 inline-flex"
+                                          >
+                                            <Info size={12} className="text-blue-400 hover:text-blue-500" />
+                                          </button>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                          <p className="text-xs">Learn more about SMS Encodings</p>
+                                        </TooltipContent>
+                                      </Tooltip>
+                                    </TooltipProvider>
+                                  )}
+                                </div>
+                              </td>
                               <td className="pb-1 font-medium">{parsedData.header.encoding}</td>
                             </tr>
                             <tr>
-                              <td className="pb-1 pr-3 text-muted-foreground">Multipart:</td>
+                              <td className="pb-1 pr-3 text-muted-foreground">
+                                <div className="flex items-center">
+                                  Multipart:
+                                  {getKnowledgeBaseLink("User Data Header") && (
+                                    <TooltipProvider>
+                                      <Tooltip>
+                                        <TooltipTrigger asChild>
+                                          <button 
+                                            onClick={() => openKnowledgeSection(getKnowledgeBaseLink("User Data Header")!)}
+                                            className="ml-1 inline-flex"
+                                          >
+                                            <Info size={12} className="text-blue-400 hover:text-blue-500" />
+                                          </button>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                          <p className="text-xs">Learn more about Multipart SMS</p>
+                                        </TooltipContent>
+                                      </Tooltip>
+                                    </TooltipProvider>
+                                  )}
+                                </div>
+                              </td>
                               <td className="pb-1 font-medium">
                                 {parsedData.header.multipart ? (
                                   <>
@@ -480,11 +543,31 @@ export default function PDUParser() {
                       <div className="text-xs space-y-2">
                         <div className="flex items-center">
                           <span className="w-4 h-4 bg-primary/20 border border-primary/30 inline-block mr-2"></span>
-                          <span>SMSC Information</span>
+                          <div className="flex items-center">
+                            <span>SMSC Information</span>
+                            {getKnowledgeBaseLink("SMSC Address") && (
+                              <button 
+                                onClick={() => openKnowledgeSection(getKnowledgeBaseLink("SMSC Address")!)}
+                                className="ml-1 inline-flex"
+                              >
+                                <Info size={12} className="text-blue-400 hover:text-blue-500" />
+                              </button>
+                            )}
+                          </div>
                         </div>
                         <div className="flex items-center">
                           <span className="w-4 h-4 bg-secondary/20 border border-secondary/30 inline-block mr-2"></span>
-                          <span>{parsedData.header.messageType === 'sms-deliver' ? 'Originating Address' : 'Destination Address'}</span>
+                          <div className="flex items-center">
+                            <span>{parsedData.header.messageType === 'sms-deliver' ? 'Originating Address' : 'Destination Address'}</span>
+                            {getKnowledgeBaseLink(parsedData.header.messageType === 'sms-deliver' ? "TP-OA" : "TP-DA") && (
+                              <button 
+                                onClick={() => openKnowledgeSection(getKnowledgeBaseLink(parsedData.header.messageType === 'sms-deliver' ? "TP-OA" : "TP-DA")!)}
+                                className="ml-1 inline-flex"
+                              >
+                                <Info size={12} className="text-blue-400 hover:text-blue-500" />
+                              </button>
+                            )}
+                          </div>
                         </div>
                         <div className="flex items-center">
                           <span className="w-4 h-4 bg-muted border border-muted-foreground/30 inline-block mr-2"></span>
