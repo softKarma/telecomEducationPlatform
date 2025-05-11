@@ -11,6 +11,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import ByteDisplay from "./ByteDisplay";
 import { exampleSatPdus } from "@/lib/satUtils";
+import { findTooltip, hasTooltip } from "@/lib/tooltipUtils";
 
 // Field Info component
 interface FieldInfoProps {

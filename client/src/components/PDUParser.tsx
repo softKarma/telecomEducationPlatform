@@ -309,7 +309,7 @@ export default function PDUParser() {
                             <tr>
                               <td className="pb-1 pr-3 text-muted-foreground">
                                 SMSC:
-                                <FieldInfo tooltip={fieldDescriptions.smsc} />
+                                <FieldInfo tooltip={findTooltip('smsc', fieldDescriptions)} />
                               </td>
                               <td className="pb-1 font-medium">{parsedData.header.smsc}</td>
                             </tr>
@@ -317,7 +317,7 @@ export default function PDUParser() {
                               <tr>
                                 <td className="pb-1 pr-3 text-muted-foreground">
                                   Sender:
-                                  <FieldInfo tooltip={fieldDescriptions.sender} />
+                                  <FieldInfo tooltip={findTooltip('sender', fieldDescriptions)} />
                                 </td>
                                 <td className="pb-1 font-medium">{parsedData.header.sender}</td>
                               </tr>
@@ -326,7 +326,7 @@ export default function PDUParser() {
                               <tr>
                                 <td className="pb-1 pr-3 text-muted-foreground align-top">
                                   Recipient:
-                                  <FieldInfo tooltip={fieldDescriptions.recipient} />
+                                  <FieldInfo tooltip={findTooltip('recipient', fieldDescriptions)} />
                                 </td>
                                 <td className="pb-1 font-medium break-all max-w-[200px]" title={parsedData.header.recipient}>
                                   {parsedData.header.recipient.length > 50 
@@ -339,7 +339,7 @@ export default function PDUParser() {
                               <tr>
                                 <td className="pb-1 pr-3 text-muted-foreground">
                                   Timestamp:
-                                  <FieldInfo tooltip={fieldDescriptions.timestamp} />
+                                  <FieldInfo tooltip={findTooltip('timestamp', fieldDescriptions)} />
                                 </td>
                                 <td className="pb-1 font-medium">{parsedData.header.timestamp}</td>
                               </tr>
@@ -347,14 +347,14 @@ export default function PDUParser() {
                             <tr>
                               <td className="pb-1 pr-3 text-muted-foreground">
                                 Encoding:
-                                <FieldInfo tooltip={fieldDescriptions.encoding} />
+                                <FieldInfo tooltip={findTooltip('encoding', fieldDescriptions)} />
                               </td>
                               <td className="pb-1 font-medium">{parsedData.header.encoding}</td>
                             </tr>
                             <tr>
                               <td className="pb-1 pr-3 text-muted-foreground">
                                 Multipart:
-                                <FieldInfo tooltip={fieldDescriptions.multipart} />
+                                <FieldInfo tooltip={findTooltip('multipart', fieldDescriptions)} />
                               </td>
                               <td className="pb-1 font-medium">
                                 {parsedData.header.multipart ? (
