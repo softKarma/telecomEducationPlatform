@@ -1702,6 +1702,891 @@ export default function PDULearn() {
               </p>
             </>
           )}
+          {section === "cellular-networks" && (
+            <>
+              <h3>Cellular Network Fundamentals</h3>
+              <p>
+                Cellular networks are telecommunications networks designed to provide wireless connectivity over wide geographic areas.
+                They divide the coverage area into smaller regions called "cells," each served by at least one fixed-location transceiver
+                known as a base station.
+              </p>
+              
+              <div className="bg-primary/5 p-4 rounded-md border border-primary/20 mb-4">
+                <h4 className="mt-0 text-primary">How Cellular Networks Work</h4>
+                <p>
+                  Mobile devices connect to the nearest base station, and as users move between cells, the network
+                  performs "handovers" to transfer connections between base stations. This cellular architecture allows for:
+                </p>
+                <ul className="mb-0">
+                  <li><strong>Frequency Reuse:</strong> The same frequencies can be reused in non-adjacent cells, increasing network capacity</li>
+                  <li><strong>Seamless Mobility:</strong> Users can move throughout the coverage area while maintaining connectivity</li>
+                  <li><strong>Scalable Deployment:</strong> Networks can grow by adding more cells</li>
+                  <li><strong>Power Efficiency:</strong> Mobile devices only need enough power to communicate with the nearest base station</li>
+                </ul>
+              </div>
+              
+              <h4>Cellular Network Structure</h4>
+              <p>
+                Modern cellular networks are organized in a hierarchical structure consisting of various components:
+              </p>
+              
+              <div className="overflow-x-auto my-4">
+                <table className="min-w-full border border-border">
+                  <thead className="bg-muted/50">
+                    <tr>
+                      <th className="px-4 py-2 border-b border-r">Component</th>
+                      <th className="px-4 py-2 border-b">Function</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="px-4 py-2 font-medium border-r">Mobile Station (MS)</td>
+                      <td className="px-4 py-2">The user device (phone, modem) that connects to the network</td>
+                    </tr>
+                    <tr className="bg-muted/20">
+                      <td className="px-4 py-2 font-medium border-r">Base Station (BTS/NodeB/eNodeB)</td>
+                      <td className="px-4 py-2">Radio equipment that communicates with mobile devices</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 font-medium border-r">Base Station Controller (BSC/RNC)</td>
+                      <td className="px-4 py-2">Manages multiple base stations, handling resource allocation and handovers</td>
+                    </tr>
+                    <tr className="bg-muted/20">
+                      <td className="px-4 py-2 font-medium border-r">Mobile Switching Center (MSC)</td>
+                      <td className="px-4 py-2">Routes voice calls and SMS, interfaces with other networks</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 font-medium border-r">Home Location Register (HLR)</td>
+                      <td className="px-4 py-2">Central database of subscriber information</td>
+                    </tr>
+                    <tr className="bg-muted/20">
+                      <td className="px-4 py-2 font-medium border-r">Visitor Location Register (VLR)</td>
+                      <td className="px-4 py-2">Temporary database of subscribers currently in a specific area</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              
+              <h4>Cell Types and Coverage</h4>
+              <p>
+                Network operators deploy different types of cells based on coverage requirements and user density:
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-6">
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">Macrocells</h5>
+                  <ul className="mb-0">
+                    <li>Coverage: 2-30 km radius</li>
+                    <li>Deployed on towers or building rooftops</li>
+                    <li>Provide broad coverage in urban and rural areas</li>
+                    <li>Higher transmission power</li>
+                  </ul>
+                </div>
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">Microcells</h5>
+                  <ul className="mb-0">
+                    <li>Coverage: 200-2000m radius</li>
+                    <li>Used in densely populated urban areas</li>
+                    <li>Mounted below rooftop level</li>
+                    <li>Enhance capacity in high-traffic zones</li>
+                  </ul>
+                </div>
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">Small Cells</h5>
+                  <ul className="mb-0">
+                    <li>Picocells: 100-200m radius</li>
+                    <li>Femtocells: 10-50m radius</li>
+                    <li>Deployed indoors or in specific locations</li>
+                    <li>Improve indoor coverage and offload traffic</li>
+                  </ul>
+                </div>
+              </div>
+            </>
+          )}
+          
+          {section === "signaling-protocols" && (
+            <>
+              <h3>Telecommunications Signaling Protocols</h3>
+              <p>
+                Signaling protocols are essential communication mechanisms that enable network elements to exchange control 
+                information and coordinate operations. They form the backbone of telecommunications systems by managing
+                connections, resource allocation, and service delivery.
+              </p>
+              
+              <div className="bg-primary/5 p-4 rounded-md border border-primary/20 mb-4">
+                <h4 className="mt-0 text-primary">Types of Signaling</h4>
+                <p className="mb-2">
+                  Signaling systems can be broadly categorized into several types:
+                </p>
+                <ul className="mb-0">
+                  <li><strong>Subscriber Signaling:</strong> Between end-user device and network (e.g., DTMF tones)</li>
+                  <li><strong>Network Access Signaling:</strong> Procedures for devices to access the network (e.g., RACH in GSM)</li>
+                  <li><strong>Network-to-Network Signaling:</strong> Between network elements (e.g., SS7, Diameter)</li>
+                  <li><strong>Channel-Associated Signaling (CAS):</strong> Uses the same channel as user data</li>
+                  <li><strong>Common Channel Signaling (CCS):</strong> Uses separate channels for signaling and user data</li>
+                </ul>
+              </div>
+              
+              <h4>Key Signaling Protocols in Telecommunications</h4>
+              
+              <div className="overflow-x-auto my-4">
+                <table className="min-w-full border border-border">
+                  <thead className="bg-muted/50">
+                    <tr>
+                      <th className="px-4 py-2 border-b border-r">Protocol</th>
+                      <th className="px-4 py-2 border-b border-r">Network</th>
+                      <th className="px-4 py-2 border-b">Function</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="px-4 py-2 font-medium border-r">SS7 (Signaling System No. 7)</td>
+                      <td className="px-4 py-2 border-r">PSTN, 2G/3G</td>
+                      <td className="px-4 py-2">
+                        Core signaling protocol for PSTN and early mobile networks, handling call setup, 
+                        routing, SMS delivery, and roaming.
+                      </td>
+                    </tr>
+                    <tr className="bg-muted/20">
+                      <td className="px-4 py-2 font-medium border-r">ISUP (ISDN User Part)</td>
+                      <td className="px-4 py-2 border-r">PSTN, SS7</td>
+                      <td className="px-4 py-2">
+                        Part of SS7, handles circuit-switched call establishment, management, and teardown.
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 font-medium border-r">MAP (Mobile Application Part)</td>
+                      <td className="px-4 py-2 border-r">2G/3G</td>
+                      <td className="px-4 py-2">
+                        Mobile-specific extension to SS7, supporting mobility management, 
+                        SMS, and roaming operations.
+                      </td>
+                    </tr>
+                    <tr className="bg-muted/20">
+                      <td className="px-4 py-2 font-medium border-r">BSSAP (Base Station System Application Part)</td>
+                      <td className="px-4 py-2 border-r">GSM</td>
+                      <td className="px-4 py-2">
+                        Communications between BSC and MSC, handling resource management and mobility.
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 font-medium border-r">SCCP (Signaling Connection Control Part)</td>
+                      <td className="px-4 py-2 border-r">SS7</td>
+                      <td className="px-4 py-2">
+                        Provides routing and addressing capabilities for non-circuit-related signaling.
+                      </td>
+                    </tr>
+                    <tr className="bg-muted/20">
+                      <td className="px-4 py-2 font-medium border-r">SIGTRAN</td>
+                      <td className="px-4 py-2 border-r">IP networks</td>
+                      <td className="px-4 py-2">
+                        SS7 over IP, enabling traditional telephony signaling over packet networks.
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 font-medium border-r">Diameter</td>
+                      <td className="px-4 py-2 border-r">4G/IMS</td>
+                      <td className="px-4 py-2">
+                        Authentication, authorization, and accounting protocol for 4G and IMS networks.
+                      </td>
+                    </tr>
+                    <tr className="bg-muted/20">
+                      <td className="px-4 py-2 font-medium border-r">SIP (Session Initiation Protocol)</td>
+                      <td className="px-4 py-2 border-r">VoIP, IMS</td>
+                      <td className="px-4 py-2">
+                        Setup, modification, and termination of multimedia sessions in IP networks.
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 font-medium border-r">GTP (GPRS Tunneling Protocol)</td>
+                      <td className="px-4 py-2 border-r">2G/3G/4G</td>
+                      <td className="px-4 py-2">
+                        Tunneling of user data between GPRS/UMTS/LTE network components.
+                      </td>
+                    </tr>
+                    <tr className="bg-muted/20">
+                      <td className="px-4 py-2 font-medium border-r">RANAP (Radio Access Network Application Part)</td>
+                      <td className="px-4 py-2 border-r">3G UMTS</td>
+                      <td className="px-4 py-2">
+                        Signaling between RNC and core network in UMTS.
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 font-medium border-r">S1AP</td>
+                      <td className="px-4 py-2 border-r">4G LTE</td>
+                      <td className="px-4 py-2">
+                        Signaling between eNodeB and MME in LTE networks.
+                      </td>
+                    </tr>
+                    <tr className="bg-muted/20">
+                      <td className="px-4 py-2 font-medium border-r">NGAP</td>
+                      <td className="px-4 py-2 border-r">5G</td>
+                      <td className="px-4 py-2">
+                        Signaling between gNB and AMF in 5G networks.
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              
+              <h4>SMS-Related Signaling</h4>
+              <p>
+                SMS messaging relies on specific signaling protocols and mechanisms:
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">SMS Point-to-Point (SMS-PP)</h5>
+                  <p className="mb-0">
+                    Uses Mobile Application Part (MAP) signaling to send SMS messages from the SMSC to mobile devices
+                    or between mobile devices. MAP operations include:
+                  </p>
+                  <ul className="mb-0 mt-2">
+                    <li>mo-ForwardSM (Mobile-Originated Forward Short Message)</li>
+                    <li>mt-ForwardSM (Mobile-Terminated Forward Short Message)</li>
+                    <li>SendRoutingInfoForSM (to locate recipient devices)</li>
+                  </ul>
+                </div>
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">SMS Cell Broadcast (SMS-CB)</h5>
+                  <p className="mb-0">
+                    Mechanism for sending messages to all mobile devices in a specific area.
+                    Used for emergency alerts, weather warnings, and public information.
+                    Doesn't use store-and-forward methodology like SMS-PP.
+                  </p>
+                </div>
+              </div>
+              
+              <h4>Modern Network Signaling Evolution</h4>
+              <p>
+                The evolution of signaling protocols reflects the broader transition from circuit-switched to 
+                packet-switched networks and the increasing importance of IP-based communications:
+              </p>
+              
+              <div className="border rounded-md p-4 bg-secondary/5 my-4">
+                <ul className="mb-0">
+                  <li><strong>Traditional SS7:</strong> Hierarchical network architecture with dedicated signaling links</li>
+                  <li><strong>SIGTRAN:</strong> Adaptation layer allowing SS7 protocols to run over IP networks</li>
+                  <li><strong>Diameter:</strong> Designed as an improvement over RADIUS for IP networks, with peer-to-peer architecture</li>
+                  <li><strong>HTTP/2-based Signaling:</strong> Modern 5G networks increasingly use REST APIs and HTTP/2 for signaling</li>
+                  <li><strong>Service-Based Architecture (SBA):</strong> 5G core network uses web-based microservices approach</li>
+                </ul>
+              </div>
+            </>
+          )}
+          
+          {section === "voice-services" && (
+            <>
+              <h3>Voice Services in Mobile Networks</h3>
+              <p>
+                Voice services form the fundamental communication functionality of mobile networks, 
+                enabling real-time audio conversations between users. While voice may seem simple, 
+                the underlying technologies are complex and have evolved significantly across network generations.
+              </p>
+              
+              <div className="bg-primary/5 p-4 rounded-md border border-primary/20 mb-4">
+                <h4 className="mt-0 text-primary">Voice Service Evolution</h4>
+                <p className="mb-2">
+                  Mobile voice services have evolved through several technologies:
+                </p>
+                <ul className="mb-0">
+                  <li><strong>Circuit-Switched Voice (1G/2G/3G):</strong> Dedicated end-to-end channel for each call</li>
+                  <li><strong>Voice over IP (VoIP):</strong> Voice transmitted as data packets over IP networks</li>
+                  <li><strong>Voice over LTE (VoLTE):</strong> Native IP-based voice service in 4G networks</li>
+                  <li><strong>Voice over NR (VoNR):</strong> Native voice service in 5G networks</li>
+                  <li><strong>OTT Voice Services:</strong> Third-party apps providing voice service over data connection</li>
+                </ul>
+              </div>
+              
+              <h4>Circuit-Switched Voice</h4>
+              <p>
+                Traditional voice in 2G and 3G networks uses circuit-switching technology:
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">GSM Voice (2G)</h5>
+                  <ul className="mb-0">
+                    <li><strong>Codec:</strong> Full-Rate (FR) or Enhanced Full-Rate (EFR), 13 kbps</li>
+                    <li><strong>Channels:</strong> Traffic Channel (TCH) carries voice data</li>
+                    <li><strong>Call Setup:</strong> Via ISUP signaling over SS7</li>
+                    <li><strong>Frequency:</strong> Operates in 900/1800 MHz bands in Europe, 850/1900 MHz in US</li>
+                    <li><strong>Time Division:</strong> Each frequency divided into 8 time slots</li>
+                  </ul>
+                </div>
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">UMTS Voice (3G)</h5>
+                  <ul className="mb-0">
+                    <li><strong>Codec:</strong> Adaptive Multi-Rate (AMR), 4.75-12.2 kbps</li>
+                    <li><strong>Channels:</strong> Dedicated Channel (DCH) carries voice data</li>
+                    <li><strong>Technology:</strong> Wideband CDMA (WCDMA)</li>
+                    <li><strong>Frequency:</strong> Typically 2100 MHz in Europe, mixed in US</li>
+                    <li><strong>Quality:</strong> Improved voice quality over GSM</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <h4>Voice over LTE (VoLTE)</h4>
+              <p>
+                VoLTE represented a fundamental shift in mobile voice, moving from circuit-switched
+                to fully packet-switched IP-based communication:
+              </p>
+              
+              <div className="overflow-x-auto my-4">
+                <table className="min-w-full border border-border">
+                  <thead className="bg-muted/50">
+                    <tr>
+                      <th className="px-4 py-2 border-b border-r">Feature</th>
+                      <th className="px-4 py-2 border-b">Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="px-4 py-2 font-medium border-r">IP Multimedia Subsystem (IMS)</td>
+                      <td className="px-4 py-2">
+                        VoLTE is built on the IMS framework, which provides the infrastructure for IP-based services
+                      </td>
+                    </tr>
+                    <tr className="bg-muted/20">
+                      <td className="px-4 py-2 font-medium border-r">Codec</td>
+                      <td className="px-4 py-2">
+                        Adaptive Multi-Rate Wideband (AMR-WB/HD Voice), operating at up to 23.85 kbps,
+                        providing enhanced voice quality
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 font-medium border-r">QoS</td>
+                      <td className="px-4 py-2">
+                        Guaranteed Quality of Service (QoS) through dedicated bearer channels with highest priority
+                      </td>
+                    </tr>
+                    <tr className="bg-muted/20">
+                      <td className="px-4 py-2 font-medium border-r">Signaling</td>
+                      <td className="px-4 py-2">
+                        Uses Session Initiation Protocol (SIP) for call setup and management
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 font-medium border-r">Enhanced Services</td>
+                      <td className="px-4 py-2">
+                        Supports Rich Communication Services (RCS) including video calling, file transfer during calls
+                      </td>
+                    </tr>
+                    <tr className="bg-muted/20">
+                      <td className="px-4 py-2 font-medium border-r">Call Setup Time</td>
+                      <td className="px-4 py-2">
+                        Faster call setup compared to circuit-switched calls
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 font-medium border-r">Battery Impact</td>
+                      <td className="px-4 py-2">
+                        Originally had higher battery consumption, improved in later implementations
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              
+              <h4>Voice in 5G Networks</h4>
+              <p>
+                5G networks introduce new approaches to voice services:
+              </p>
+              
+              <div className="grid grid-cols-1 gap-4 my-6">
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">Voice over New Radio (VoNR)</h5>
+                  <p>
+                    Native 5G voice service operating entirely on 5G standalone networks. Key features include:
+                  </p>
+                  <ul className="mb-0">
+                    <li>Full end-to-end 5G connectivity without fallback to LTE</li>
+                    <li>Lower latency than VoLTE (potentially under 10ms)</li>
+                    <li>Enhanced voice quality with EVS codec (up to 128 kbps)</li>
+                    <li>Built on enhanced IMS architecture</li>
+                    <li>Supports advanced features like spatial audio and noise cancellation</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">Voice over NR (VoNR)</h5>
+                  <p className="mb-0">
+                    Native voice service in 5G Standalone networks, offering ultra-low latency, 
+                    improved call quality with EVS codecs, and fully IP-based architecture.
+                  </p>
+                </div>
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">EPS Fallback</h5>
+                  <p className="mb-0">
+                    When VoNR is not available, 5G devices can fall back to LTE (EPS) 
+                    for voice calls, ensuring service continuity during early 5G deployments.
+                  </p>
+                </div>
+              </div>
+            </>
+          )}
+          
+          {section === "data-services" && (
+            <>
+              <h3>Mobile Data Services</h3>
+              <p>
+                Mobile data services enable the transmission of non-voice information over cellular networks,
+                from simple text messaging to high-speed internet access. These services have become increasingly
+                central to mobile communications, evolving dramatically across network generations.
+              </p>
+              
+              <div className="bg-primary/5 p-4 rounded-md border border-primary/20 mb-4">
+                <h4 className="mt-0 text-primary">Data Service Evolution</h4>
+                <p className="mb-2">
+                  Data capabilities have expanded exponentially across mobile generations:
+                </p>
+                <ul className="mb-0">
+                  <li><strong>2G (GSM):</strong> Basic data at 9.6 kbps with circuit-switched data (CSD)</li>
+                  <li><strong>2.5G (GPRS):</strong> Packet-switched data at up to 114 kbps</li>
+                  <li><strong>2.75G (EDGE):</strong> Enhanced data rates up to 384 kbps</li>
+                  <li><strong>3G (UMTS):</strong> Higher-speed data up to 2 Mbps, enabling mobile internet</li>
+                  <li><strong>3.5G (HSPA/HSPA+):</strong> Advanced data services up to 42 Mbps</li>
+                  <li><strong>4G (LTE):</strong> True broadband mobile data with speeds up to 300 Mbps</li>
+                  <li><strong>4G+ (LTE-Advanced):</strong> Enhanced speeds up to 1 Gbps with carrier aggregation</li>
+                  <li><strong>5G:</strong> Ultra-high speeds up to 20 Gbps with massive bandwidth and low latency</li>
+                </ul>
+              </div>
+              
+              <h4>Core Data Network Architecture</h4>
+              <p>
+                Mobile data services rely on specialized network components that have evolved over time:
+              </p>
+              
+              <div className="overflow-x-auto my-4">
+                <table className="min-w-full border border-border">
+                  <thead className="bg-muted/50">
+                    <tr>
+                      <th className="px-4 py-2 border-b border-r">Generation</th>
+                      <th className="px-4 py-2 border-b border-r">Key Network Elements</th>
+                      <th className="px-4 py-2 border-b">Function</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="px-4 py-2 font-medium border-r">2G/2.5G (GPRS)</td>
+                      <td className="px-4 py-2 border-r">SGSN, GGSN</td>
+                      <td className="px-4 py-2">
+                        SGSN (Serving GPRS Support Node) handles mobility and authentication.<br />
+                        GGSN (Gateway GPRS Support Node) connects to external data networks.
+                      </td>
+                    </tr>
+                    <tr className="bg-muted/20">
+                      <td className="px-4 py-2 font-medium border-r">3G (UMTS)</td>
+                      <td className="px-4 py-2 border-r">SGSN, GGSN, RNC</td>
+                      <td className="px-4 py-2">
+                        Similar to GPRS but with added RNC (Radio Network Controller) for radio resource management.
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 font-medium border-r">4G (LTE)</td>
+                      <td className="px-4 py-2 border-r">S-GW, P-GW, MME</td>
+                      <td className="px-4 py-2">
+                        S-GW (Serving Gateway) handles user data and mobility.<br />
+                        P-GW (PDN Gateway) connects to external networks.<br />
+                        MME (Mobility Management Entity) handles signaling.
+                      </td>
+                    </tr>
+                    <tr className="bg-muted/20">
+                      <td className="px-4 py-2 font-medium border-r">5G</td>
+                      <td className="px-4 py-2 border-r">UPF, SMF, AMF</td>
+                      <td className="px-4 py-2">
+                        UPF (User Plane Function) handles user data traffic.<br />
+                        SMF (Session Management Function) manages data sessions.<br />
+                        AMF (Access and Mobility Function) handles connection and mobility.
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              
+              <h4>Key Data Service Technologies</h4>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">Packet Switching</h5>
+                  <p className="mb-0">
+                    Core technology behind efficient data transmission in mobile networks. 
+                    Data is divided into packets, each routed independently based on 
+                    network conditions. This allows multiple users to share the same 
+                    channel, optimizing network resources.
+                  </p>
+                </div>
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">IP-Based Networking</h5>
+                  <p className="mb-0">
+                    Modern mobile networks use Internet Protocol (IP) as the fundamental 
+                    addressing and routing mechanism. 4G introduced a fully IP-based core 
+                    network, while 5G extends this with simplified all-IP architecture and 
+                    service-based interfaces.
+                  </p>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">Quality of Service (QoS)</h5>
+                  <p className="mb-0">
+                    Mechanisms to prioritize different types of traffic. 4G introduced 
+                    QoS Class Identifiers (QCI) which assign priority levels to different 
+                    services. 5G enhances this with 5G QoS Indicators (5QI) supporting 
+                    ultra-reliable low-latency communications.
+                  </p>
+                </div>
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">Network Slicing</h5>
+                  <p className="mb-0">
+                    5G technology that allows creation of multiple virtual networks on shared 
+                    physical infrastructure. Each slice is optimized for specific services 
+                    (e.g., IoT, autonomous vehicles, streaming) with tailored characteristics 
+                    for bandwidth, latency, and reliability.
+                  </p>
+                </div>
+              </div>
+              
+              <h4>Modern Mobile Data Applications</h4>
+              <p>
+                Today's data services enable a wide range of applications:
+              </p>
+              
+              <div className="border rounded-md p-4 bg-secondary/5 my-4">
+                <ul className="mb-0 grid grid-cols-1 md:grid-cols-2 gap-2">
+                  <li><strong>Mobile Broadband:</strong> High-speed internet access</li>
+                  <li><strong>Video Streaming:</strong> HD and 4K content delivery</li>
+                  <li><strong>Cloud Computing:</strong> Remote processing and storage</li>
+                  <li><strong>IoT Applications:</strong> Smart devices and sensors</li>
+                  <li><strong>Augmented Reality:</strong> Real-time digital overlays</li>
+                  <li><strong>Virtual Reality:</strong> Immersive experiences</li>
+                  <li><strong>Mobile Gaming:</strong> Real-time multiplayer experiences</li>
+                  <li><strong>Telemedicine:</strong> Remote health monitoring and consultation</li>
+                </ul>
+              </div>
+            </>
+          )}
+          
+          {section === "messaging-services" && (
+            <>
+              <h3>Mobile Messaging Services</h3>
+              <p>
+                Messaging services enable the exchange of text, multimedia, and other content between mobile 
+                users. From the revolutionary SMS to modern rich messaging platforms, these services have transformed
+                how people communicate in the mobile era.
+              </p>
+              
+              <div className="bg-primary/5 p-4 rounded-md border border-primary/20 mb-4">
+                <h4 className="mt-0 text-primary">Types of Mobile Messaging</h4>
+                <p className="mb-2">
+                  Mobile networks support multiple messaging technologies:
+                </p>
+                <ul className="mb-0">
+                  <li><strong>SMS (Short Message Service):</strong> Basic text messages up to 160 characters</li>
+                  <li><strong>MMS (Multimedia Messaging Service):</strong> Messages with images, audio, video</li>
+                  <li><strong>Cell Broadcast:</strong> Messages sent to all devices in specific cell areas</li>
+                  <li><strong>RCS (Rich Communication Services):</strong> Enhanced messaging with advanced features</li>
+                  <li><strong>OTT (Over-The-Top) Messaging:</strong> Third-party messaging apps using data connection</li>
+                </ul>
+              </div>
+              
+              <h4>SMS Technology Overview</h4>
+              <p>
+                SMS is the foundational mobile messaging technology, with several unique characteristics:
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">Store and Forward</h5>
+                  <p className="mb-0">
+                    SMS uses a store-and-forward mechanism where messages are sent to the SMSC (Short Message Service Center),
+                    which stores them and attempts delivery. If the recipient is unavailable, the SMSC will retry
+                    later, typically for 24-72 hours.
+                  </p>
+                </div>
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">Signaling Channel</h5>
+                  <p className="mb-0">
+                    SMS messages travel over the control channels (SDCCH in GSM) rather than the voice or data channels.
+                    This allows SMS to work even during voice calls and uses minimal network resources.
+                    This design also contributes to SMS reliability.
+                  </p>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">Character Limitations</h5>
+                  <p className="mb-0">
+                    Standard SMS is limited to 160 characters using the GSM 7-bit alphabet, 140 characters using
+                    8-bit encoding, or 70 characters using UCS-2 encoding for languages with non-Latin alphabets.
+                    Longer messages are split into multiple SMS segments.
+                  </p>
+                </div>
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">PDU Format</h5>
+                  <p className="mb-0">
+                    SMS messages are transmitted in Protocol Data Unit (PDU) format, which encodes the message content,
+                    recipient information, validity period, and other parameters into a compact binary format for
+                    transmission over the network.
+                  </p>
+                </div>
+              </div>
+              
+              <h4>MMS Technology</h4>
+              <p>
+                Multimedia Messaging Service extends SMS with media content support:
+              </p>
+              
+              <div className="overflow-x-auto my-4">
+                <table className="min-w-full border border-border">
+                  <thead className="bg-muted/50">
+                    <tr>
+                      <th className="px-4 py-2 border-b border-r">Feature</th>
+                      <th className="px-4 py-2 border-b">Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="px-4 py-2 font-medium border-r">Content Types</td>
+                      <td className="px-4 py-2">
+                        Images, audio clips, video clips, and formatted text
+                      </td>
+                    </tr>
+                    <tr className="bg-muted/20">
+                      <td className="px-4 py-2 font-medium border-r">Architecture</td>
+                      <td className="px-4 py-2">
+                        Uses MMSC (Multimedia Messaging Service Center) similar to SMSC,
+                        but also uses WAP for content transfer
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 font-medium border-r">Data Transport</td>
+                      <td className="px-4 py-2">
+                        Uses packet-switched data connection rather than signaling channels
+                      </td>
+                    </tr>
+                    <tr className="bg-muted/20">
+                      <td className="px-4 py-2 font-medium border-r">Size Limits</td>
+                      <td className="px-4 py-2">
+                        Varies by carrier, typically 300KB-1MB per message
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 font-medium border-r">Delivery Notification</td>
+                      <td className="px-4 py-2">
+                        Can include read receipts and delivery confirmations
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              
+              <h4>Rich Communication Services (RCS)</h4>
+              <p>
+                RCS is designed as the successor to SMS/MMS, offering enhanced features while maintaining
+                carrier-based infrastructure:
+              </p>
+              
+              <div className="border rounded-md p-4 bg-secondary/5 my-4">
+                <h5 className="mt-0 mb-2 font-medium">Key RCS Features</h5>
+                <ul className="mb-0 grid grid-cols-1 md:grid-cols-2 gap-2">
+                  <li><strong>Rich Media Sharing:</strong> High-quality images and videos</li>
+                  <li><strong>Group Chats:</strong> Enhanced group messaging capabilities</li>
+                  <li><strong>Read Receipts:</strong> Confirmation when messages are read</li>
+                  <li><strong>Typing Indicators:</strong> Shows when someone is composing a message</li>
+                  <li><strong>Location Sharing:</strong> Real-time location information</li>
+                  <li><strong>File Transfer:</strong> Sending documents and other files</li>
+                  <li><strong>Video Calling:</strong> Integration with carrier video calls</li>
+                  <li><strong>Business Messaging:</strong> Enhanced business-to-consumer communication</li>
+                </ul>
+              </div>
+              
+              <p>
+                Despite its technical advantages, RCS has faced adoption challenges due to fragmented
+                implementation across carriers and device manufacturers. Google's "Messages" app has
+                helped standardize RCS on Android, while Apple announced RCS support in 2024.
+              </p>
+            </>
+          )}
+          
+          {section === "network-evolution" && (
+            <>
+              <h3>Mobile Network Evolution</h3>
+              <p>
+                Mobile network technology has evolved through distinct generations, each bringing significant 
+                improvements in functionality, speed, and services.
+              </p>
+              
+              <div className="overflow-x-auto my-4">
+                <table className="min-w-full border border-border">
+                  <thead className="bg-muted/50">
+                    <tr>
+                      <th className="px-4 py-2 border-b border-r">Generation</th>
+                      <th className="px-4 py-2 border-b border-r">Technology</th>
+                      <th className="px-4 py-2 border-b border-r">Period</th>
+                      <th className="px-4 py-2 border-b">Key Features</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="px-4 py-2 font-medium border-r">1G</td>
+                      <td className="px-4 py-2 border-r">AMPS, NMT, TACS</td>
+                      <td className="px-4 py-2 border-r">1980s</td>
+                      <td className="px-4 py-2">
+                        <ul className="mb-0 pl-4">
+                          <li>Analog voice only</li>
+                          <li>No data capabilities</li>
+                          <li>Limited security</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="bg-muted/20">
+                      <td className="px-4 py-2 font-medium border-r">2G</td>
+                      <td className="px-4 py-2 border-r">GSM, CDMA, TDMA</td>
+                      <td className="px-4 py-2 border-r">1990s</td>
+                      <td className="px-4 py-2">
+                        <ul className="mb-0 pl-4">
+                          <li>Digital voice</li>
+                          <li>SMS and basic data (9.6 kbps)</li>
+                          <li>Improved security with encryption</li>
+                          <li>SIM cards introduced</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 font-medium border-r">2.5G</td>
+                      <td className="px-4 py-2 border-r">GPRS</td>
+                      <td className="px-4 py-2 border-r">Late 1990s</td>
+                      <td className="px-4 py-2">
+                        <ul className="mb-0 pl-4">
+                          <li>Packet-switched data (up to 114 kbps)</li>
+                          <li>Always-on data connections</li>
+                          <li>WAP for mobile internet</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="bg-muted/20">
+                      <td className="px-4 py-2 font-medium border-r">2.75G</td>
+                      <td className="px-4 py-2 border-r">EDGE</td>
+                      <td className="px-4 py-2 border-r">Early 2000s</td>
+                      <td className="px-4 py-2">
+                        <ul className="mb-0 pl-4">
+                          <li>Enhanced data rates (up to 384 kbps)</li>
+                          <li>Improved data applications</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 font-medium border-r">3G</td>
+                      <td className="px-4 py-2 border-r">UMTS, WCDMA, CDMA2000</td>
+                      <td className="px-4 py-2 border-r">2000s</td>
+                      <td className="px-4 py-2">
+                        <ul className="mb-0 pl-4">
+                          <li>Higher data speeds (up to 2 Mbps)</li>
+                          <li>Video calling</li>
+                          <li>Mobile internet browsing</li>
+                          <li>Multimedia messaging</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="bg-muted/20">
+                      <td className="px-4 py-2 font-medium border-r">3.5G</td>
+                      <td className="px-4 py-2 border-r">HSPA, HSPA+</td>
+                      <td className="px-4 py-2 border-r">Mid-2000s</td>
+                      <td className="px-4 py-2">
+                        <ul className="mb-0 pl-4">
+                          <li>Improved data speeds (up to 14 Mbps)</li>
+                          <li>Enhanced multimedia applications</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 font-medium border-r">4G</td>
+                      <td className="px-4 py-2 border-r">LTE, WiMAX</td>
+                      <td className="px-4 py-2 border-r">2010s</td>
+                      <td className="px-4 py-2">
+                        <ul className="mb-0 pl-4">
+                          <li>High-speed data (up to 100 Mbps)</li>
+                          <li>IP-based voice (VoLTE)</li>
+                          <li>HD video streaming</li>
+                          <li>Advanced mobile applications</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="bg-muted/20">
+                      <td className="px-4 py-2 font-medium border-r">4G+</td>
+                      <td className="px-4 py-2 border-r">LTE-Advanced</td>
+                      <td className="px-4 py-2 border-r">Mid-2010s</td>
+                      <td className="px-4 py-2">
+                        <ul className="mb-0 pl-4">
+                          <li>Carrier aggregation</li>
+                          <li>Higher speeds (up to 1 Gbps)</li>
+                          <li>Reduced latency</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 font-medium border-r">5G</td>
+                      <td className="px-4 py-2 border-r">5G NR</td>
+                      <td className="px-4 py-2 border-r">2020s</td>
+                      <td className="px-4 py-2">
+                        <ul className="mb-0 pl-4">
+                          <li>Ultra-high speeds (up to 10 Gbps)</li>
+                          <li>Ultra-low latency (1ms)</li>
+                          <li>Massive device connectivity (IoT)</li>
+                          <li>Network slicing</li>
+                          <li>Edge computing integration</li>
+                        </ul>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              
+              <h4>Key Technological Shifts</h4>
+              <p>
+                The evolution of mobile networks has been driven by several fundamental technological shifts:
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">Analog to Digital</h5>
+                  <p className="mb-0">
+                    The transition from analog (1G) to digital (2G) transmission enabled more efficient use of spectrum, 
+                    improved voice quality, and introduced basic data services like SMS.
+                  </p>
+                </div>
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">Circuit-Switched to Packet-Switched</h5>
+                  <p className="mb-0">
+                    Moving from dedicated circuits (2G) to packet-switching (2.5G+) allowed more efficient resource 
+                    utilization and enabled always-on data connections.
+                  </p>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">All-IP Networks</h5>
+                  <p className="mb-0">
+                    4G introduced all-IP architectures, eliminating the separate circuit-switched domain for voice 
+                    and moving all traffic to packet-based transmission.
+                  </p>
+                </div>
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">Network Softwarization</h5>
+                  <p className="mb-0">
+                    5G embraces software-defined networking, network function virtualization, and cloud-native principles, 
+                    making networks more flexible and programmable.
+                  </p>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </CardContent>
     </Card>
