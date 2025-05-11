@@ -271,21 +271,21 @@ export default function SMPPParser() {
                           <tr>
                             <td className="pb-1 pr-3 text-muted-foreground">
                               Command Status:
-                              <FieldInfo tooltip={fieldDescriptions.commandStatus} />
+                              <FieldInfo tooltip={findTooltip('commandStatus', fieldDescriptions)} />
                             </td>
                             <td className="pb-1 font-medium">{parsedData.header.commandStatus}</td>
                           </tr>
                           <tr>
                             <td className="pb-1 pr-3 text-muted-foreground">
                               Command Length:
-                              <FieldInfo tooltip={fieldDescriptions.commandLength} />
+                              <FieldInfo tooltip={findTooltip('commandLength', fieldDescriptions)} />
                             </td>
                             <td className="pb-1 font-medium">{parsedData.header.commandLength} bytes</td>
                           </tr>
                           <tr>
                             <td className="pb-1 pr-3 text-muted-foreground">
                               Sequence Number:
-                              <FieldInfo tooltip={fieldDescriptions.sequenceNumber} />
+                              <FieldInfo tooltip={findTooltip('sequenceNumber', fieldDescriptions)} />
                             </td>
                             <td className="pb-1 font-medium">{parsedData.header.sequenceNumber}</td>
                           </tr>
@@ -303,7 +303,7 @@ export default function SMPPParser() {
                             <tr>
                               <td className="pb-1 pr-3 text-muted-foreground">
                                 Source:
-                                <FieldInfo tooltip={fieldDescriptions.sourceAddr} />
+                                <FieldInfo tooltip={findTooltip('sourceAddr', fieldDescriptions)} />
                               </td>
                               <td className="pb-1 font-medium">{parsedData.sourceAddr}</td>
                             </tr>
@@ -312,7 +312,7 @@ export default function SMPPParser() {
                             <tr>
                               <td className="pb-1 pr-3 text-muted-foreground">
                                 Destination:
-                                <FieldInfo tooltip={fieldDescriptions.destAddr} />
+                                <FieldInfo tooltip={findTooltip('destAddr', fieldDescriptions)} />
                               </td>
                               <td className="pb-1 font-medium">{parsedData.destAddr}</td>
                             </tr>
@@ -321,7 +321,7 @@ export default function SMPPParser() {
                             <tr>
                               <td className="pb-1 pr-3 text-muted-foreground">
                                 Service Type:
-                                <FieldInfo tooltip={fieldDescriptions.serviceType} />
+                                <FieldInfo tooltip={findTooltip('serviceType', fieldDescriptions)} />
                               </td>
                               <td className="pb-1 font-medium">{parsedData.servicetype || "Default"}</td>
                             </tr>
@@ -330,7 +330,7 @@ export default function SMPPParser() {
                             <tr>
                               <td className="pb-1 pr-3 text-muted-foreground">
                                 Message:
-                                <FieldInfo tooltip={fieldDescriptions.shortMessage} />
+                                <FieldInfo tooltip={findTooltip('shortMessage', fieldDescriptions)} />
                               </td>
                               <td className="pb-1 font-medium">{parsedData.messageContent}</td>
                             </tr>
