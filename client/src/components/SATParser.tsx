@@ -6,93 +6,15 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { AlertCircle, Check, Copy, Info } from "lucide-react";
+import { AlertCircle, Check, Copy } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import ByteDisplay from "./ByteDisplay";
 import { exampleSatPdus } from "@/lib/satUtils";
-import { useLocation } from "wouter";
-
-// Knowledge base mapping for SAT fields with descriptions
-interface KnowledgeItem {
-  section: string;
-  summary: string;
-}
-
-const fieldToKnowledgeSection: Record<string, KnowledgeItem> = {
-  "Command Details": { 
-    section: "sat", 
-    summary: "Defines the specific SAT command type and its parameters" 
-  },
-  "Device Identities": { 
-    section: "sat", 
-    summary: "Identifies the source and destination devices for the command" 
-  },
-  "Text String": { 
-    section: "sat", 
-    summary: "Contains text content to be displayed on the device" 
-  },
-  "Command Qualifier": { 
-    section: "sat", 
-    summary: "Contains modifiers that affect how the command should be executed" 
-  },
-  "Proactive SIM Command": { 
-    section: "sat", 
-    summary: "Commands initiated by the SIM rather than the network" 
-  },
-};
 
 export default function SATParser() {
   const [pduString, setPduString] = useState<string>("D0288103012180820281028D1A04546869732069732061207465737420746578742E2020202020");
   const [clipboardStatus, setClipboardStatus] = useState<"idle" | "copied">("idle");
-  const [, setLocation] = useLocation();
-  
-  // Function to get the knowledge base item for a field
-  const getKnowledgeBaseItem = (fieldName: string): KnowledgeItem | null => {
-    return fieldToKnowledgeSection[fieldName] || null;
-  };
-  
-  // Function to navigate to the knowledge base section
-  const openKnowledgeSection = (sectionId: string) => {
-    // First make sure we're on the home page
-    setLocation('/');
-    
-    // Use setTimeout to ensure we're on home page before trying to navigate to the learn tab
-    setTimeout(() => {
-      // Find the learn tab and click it
-      const learnTab = document.querySelector('[data-value="learn"]');
-      if (learnTab) {
-        (learnTab as HTMLElement).click();
-        
-        // Then try to find and click the specific section
-        setTimeout(() => {
-          console.log(`Looking for section: ${sectionId}`);
-          
-          // First try to find a button with data-section attribute
-          const sectionButton = document.querySelector(`[data-section="${sectionId}"]`);
-          if (sectionButton) {
-            console.log("Found section button, clicking it");
-            (sectionButton as HTMLElement).click();
-          } else {
-            // If we can't find a button with the data-section attribute, try other approaches
-            console.log("Section button not found, trying other approaches");
-            
-            // Approach 2: Look for buttons that have the section name in their text content
-            const buttons = document.querySelectorAll('button');
-            // Convert NodeList to Array to use forEach
-            Array.from(buttons).forEach(button => {
-              if (button.textContent?.toLowerCase().includes(sectionId.toLowerCase().replace(/-/g, ' '))) {
-                console.log("Found button by text content, clicking it");
-                (button as HTMLElement).click();
-              }
-            });
-          }
-        }, 500);
-      } else {
-        console.log("Learn tab not found");
-      }
-    }, 300);
-  };
 
   // SAT Parse mutation
   const { mutate: parseSat, data: parsedData, isPending, isError, error } = useMutation({
@@ -361,78 +283,15 @@ export default function SATParser() {
                       <table className="w-full text-sm">
                         <tbody>
                           <tr>
-                            <td className="pb-1 pr-3 text-muted-foreground">
-                              <div className="flex items-center">
-                                <span>Command Type:</span>
-                                {getKnowledgeBaseItem("Command Details") && (
-                                  <TooltipProvider>
-                                    <Tooltip>
-                                      <TooltipTrigger asChild>
-                                        <button 
-                                          onClick={() => openKnowledgeSection(getKnowledgeBaseItem("Command Details")!.section)}
-                                          className="ml-1 inline-flex"
-                                        >
-                                          <Info size={12} className="text-blue-400 hover:text-blue-500" />
-                                        </button>
-                                      </TooltipTrigger>
-                                      <TooltipContent>
-                                        <p className="text-xs">{getKnowledgeBaseItem("Command Details")?.summary || "Learn more about Command Details"}</p>
-                                      </TooltipContent>
-                                    </Tooltip>
-                                  </TooltipProvider>
-                                )}
-                              </div>
-                            </td>
+                            <td className="pb-1 pr-3 text-muted-foreground">Command Type:</td>
                             <td className="pb-1 font-medium">{parsedData.header.commandType}</td>
                           </tr>
                           <tr>
-                            <td className="pb-1 pr-3 text-muted-foreground">
-                              <div className="flex items-center">
-                                <span>Command Qualifier:</span>
-                                {getKnowledgeBaseItem("Command Qualifier") && (
-                                  <TooltipProvider>
-                                    <Tooltip>
-                                      <TooltipTrigger asChild>
-                                        <button 
-                                          onClick={() => openKnowledgeSection(getKnowledgeBaseItem("Command Qualifier")!.section)}
-                                          className="ml-1 inline-flex"
-                                        >
-                                          <Info size={12} className="text-blue-400 hover:text-blue-500" />
-                                        </button>
-                                      </TooltipTrigger>
-                                      <TooltipContent>
-                                        <p className="text-xs">{getKnowledgeBaseItem("Command Qualifier")?.summary || "Learn more about Command Qualifier"}</p>
-                                      </TooltipContent>
-                                    </Tooltip>
-                                  </TooltipProvider>
-                                )}
-                              </div>
-                            </td>
+                            <td className="pb-1 pr-3 text-muted-foreground">Command Qualifier:</td>
                             <td className="pb-1 font-medium">0x{parsedData.header.commandQualifier}</td>
                           </tr>
                           <tr>
-                            <td className="pb-1 pr-3 text-muted-foreground">
-                              <div className="flex items-center">
-                                <span>Source Device:</span>
-                                {getKnowledgeBaseItem("Device Identities") && (
-                                  <TooltipProvider>
-                                    <Tooltip>
-                                      <TooltipTrigger asChild>
-                                        <button 
-                                          onClick={() => openKnowledgeSection(getKnowledgeBaseItem("Device Identities")!.section)}
-                                          className="ml-1 inline-flex"
-                                        >
-                                          <Info size={12} className="text-blue-400 hover:text-blue-500" />
-                                        </button>
-                                      </TooltipTrigger>
-                                      <TooltipContent>
-                                        <p className="text-xs">{getKnowledgeBaseItem("Device Identities")?.summary || "Learn more about Device Identities"}</p>
-                                      </TooltipContent>
-                                    </Tooltip>
-                                  </TooltipProvider>
-                                )}
-                              </div>
-                            </td>
+                            <td className="pb-1 pr-3 text-muted-foreground">Source Device:</td>
                             <td className="pb-1 font-medium">{parsedData.header.deviceIdentities.source}</td>
                           </tr>
                           <tr>
@@ -499,28 +358,7 @@ export default function SATParser() {
                       <tbody className="divide-y divide-border">
                         {parsedData.properties.map((property, index) => (
                           <tr key={index}>
-                            <td className="px-4 py-2">
-                              <div className="flex items-center">
-                                <span>{property.name}</span>
-                                {getKnowledgeBaseItem(property.name) && (
-                                  <TooltipProvider>
-                                    <Tooltip>
-                                      <TooltipTrigger asChild>
-                                        <button 
-                                          onClick={() => openKnowledgeSection(getKnowledgeBaseItem(property.name)!.section)}
-                                          className="ml-1 inline-flex"
-                                        >
-                                          <Info size={14} className="text-blue-400 hover:text-blue-500" />
-                                        </button>
-                                      </TooltipTrigger>
-                                      <TooltipContent>
-                                        <p className="text-xs">{getKnowledgeBaseItem(property.name)?.summary || `Learn more about ${property.name}`}</p>
-                                      </TooltipContent>
-                                    </Tooltip>
-                                  </TooltipProvider>
-                                )}
-                              </div>
-                            </td>
+                            <td className="px-4 py-2">{property.name}</td>
                             <td className="px-4 py-2 font-mono">{property.value}</td>
                             <td className="px-4 py-2 text-muted-foreground">{property.description}</td>
                           </tr>

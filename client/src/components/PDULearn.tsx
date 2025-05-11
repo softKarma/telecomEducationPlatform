@@ -272,7 +272,6 @@ export default function PDULearn() {
                     variant={section === "pdu-formats" ? "default" : "outline"}
                     size="sm"
                     onClick={() => setSection("pdu-formats")}
-                    data-section="pdu-formats"
                   >
                     PDU Formats
                   </Button>
@@ -280,7 +279,6 @@ export default function PDULearn() {
                     variant={section === "encodings" ? "default" : "outline"}
                     size="sm"
                     onClick={() => setSection("encodings")}
-                    data-section="encodings"
                   >
                     Character Encodings
                   </Button>
@@ -288,7 +286,6 @@ export default function PDULearn() {
                     variant={section === "fields" ? "default" : "outline"}
                     size="sm"
                     onClick={() => setSection("fields")}
-                    data-section="fields"
                   >
                     Fields Reference
                   </Button>
@@ -296,7 +293,6 @@ export default function PDULearn() {
                     variant={section === "multipart" ? "default" : "outline"}
                     size="sm"
                     onClick={() => setSection("multipart")}
-                    data-section="multipart"
                   >
                     Multipart SMS
                   </Button>
