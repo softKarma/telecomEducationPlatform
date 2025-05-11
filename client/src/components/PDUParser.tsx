@@ -17,8 +17,10 @@ import ByteDisplay from "./ByteDisplay";
 const examplePdus = {
   "deliver-7bit": "07911326040000F0040B911346610089F60000208062917314080CC8F71D14969741F977FD07",
   "deliver-ucs2": "07911326040000F0040B911346610089F600082180214155840018D4F29C0E6A96E7F3F0B90C0A07D9D76D3D3739CC2E83C661757A0C0EB3D3",
-  "submit-7bit": "0011000B916407281553F80000AA0AE8329BFD4697D9EC37",
-  "submit-multipart": "0041000B916407281553F80000A0060804000301986F79B90D4AC3E7F53688FC66BFE5A0799A0E0AB7CB741668FC76CFCB637A995E9783C2E4343C3D4F8FD3EE33A8CC4ED359A079990C22BF41E5747DDE7E9341F4721BFE9683D2EE719A9C26D7DD74509D0E6287C56F791954A683C86FF65B5E06B5C36777181466A7E3F5B0AB4A0795DDE936284C06B5D3EE741B642FBBD3E1360B14AFA7DD",
+  "submit-7bit": "0011000B916407281553F80000AA0C48656C6C6F20776F726C64",
+  "submit-binary": "0011000B916407281553F8000806050415040B8423F0",
+  "submit-multipart-1": "0051000B916407281553F80000A0050003010201546869732069732074686520666972737420706172742073686F77696E6720686F772061206C6F6E67206D657373616765206973207370616E206163726F7373206D756C7469706C652053",
+  "submit-multipart-2": "0051000B916407281553F80000A005000301024D532053554D4954206D6573736167657320627920627265616B696E67207468656D20696E746F20736D616C6C6572206368756E6B732E2054686973206973207061727420322E",
 }
 
 export default function PDUParser() {
@@ -156,10 +158,26 @@ export default function PDUParser() {
                 <Button 
                   variant="outline" 
                   size="sm" 
-                  onClick={() => loadExamplePdu("submit-multipart")}
+                  onClick={() => loadExamplePdu("submit-binary")}
                   className="h-7 text-xs"
                 >
-                  Submit (Multipart)
+                  Submit (Binary)
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => loadExamplePdu("submit-multipart-1")}
+                  className="h-7 text-xs"
+                >
+                  Submit (Part 1)
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => loadExamplePdu("submit-multipart-2")}
+                  className="h-7 text-xs"
+                >
+                  Submit (Part 2)
                 </Button>
               </div>
             </div>
