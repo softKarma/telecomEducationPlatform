@@ -19,8 +19,66 @@ type LearnSection =
   // Practical exercises
   "exercises-encoding" | "exercises-decoding" | "exercises-multipart" | "exercises-validation";
 
+// Simple utility functions for encoding exercises
+const encode7Bit = (text: string): string => {
+  // This is a simplified version for educational purposes
+  const result = [];
+  for (let i = 0; i < text.length; i++) {
+    const char = text.charCodeAt(i);
+    // Convert to hex and pad with zeros if needed
+    result.push(char.toString(16).padStart(2, '0'));
+  }
+  return result.join('').toUpperCase();
+};
+
+const encodeUCS2 = (text: string): string => {
+  // This is a simplified version for educational purposes
+  const result = [];
+  for (let i = 0; i < text.length; i++) {
+    const char = text.charCodeAt(i);
+    // Convert to hex and pad with zeros if needed
+    result.push(char.toString(16).padStart(4, '0'));
+  }
+  return result.join('').toUpperCase();
+};
+
 export default function PDULearn() {
   const [section, setSection] = useState<LearnSection>("overview");
+  const [encodingText, setEncodingText] = useState<string>("");
+  const [encodingResult, setEncodingResult] = useState<string>("");
+  const [encodingFeedback, setEncodingFeedback] = useState<{success: boolean; message: string} | null>(null);
+  const [encodingType, setEncodingType] = useState<"7bit" | "ucs2">("7bit");
+  
+  // Function to handle encoding practice exercises
+  const handleEncoding = () => {
+    try {
+      if (!encodingText.trim()) {
+        setEncodingFeedback({
+          success: false,
+          message: "Please enter some text to encode."
+        });
+        return;
+      }
+      
+      let result = "";
+      if (encodingType === "7bit") {
+        result = encode7Bit(encodingText);
+      } else {
+        result = encodeUCS2(encodingText);
+      }
+      
+      setEncodingResult(result);
+      setEncodingFeedback({
+        success: true,
+        message: `Text successfully encoded using ${encodingType === "7bit" ? "7-bit" : "UCS2"} encoding.`
+      });
+    } catch (error) {
+      setEncodingFeedback({
+        success: false,
+        message: "Error encoding text. Please try again."
+      });
+    }
+  };
 
   return (
     <Card>
@@ -170,6 +228,254 @@ export default function PDULearn() {
         </Tabs>
         
         <div className="prose prose-sm max-w-none dark:prose-invert">
+          {section === "exercises-encoding" && (
+            <>
+              <h3>SMS Encoding Practice</h3>
+              <p>
+                This interactive exercise helps you understand how text is encoded in SMS messages.
+                Try different characters and see how they are converted to hexadecimal representation.
+              </p>
+              
+              <div className="bg-primary/5 p-4 rounded-md border border-primary/20 mb-4">
+                <h4 className="mt-0 text-primary">Exercise Objectives</h4>
+                <ul className="mb-0">
+                  <li>Understand the difference between 7-bit and UCS2 encoding</li>
+                  <li>Practice encoding text into hexadecimal format</li>
+                  <li>See how special characters and non-Latin scripts affect encoding</li>
+                </ul>
+              </div>
+              
+              <div className="not-prose">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                  <div>
+                    <h5 className="font-medium mb-2">Step 1: Enter Text to Encode</h5>
+                    <Textarea 
+                      value={encodingText}
+                      onChange={(e) => setEncodingText(e.target.value)}
+                      placeholder="Enter text to encode (e.g., Hello World)"
+                      className="h-24"
+                    />
+                  </div>
+                  
+                  <div>
+                    <h5 className="font-medium mb-2">Step 2: Choose Encoding Type</h5>
+                    <div className="flex space-x-2 mb-4">
+                      <Button 
+                        variant={encodingType === "7bit" ? "default" : "outline"}
+                        onClick={() => setEncodingType("7bit")}
+                      >
+                        GSM 7-bit Encoding
+                      </Button>
+                      <Button 
+                        variant={encodingType === "ucs2" ? "default" : "outline"}
+                        onClick={() => setEncodingType("ucs2")}
+                      >
+                        UCS2 (16-bit) Encoding
+                      </Button>
+                    </div>
+                    
+                    <p className="text-sm text-muted-foreground">
+                      {encodingType === "7bit" 
+                        ? "7-bit encoding is used for basic Latin characters and can fit 160 characters in a single SMS."
+                        : "UCS2 encoding is used for non-Latin scripts and emojis but only fits 70 characters per SMS."}
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="mb-4">
+                  <Button onClick={handleEncoding}>
+                    Encode Text
+                  </Button>
+                </div>
+                
+                {encodingFeedback && (
+                  <Alert className={encodingFeedback.success ? "bg-success/20" : "bg-destructive/20"}>
+                    {encodingFeedback.success ? (
+                      <CheckCircle2 className="h-4 w-4 text-success" />
+                    ) : (
+                      <XCircle className="h-4 w-4 text-destructive" />
+                    )}
+                    <AlertTitle>{encodingFeedback.success ? "Success" : "Error"}</AlertTitle>
+                    <AlertDescription>
+                      {encodingFeedback.message}
+                    </AlertDescription>
+                  </Alert>
+                )}
+                
+                {encodingResult && (
+                  <div className="mt-4">
+                    <h5 className="font-medium mb-2">Result: Hexadecimal Representation</h5>
+                    <div className="bg-muted p-3 rounded-md overflow-auto">
+                      <code className="text-xs break-all">{encodingResult}</code>
+                    </div>
+                    
+                    <div className="bg-secondary/5 p-4 rounded-md border mt-4">
+                      <h5 className="font-medium mt-0 mb-2">Explanation</h5>
+                      <p className="mb-1 text-sm">Your text "{encodingText}" was encoded as follows:</p>
+                      <ul className="mb-0 text-sm">
+                        <li><strong>Encoding method:</strong> {encodingType === "7bit" ? "7-bit GSM alphabet" : "UCS2 (16-bit Unicode)"}</li>
+                        <li><strong>Characters:</strong> {encodingText.length}</li>
+                        <li><strong>Hex bytes:</strong> {encodingType === "7bit" ? encodingText.length : encodingText.length * 2}</li>
+                        <li><strong>Would fit in one SMS:</strong> {
+                          (encodingType === "7bit" && encodingText.length <= 160) || 
+                          (encodingType === "ucs2" && encodingText.length <= 70) 
+                            ? "Yes" : "No"
+                        }</li>
+                      </ul>
+                    </div>
+                    
+                    <div className="bg-info/5 p-4 rounded-md border mt-4">
+                      <h5 className="font-medium mt-0 mb-2">Try This</h5>
+                      <ul className="mb-0 text-sm">
+                        <li>Try special characters like € or @ to see how they're encoded</li>
+                        <li>Compare the hex output with 7-bit vs UCS2 encoding</li>
+                        <li>Try non-Latin characters (Arabic, Chinese, Cyrillic) with UCS2 encoding</li>
+                        <li>Notice how emoji characters are represented in UCS2</li>
+                      </ul>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </>
+          )}
+          
+          {section === "learning-intermediate" && (
+            <>
+              <h3>Intermediate SMS Protocol Concepts</h3>
+              <p>
+                Now that you understand the basics of SMS messaging, let's dive deeper into more advanced concepts
+                and explore the technical details of SMS message routing and delivery.
+              </p>
+              
+              <div className="bg-primary/5 p-4 rounded-md border border-primary/20 mb-4">
+                <h4 className="mt-0 text-primary">Learning Objectives</h4>
+                <ol className="mb-2">
+                  <li>Understand the SMS protocol stack and network architecture</li>
+                  <li>Learn about SMSC (Short Message Service Center) functionality</li>
+                  <li>Explore message routing and the role of the HLR/VLR</li>
+                  <li>Understand delivery receipts and status reports</li>
+                </ol>
+                <p className="mb-0 text-sm">
+                  <strong>Estimated completion time:</strong> 30-40 minutes
+                </p>
+              </div>
+              
+              <div className="my-6">
+                <h4>Module 1: SMS Network Architecture</h4>
+                <p>
+                  SMS messages travel through a complex network before reaching their destination.
+                  Let's explore the key components of this architecture:
+                </p>
+                
+                <div className="bg-muted p-4 rounded-md my-4">
+                  <h5 className="mt-0 mb-2 font-medium">Key Network Elements</h5>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <h6 className="mt-0 mb-1 font-medium">Mobile Station (MS)</h6>
+                      <p className="text-sm mb-3">
+                        The mobile device (phone) where messages originate or terminate.
+                        Contains the Mobile Equipment (ME) and SIM card.
+                      </p>
+                      
+                      <h6 className="mt-0 mb-1 font-medium">Base Station System (BSS)</h6>
+                      <p className="text-sm mb-0">
+                        Handles radio communication with mobile devices.
+                        Consists of Base Transceiver Stations (BTS) and Base Station Controllers (BSC).
+                      </p>
+                    </div>
+                    <div>
+                      <h6 className="mt-0 mb-1 font-medium">Mobile Switching Center (MSC)</h6>
+                      <p className="text-sm mb-3">
+                        Core network element that routes calls and SMS messages.
+                        Interfaces with other networks and the SMSC.
+                      </p>
+                      
+                      <h6 className="mt-0 mb-1 font-medium">Short Message Service Center (SMSC)</h6>
+                      <p className="text-sm mb-0">
+                        Stores and forwards SMS messages.
+                        Handles message routing, retries, and delivery reports.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="border-l-4 border-info pl-4 my-6">
+                  <h5 className="mt-0 text-info">SMS Message Flow</h5>
+                  <ol className="mb-0 text-sm">
+                    <li><strong>Submission:</strong> MS encodes the message and sends it to the MSC</li>
+                    <li><strong>Routing:</strong> MSC forwards the message to the SMSC</li>
+                    <li><strong>Storage:</strong> SMSC stores the message and attempts delivery</li>
+                    <li><strong>Recipient Location:</strong> SMSC queries the HLR for recipient location</li>
+                    <li><strong>Delivery:</strong> SMSC routes the message to the recipient's MSC</li>
+                    <li><strong>Final Delivery:</strong> MSC forwards the message to the recipient's MS</li>
+                    <li><strong>Confirmation:</strong> Delivery reports are sent back through the network</li>
+                  </ol>
+                </div>
+                
+                <div className="bg-secondary/5 p-4 rounded-md my-4 border">
+                  <h5 className="mt-0 mb-2 font-medium">Home Location Register (HLR) and Visitor Location Register (VLR)</h5>
+                  <p className="mb-1">
+                    These databases play a crucial role in SMS delivery:
+                  </p>
+                  <ul className="mb-0">
+                    <li><strong>HLR:</strong> Permanent database storing subscriber information, including current location area</li>
+                    <li><strong>VLR:</strong> Temporary database for subscribers currently in a specific location area</li>
+                  </ul>
+                </div>
+                
+                <div className="bg-muted/30 p-4 rounded-md mt-6">
+                  <h5 className="mt-0 mb-3">Knowledge Check</h5>
+                  <div className="space-y-3">
+                    <div>
+                      <p className="font-medium mb-2">1. What is the primary role of the SMSC in SMS messaging?</p>
+                      <div className="space-y-1">
+                        <div className="flex items-center">
+                          <input type="radio" id="q1a_int" name="q1_int" className="mr-2" />
+                          <label htmlFor="q1a_int">To encrypt messages for security</label>
+                        </div>
+                        <div className="flex items-center">
+                          <input type="radio" id="q1b_int" name="q1_int" className="mr-2" />
+                          <label htmlFor="q1b_int">To store and forward messages, handling routing and retries</label>
+                        </div>
+                        <div className="flex items-center">
+                          <input type="radio" id="q1c_int" name="q1_int" className="mr-2" />
+                          <label htmlFor="q1c_int">To compress messages to save bandwidth</label>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <p className="font-medium mb-2">2. Which database is queried to determine a recipient's current location?</p>
+                      <div className="space-y-1">
+                        <div className="flex items-center">
+                          <input type="radio" id="q2a_int" name="q2_int" className="mr-2" />
+                          <label htmlFor="q2a_int">SMSC Database</label>
+                        </div>
+                        <div className="flex items-center">
+                          <input type="radio" id="q2b_int" name="q2_int" className="mr-2" />
+                          <label htmlFor="q2b_int">Home Location Register (HLR)</label>
+                        </div>
+                        <div className="flex items-center">
+                          <input type="radio" id="q2c_int" name="q2_int" className="mr-2" />
+                          <label htmlFor="q2c_int">Mobile Equipment Registry</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-4">
+                    <Button size="sm">Check Answers</Button>
+                  </div>
+                </div>
+                
+                <div className="flex justify-between mt-8">
+                  <Button variant="outline" onClick={() => setSection("learning-beginner")}>Previous Module</Button>
+                  <Button>Next Module: Status Reports</Button>
+                </div>
+              </div>
+            </>
+          )}
+          
           {section === "learning-beginner" && (
             <>
               <h3>Beginner's Guide to SMS Protocols</h3>
