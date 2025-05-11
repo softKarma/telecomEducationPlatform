@@ -1242,11 +1242,134 @@ export default function PDULearn() {
               <h3>SIM Application Toolkit (SAT)</h3>
               <p>
                 The SIM Application Toolkit is a standard of the GSM system which enables the SIM card to initiate actions 
-                which can be used for various value-added services and applications. It's defined in the GSM 11.14 and later 
-                in the 3GPP TS 51.014 specifications.
+                and take control of the mobile device user interface. It's defined in the GSM 11.14 specification and later 
+                evolved in the 3GPP TS 51.014 specifications and ETSI TS 102 223 standards.
               </p>
               
-              <h4>SAT Basics</h4>
+              <h4>Why SAT Exists</h4>
+              <p>
+                SAT was developed to overcome the limitations of SIM cards that were originally designed as passive storage
+                devices. Key reasons for its development include:
+              </p>
+              <ul>
+                <li><strong>Value-added services</strong>: Enabling mobile network operators to provide custom services beyond basic telephony</li>
+                <li><strong>SIM independence</strong>: Allowing applications to run consistently across different mobile devices</li>
+                <li><strong>Enhanced security</strong>: Providing secure storage and execution environments for sensitive applications</li>
+                <li><strong>Remote management</strong>: Enabling operators to update services without changing SIM cards</li>
+              </ul>
+              
+              <h4>How SAT Works - Architecture</h4>
+              <p>
+                SAT establishes a client-server relationship between the mobile device (Mobile Equipment/ME) and the SIM card:
+              </p>
+              
+              <div className="bg-muted/50 p-4 rounded-md border mb-4">
+                <h4 className="mt-0">SAT System Architecture</h4>
+                <div className="flex justify-center my-4">
+                  <div className="border rounded-lg p-4 max-w-2xl bg-black/5">
+                    <div className="grid grid-cols-3 gap-4">
+                      {/* Network */}
+                      <div className="border p-3 rounded bg-background text-center">
+                        <div className="font-bold mb-2">Mobile Network</div>
+                        <div className="text-xs mb-2">Base Station & Core Network</div>
+                        <div className="text-sm">
+                          • SMS Center<br />
+                          • OTA Server<br />
+                          • Application Server
+                        </div>
+                      </div>
+                      
+                      {/* Arrows */}
+                      <div className="flex items-center justify-center">
+                        <div className="text-center">
+                          <div>⟷</div>
+                          <div className="text-xs text-muted-foreground">Radio Interface</div>
+                          <div>⟷</div>
+                        </div>
+                      </div>
+                      
+                      {/* Mobile Station */}
+                      <div className="border p-3 rounded bg-background">
+                        <div className="font-bold mb-2 text-center">Mobile Station</div>
+                        <div className="flex flex-col gap-2">
+                          <div className="border border-dashed p-2 rounded">
+                            <div className="text-sm font-medium">Mobile Equipment (ME)</div>
+                            <div className="text-xs">
+                              • Display & Keyboard<br />
+                              • Processor<br />
+                              • SIM Interface<br />
+                              • Radio Module
+                            </div>
+                          </div>
+                          <div className="flex justify-center">⟷</div>
+                          <div className="border border-dashed p-2 rounded">
+                            <div className="text-sm font-medium">SIM Card (UICC)</div>
+                            <div className="text-xs">
+                              • SAT Runtime Environment<br />
+                              • SAT Applications<br />
+                              • SIM Files & Data<br />
+                              • Security Elements
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <h5 className="font-medium mt-4">Key Interfaces:</h5>
+                <ul className="text-sm">
+                  <li><strong>SIM-ME Interface</strong>: Physical and logical connection between SIM card and mobile device, carries proactive commands</li>
+                  <li><strong>Air Interface</strong>: Radio connection between mobile station and network, carries SMS, USSD, and data</li>
+                  <li><strong>SIM OTA</strong>: Over-The-Air interface allowing remote management of SIM applications</li>
+                </ul>
+              </div>
+              
+              <div className="bg-muted/50 p-4 rounded-md border mb-4">
+                <h4 className="mt-0">SAT Communication Flow</h4>
+                <p>The SAT protocol involves a specific sequence of interactions:</p>
+                <ol className="mb-3">
+                  <li><strong>Proactive SIM commands</strong>: The SIM initiates commands to control the mobile device</li>
+                  <li><strong>Terminal response</strong>: The mobile device responds to each command with success/failure status</li>
+                  <li><strong>ME to SIM notifications</strong>: The mobile device can notify the SIM about events (calls, SMS, etc.)</li>
+                  <li><strong>SIM data download</strong>: Data from the network can be directed to SAT applications</li>
+                </ol>
+                
+                <div className="border-t pt-3">
+                  <h5 className="font-medium">Example SAT Session Flow:</h5>
+                  <pre className="text-xs overflow-x-auto bg-black/5 p-2 rounded">
+{`1. SIM → ME:  SETUP MENU (Bank Service App)
+2. ME → SIM:  Terminal Response (Success)
+3. [User selects "Bank Service" from phone menu]
+4. ME → SIM:  MENU SELECTION (Bank Service selected)
+5. SIM → ME:  SELECT ITEM (Options: Check Balance, Transfer, Pay Bill)
+6. ME → SIM:  Terminal Response (Command performed)
+7. [User selects "Check Balance"]
+8. ME → SIM:  ITEM SELECTION (Check Balance)
+9. SIM → ME:  SEND SMS (To banking service number with balance request)
+10. ME → SIM: Terminal Response (SMS sent)
+11. [SMS response arrives from bank]
+12. ME → SIM: SMS-PP DATA DOWNLOAD (Bank data)
+13. SIM → ME: DISPLAY TEXT (Your balance is $1,245.00)
+14. ME → SIM: Terminal Response (Command performed)`}
+                  </pre>
+                </div>
+              </div>
+              
+              <h4>SAT Applications in Real-World Use</h4>
+              <p>
+                SAT is used in many practical applications that mobile users interact with daily:
+              </p>
+              <ul>
+                <li><strong>Banking and mobile payments</strong>: Secure transactions and mobile banking menus</li>
+                <li><strong>Information services</strong>: Weather, news, sports scores delivered via SIM menu</li>
+                <li><strong>Prepaid SIM management</strong>: Balance checking, top-up services</li>
+                <li><strong>Roaming services</strong>: Automatic network selection, preferred network lists</li>
+                <li><strong>Transport applications</strong>: Public transport ticketing and payment systems</li>
+                <li><strong>Customer care</strong>: Direct customer support access through SIM menu</li>
+              </ul>
+              
+              <h4>SAT Capabilities</h4>
               <p>
                 SAT allows the SIM card to:
               </p>
@@ -1254,73 +1377,208 @@ export default function PDULearn() {
                 <li>Display text and menus on the phone screen</li>
                 <li>Initiate calls, send SMS or USSD messages</li>
                 <li>Provide information to the phone</li>
-                <li>Set up event notifications</li>
-                <li>Request user input</li>
+                <li>Set up event notifications (call, SMS, location updates)</li>
+                <li>Request user input via phone interface</li>
+                <li>Access and manage network services</li>
+                <li>Launch the mobile browser to specific URLs</li>
+                <li>Control timing of operations through timers</li>
               </ul>
               
               <div className="bg-muted/50 p-4 rounded-md border mb-4">
                 <h4 className="mt-0">Common SAT Commands</h4>
                 <ul className="mt-2 mb-0">
-                  <li><strong>DISPLAY TEXT</strong>: Shows text on the phone's display</li>
-                  <li><strong>GET INPUT</strong>: Requests text input from the user</li>
-                  <li><strong>SELECT ITEM</strong>: Presents a menu for the user to select options</li>
-                  <li><strong>SETUP MENU</strong>: Creates a menu that becomes part of the phone's menu system</li>
-                  <li><strong>SEND SMS</strong>: Instructs the phone to send an SMS</li>
-                  <li><strong>SETUP CALL</strong>: Initiates a voice call</li>
-                  <li><strong>REFRESH</strong>: Updates the SIM data on the phone</li>
+                  <li><strong>DISPLAY TEXT</strong>: Shows text on the phone's display, can be configured to clear after timeout or wait for user action</li>
+                  <li><strong>GET INPUT</strong>: Requests text input from the user with various configuration options (alphabet, minimum/maximum length)</li>
+                  <li><strong>SELECT ITEM</strong>: Presents a menu for the user to select options, can include icons and help text</li>
+                  <li><strong>SETUP MENU</strong>: Creates a persistent menu that becomes part of the phone's menu system</li>
+                  <li><strong>SEND SMS</strong>: Instructs the phone to send an SMS message without user interaction</li>
+                  <li><strong>SETUP CALL</strong>: Initiates a voice call, can be configured to require confirmation or be automatic</li>
+                  <li><strong>REFRESH</strong>: Updates SIM file data on the phone, can range from specific files to complete SIM restart</li>
+                  <li><strong>PROVIDE LOCAL INFO</strong>: Requests information like network status, location, time from the phone</li>
+                  <li><strong>SET UP EVENT LIST</strong>: Configures which events the phone should notify the SIM about</li>
+                  <li><strong>LAUNCH BROWSER</strong>: Opens the phone's web browser to a specified URL</li>
                 </ul>
               </div>
               
-              <h4>Proactive SIM Command Format</h4>
+              <h4>SAT and Mobile Security</h4>
               <p>
-                SAT commands follow a TLV (Tag-Length-Value) structure:
+                SIM Application Toolkit provides several security features:
+              </p>
+              <ul>
+                <li><strong>Secure Channel</strong>: Communication between SIM and network can be encrypted</li>
+                <li><strong>Access Control</strong>: Commands can be restricted to authorized network operators</li>
+                <li><strong>SIM as Secure Element</strong>: Provides a tamper-resistant environment for sensitive data</li>
+                <li><strong>Digital Signatures</strong>: Supports verification of command authenticity</li>
+              </ul>
+              
+              <h4>SAT Command Structure and Encoding</h4>
+              <p>
+                SAT commands follow a BER-TLV (Basic Encoding Rules - Tag-Length-Value) structure, allowing for a flexible protocol that can evolve over time.
               </p>
               
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Field</TableHead>
-                    <TableHead>Size (bytes)</TableHead>
-                    <TableHead>Description</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  <TableRow>
-                    <TableCell>Proactive SIM Command Tag</TableCell>
-                    <TableCell>1</TableCell>
-                    <TableCell>Always 0xD0 to indicate a proactive command</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>Length</TableCell>
-                    <TableCell>1-3</TableCell>
-                    <TableCell>Length of all subsequent data</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>Command Details TLV</TableCell>
-                    <TableCell>3-5</TableCell>
-                    <TableCell>Tag (0x01), Length (3), and command details (command number, type, qualifier)</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>Device Identities TLV</TableCell>
-                    <TableCell>4</TableCell>
-                    <TableCell>Tag (0x02), Length (2), Source and Destination device identities</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>Command-specific TLVs</TableCell>
-                    <TableCell>Variable</TableCell>
-                    <TableCell>Additional TLVs specific to the command type</TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                <div>
+                  <h5 className="font-medium">Proactive SIM Command Format</h5>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Field</TableHead>
+                        <TableHead>Size (bytes)</TableHead>
+                        <TableHead>Description</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      <TableRow>
+                        <TableCell>Proactive SIM Command Tag</TableCell>
+                        <TableCell>1</TableCell>
+                        <TableCell>Always 0xD0 to indicate a proactive command</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>Length</TableCell>
+                        <TableCell>1-3</TableCell>
+                        <TableCell>Length of all subsequent data</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>Command Details TLV</TableCell>
+                        <TableCell>3-5</TableCell>
+                        <TableCell>Tag (0x01), Length (3), and command details (command number, type, qualifier)</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>Device Identities TLV</TableCell>
+                        <TableCell>4</TableCell>
+                        <TableCell>Tag (0x02), Length (2), Source and Destination device identities</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>Command-specific TLVs</TableCell>
+                        <TableCell>Variable</TableCell>
+                        <TableCell>Additional TLVs specific to the command type</TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </div>
+                
+                <div>
+                  <h5 className="font-medium">TLV Structure in Detail</h5>
+                  <div className="mb-3">
+                    <p className="text-sm">Each information element in a SAT command follows the TLV format:</p>
+                    <div className="border rounded bg-black/5 p-3 my-2">
+                      <div className="grid grid-cols-3 gap-1 text-center">
+                        <div className="border bg-primary/10 p-1 rounded">
+                          <div className="text-xs font-bold">Tag (1 byte)</div>
+                          <div className="text-xs">Identifies the type of data</div>
+                        </div>
+                        <div className="border bg-secondary/10 p-1 rounded">
+                          <div className="text-xs font-bold">Length (1-3 bytes)</div>
+                          <div className="text-xs">Size of the value field</div>
+                        </div>
+                        <div className="border bg-accent/10 p-1 rounded">
+                          <div className="text-xs font-bold">Value (variable)</div>
+                          <div className="text-xs">The actual data</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <h5 className="font-medium mt-4">Common TLV Tags</h5>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Tag</TableHead>
+                        <TableHead>Name</TableHead>
+                        <TableHead>Purpose</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      <TableRow>
+                        <TableCell>0x01</TableCell>
+                        <TableCell>Command Details</TableCell>
+                        <TableCell>Command type and parameters</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>0x02</TableCell>
+                        <TableCell>Device Identities</TableCell>
+                        <TableCell>Source and destination devices</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>0x0D</TableCell>
+                        <TableCell>Text String</TableCell>
+                        <TableCell>Text to display or process</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>0x05</TableCell>
+                        <TableCell>Alpha Identifier</TableCell>
+                        <TableCell>Text label for menus and commands</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>0x0F</TableCell>
+                        <TableCell>Item</TableCell>
+                        <TableCell>Menu item for selection menus</TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </div>
+              </div>
               
-              <h4>Common Command-specific TLVs</h4>
+              <div className="bg-muted/50 p-4 rounded-md border mb-4">
+                <h5 className="mt-0 font-medium">Command Example: DISPLAY TEXT</h5>
+                <p className="text-sm">The following is an example of a DISPLAY TEXT command broken down by its component parts:</p>
+                
+                <div className="font-mono text-xs overflow-x-auto bg-black/5 p-3 rounded my-2">
+                  <span className="bg-primary/20 p-1 rounded mr-1">D0</span>
+                  <span className="bg-secondary/20 p-1 rounded mr-1">28</span>
+                  <span className="bg-accent/20 p-1 rounded mr-1">81 03 01 21 00</span>
+                  <span className="bg-destructive/20 p-1 rounded mr-1">82 02 81 02</span>
+                  <span className="bg-muted p-1 border rounded">8D 1A 04 54 68 69 73 20 69 73 20 61 20 74 65 73 74 20 74 65 78 74 2E 20 20 20 20 20</span>
+                </div>
+                
+                <div className="mt-3">
+                  <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+                    <div>
+                      <span className="bg-primary/20 px-1 py-0.5 rounded text-xs mr-1.5">D0</span>
+                      Proactive SIM Command Tag
+                    </div>
+                    <div>
+                      <span className="bg-secondary/20 px-1 py-0.5 rounded text-xs mr-1.5">28</span>
+                      Length (40 bytes)
+                    </div>
+                    <div>
+                      <span className="bg-accent/20 px-1 py-0.5 rounded text-xs mr-1.5">81 03 01 21 00</span>
+                      Command Details TLV (DISPLAY TEXT, high priority)
+                    </div>
+                    <div>
+                      <span className="bg-destructive/20 px-1 py-0.5 rounded text-xs mr-1.5">82 02 81 02</span>
+                      Device Identities TLV (SIM to Display)
+                    </div>
+                    <div className="col-span-2">
+                      <span className="bg-muted p-0.5 border rounded text-xs mr-1.5">8D 1A 04...</span>
+                      Text String TLV (contains "This is a test text.")
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <h4>Data Encoding in SAT</h4>
+              <p>
+                SAT supports multiple text encoding formats to accommodate different languages and character sets:
+              </p>
               <ul>
-                <li><strong>Text String (0x0D)</strong>: Text to be displayed or used</li>
-                <li><strong>Alpha Identifier (0x05)</strong>: Text label for menus and commands</li>
-                <li><strong>Item (0x0F)</strong>: Menu item for selection menus</li>
+                <li><strong>GSM 7-bit default alphabet</strong>: Most efficient for Latin-based languages</li>
+                <li><strong>8-bit data</strong>: For binary data or specialized character sets</li>
+                <li><strong>UCS2 (16-bit)</strong>: For languages with non-Latin scripts (Arabic, Chinese, etc.)</li>
+              </ul>
+              
+              <p>
+                The Data Coding Scheme (DCS) byte in a text string TLV indicates which encoding is used, similar to SMS PDU format.
+              </p>
+              
+              <h4>Additional Common Command-specific TLVs</h4>
+              <ul>
                 <li><strong>Item Identifier (0x10)</strong>: Identifier for an item</li>
                 <li><strong>SMS TPDU (0x8B)</strong>: SMS message to be sent</li>
                 <li><strong>Address (0x06)</strong>: Phone number (in the same format as SMS PDUs)</li>
+                <li><strong>Duration (0x04)</strong>: Time interval for command timeouts</li>
+                <li><strong>Icon Identifier (0x1E)</strong>: Reference to an icon to display</li>
+                <li><strong>URL (0x31)</strong>: Web address for LAUNCH BROWSER command</li>
               </ul>
               
               <h4>Example: DISPLAY TEXT command</h4>
