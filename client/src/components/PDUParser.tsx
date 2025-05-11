@@ -12,6 +12,55 @@ import { AlertCircle, Check, Copy } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import ByteDisplay from "./ByteDisplay";
+import { Info } from "lucide-react";
+
+// Field Info component
+interface FieldInfoProps {
+  tooltip: string;
+}
+
+function FieldInfo({ tooltip }: FieldInfoProps) {
+  return (
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <span className="inline-flex ml-1 cursor-help">
+            <Info className="h-3.5 w-3.5 text-muted-foreground" />
+          </span>
+        </TooltipTrigger>
+        <TooltipContent side="right" className="max-w-xs">
+          <p className="text-xs">{tooltip}</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  );
+}
+
+// PDU field descriptions
+const fieldDescriptions = {
+  // Header fields
+  messageType: "Indicates the direction and purpose of the SMS message (SMS-DELIVER or SMS-SUBMIT)",
+  smsc: "Short Message Service Center address that routes and handles the SMS message",
+  sender: "Originating address (phone number) of the message sender",
+  recipient: "Destination address (phone number) to which the message is being sent",
+  timestamp: "Date and time when the message was submitted to the SMSC",
+  encoding: "Character encoding scheme used for the message content (7-bit, 8-bit, UCS2)",
+  multipart: "Indicates whether this message is part of a multi-part (concatenated) SMS",
+  
+  // PDU structure fields
+  smscLength: "Length of the SMSC information in bytes",
+  smscType: "Type of SMSC address (international, national, alphanumeric)",
+  firstOctet: "Contains message flags including reply path, user data header indicator, and status report request",
+  messageReference: "Reference number for identifying the SMS-SUBMIT message",
+  destAddrLength: "Length of the destination address in digits",
+  destAddrType: "Type of destination address (international, national, alphanumeric)",
+  protocolId: "Protocol identifier parameter indicating how the SC is to process the message",
+  dataCoding: "Indicates the message encoding scheme and message class",
+  validityPeriod: "Period during which the message is valid if it cannot be delivered immediately",
+  userDataLength: "Length of the user data section in the appropriate units based on encoding",
+  userDataHeader: "Optional header containing information for concatenated messages, port addressing, etc.",
+  userData: "The actual message content encoded according to the data coding scheme"
+};
 
 // Example PDUs
 const examplePdus = {
@@ -232,22 +281,34 @@ export default function PDUParser() {
                         <table className="w-full text-sm">
                           <tbody>
                             <tr>
-                              <td className="pb-1 pr-3 text-muted-foreground">Message Type:</td>
+                              <td className="pb-1 pr-3 text-muted-foreground">
+                                Message Type:
+                                <FieldInfo tooltip={fieldDescriptions.messageType} />
+                              </td>
                               <td className="pb-1 font-medium">{parsedData.header.messageType.toUpperCase()}</td>
                             </tr>
                             <tr>
-                              <td className="pb-1 pr-3 text-muted-foreground">SMSC:</td>
+                              <td className="pb-1 pr-3 text-muted-foreground">
+                                SMSC:
+                                <FieldInfo tooltip={fieldDescriptions.smsc} />
+                              </td>
                               <td className="pb-1 font-medium">{parsedData.header.smsc}</td>
                             </tr>
                             {parsedData.header.sender && (
                               <tr>
-                                <td className="pb-1 pr-3 text-muted-foreground">Sender:</td>
+                                <td className="pb-1 pr-3 text-muted-foreground">
+                                  Sender:
+                                  <FieldInfo tooltip={fieldDescriptions.sender} />
+                                </td>
                                 <td className="pb-1 font-medium">{parsedData.header.sender}</td>
                               </tr>
                             )}
                             {parsedData.header.recipient && (
                               <tr>
-                                <td className="pb-1 pr-3 text-muted-foreground align-top">Recipient:</td>
+                                <td className="pb-1 pr-3 text-muted-foreground align-top">
+                                  Recipient:
+                                  <FieldInfo tooltip={fieldDescriptions.recipient} />
+                                </td>
                                 <td className="pb-1 font-medium break-all max-w-[200px]" title={parsedData.header.recipient}>
                                   {parsedData.header.recipient.length > 50 
                                     ? `${parsedData.header.recipient.substring(0, 50)}...` 
@@ -257,16 +318,25 @@ export default function PDUParser() {
                             )}
                             {parsedData.header.timestamp && (
                               <tr>
-                                <td className="pb-1 pr-3 text-muted-foreground">Timestamp:</td>
+                                <td className="pb-1 pr-3 text-muted-foreground">
+                                  Timestamp:
+                                  <FieldInfo tooltip={fieldDescriptions.timestamp} />
+                                </td>
                                 <td className="pb-1 font-medium">{parsedData.header.timestamp}</td>
                               </tr>
                             )}
                             <tr>
-                              <td className="pb-1 pr-3 text-muted-foreground">Encoding:</td>
+                              <td className="pb-1 pr-3 text-muted-foreground">
+                                Encoding:
+                                <FieldInfo tooltip={fieldDescriptions.encoding} />
+                              </td>
                               <td className="pb-1 font-medium">{parsedData.header.encoding}</td>
                             </tr>
                             <tr>
-                              <td className="pb-1 pr-3 text-muted-foreground">Multipart:</td>
+                              <td className="pb-1 pr-3 text-muted-foreground">
+                                Multipart:
+                                <FieldInfo tooltip={fieldDescriptions.multipart} />
+                              </td>
                               <td className="pb-1 font-medium">
                                 {parsedData.header.multipart ? (
                                   <>
@@ -307,7 +377,12 @@ export default function PDUParser() {
                             .filter(prop => !prop.rawBytes)
                             .map((property, index) => (
                               <tr key={index}>
-                                <td className="px-4 py-2">{property.name}</td>
+                                <td className="px-4 py-2 flex items-center">
+                                  {property.name}
+                                  {fieldDescriptions[property.name.toLowerCase().replace(/\s+/g, '')] && (
+                                    <FieldInfo tooltip={fieldDescriptions[property.name.toLowerCase().replace(/\s+/g, '')]} />
+                                  )}
+                                </td>
                                 <td className="px-4 py-2 font-mono">{property.value}</td>
                                 <td className="px-4 py-2 text-muted-foreground">{property.description}</td>
                               </tr>
