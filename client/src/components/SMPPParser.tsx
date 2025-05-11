@@ -397,8 +397,17 @@ export default function SMPPParser() {
                           <tr key={index}>
                             <td className="px-4 py-2 flex items-center">
                               {property.name}
-                              {fieldDescriptions[property.name.toLowerCase().replace(/\s+/g, '')] && (
-                                <FieldInfo tooltip={fieldDescriptions[property.name.toLowerCase().replace(/\s+/g, '')]} />
+                              {(fieldDescriptions[property.name] || 
+                                fieldDescriptions[property.name.toLowerCase()] || 
+                                fieldDescriptions[property.name.toLowerCase().replace(/\s+/g, '')] ||
+                                fieldDescriptions[property.name.toLowerCase().replace(/[-_]/g, '')]) && (
+                                <FieldInfo tooltip={
+                                  fieldDescriptions[property.name] || 
+                                  fieldDescriptions[property.name.toLowerCase()] || 
+                                  fieldDescriptions[property.name.toLowerCase().replace(/\s+/g, '')] ||
+                                  fieldDescriptions[property.name.toLowerCase().replace(/[-_]/g, '')] ||
+                                  "Field information"
+                                } />
                               )}
                             </td>
                             <td className="px-4 py-2 font-mono">{property.value}</td>
