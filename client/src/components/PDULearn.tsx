@@ -14,10 +14,8 @@ type LearnSection =
   "overview" | "pdu-formats" | "encodings" | "fields" | "multipart" | 
   // Advanced protocols
   "sat" | "smpp" | "sms-flow" | "efsms" |
-  // Interactive learning modules
-  "learning-beginner" | "learning-intermediate" | "learning-advanced" | "learning-expert" |
-  // Practical exercises
-  "exercises-encoding" | "exercises-decoding" | "exercises-multipart" | "exercises-validation";
+  // Additional telecom topics
+  "network-architecture" | "gsm-concepts" | "encoding-tool";
 
 // Simple utility functions for encoding exercises
 const encode7Bit = (text: string): string => {
@@ -85,163 +83,113 @@ export default function PDULearn() {
       <CardContent className="pt-6">
         <h2 className="text-lg font-medium mb-4">SMS Protocol & Specification Guide</h2>
         
-        <Tabs defaultValue="reference" className="mb-4">
-          <TabsList className="grid grid-cols-3 mb-2">
-            <TabsTrigger value="reference">Technical Reference</TabsTrigger>
-            <TabsTrigger value="learning">Interactive Learning</TabsTrigger>
-            <TabsTrigger value="exercises">Practical Exercises</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="reference">
-            <div className="flex flex-wrap gap-2 mb-4">
-              <Button 
-                variant={section === "overview" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setSection("overview")}
-              >
-                Overview
-              </Button>
-              <Button 
-                variant={section === "pdu-formats" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setSection("pdu-formats")}
-              >
-                PDU Formats
-              </Button>
-              <Button 
-                variant={section === "encodings" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setSection("encodings")}
-              >
-                Character Encodings
-              </Button>
-              <Button 
-                variant={section === "fields" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setSection("fields")}
-              >
-                Fields Reference
-              </Button>
-              <Button 
-                variant={section === "multipart" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setSection("multipart")}
-              >
-                Multipart SMS
-              </Button>
-              <Button 
-                variant={section === "sat" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setSection("sat")}
-              >
-                SIM Toolkit
-              </Button>
-              <Button 
-                variant={section === "smpp" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setSection("smpp")}
-              >
-                SMPP Protocol
-              </Button>
-              <Button 
-                variant={section === "sms-flow" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setSection("sms-flow")}
-              >
-                SMS Flow
-              </Button>
-              <Button 
-                variant={section === "efsms" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setSection("efsms")}
-              >
-                EF_SMS Storage
-              </Button>
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="learning">
-            <div className="flex flex-wrap gap-2 mb-4">
-              <Button 
-                variant={section === "learning-beginner" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setSection("learning-beginner")}
-              >
-                Beginner Course
-              </Button>
-              <Button 
-                variant={section === "learning-intermediate" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setSection("learning-intermediate")}
-              >
-                Intermediate Course
-              </Button>
-              <Button 
-                variant={section === "learning-advanced" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setSection("learning-advanced")}
-              >
-                Advanced Course
-              </Button>
-              <Button 
-                variant={section === "learning-expert" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setSection("learning-expert")}
-              >
-                Expert Topics
-              </Button>
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="exercises">
-            <div className="flex flex-wrap gap-2 mb-4">
-              <Button 
-                variant={section === "exercises-encoding" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setSection("exercises-encoding")}
-              >
-                SMS Encoding Practice
-              </Button>
-              <Button 
-                variant={section === "exercises-decoding" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setSection("exercises-decoding")}
-              >
-                SMS Decoding Challenges
-              </Button>
-              <Button 
-                variant={section === "exercises-multipart" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setSection("exercises-multipart")}
-              >
-                Multipart SMS Exercises
-              </Button>
-              <Button 
-                variant={section === "exercises-validation" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setSection("exercises-validation")}
-              >
-                PDU Validation Challenges
-              </Button>
-            </div>
-          </TabsContent>
-        </Tabs>
+        <div className="mb-6">
+          <h3 className="text-lg font-medium mb-4">Telecom Knowledge Base</h3>
+          <div className="flex flex-wrap gap-2 mb-4">
+            <Button 
+              variant={section === "overview" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setSection("overview")}
+            >
+              Overview
+            </Button>
+            <Button 
+              variant={section === "pdu-formats" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setSection("pdu-formats")}
+            >
+              PDU Formats
+            </Button>
+            <Button 
+              variant={section === "encodings" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setSection("encodings")}
+            >
+              Character Encodings
+            </Button>
+            <Button 
+              variant={section === "fields" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setSection("fields")}
+            >
+              Fields Reference
+            </Button>
+            <Button 
+              variant={section === "multipart" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setSection("multipart")}
+            >
+              Multipart SMS
+            </Button>
+            <Button 
+              variant={section === "sat" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setSection("sat")}
+            >
+              SIM Toolkit
+            </Button>
+            <Button 
+              variant={section === "smpp" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setSection("smpp")}
+            >
+              SMPP Protocol
+            </Button>
+            <Button 
+              variant={section === "sms-flow" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setSection("sms-flow")}
+            >
+              SMS Flow
+            </Button>
+            <Button 
+              variant={section === "efsms" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setSection("efsms")}
+            >
+              EF_SMS Storage
+            </Button>
+            <Button 
+              variant={section === "network-architecture" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setSection("network-architecture")}
+            >
+              Network Architecture
+            </Button>
+            <Button 
+              variant={section === "gsm-concepts" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setSection("gsm-concepts")}
+            >
+              GSM Concepts
+            </Button>
+            <Button 
+              variant={section === "encoding-tool" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setSection("encoding-tool")}
+            >
+              Encoding Tool
+            </Button>
+          </div>
+        </div>
         
         <div className="prose prose-sm max-w-none dark:prose-invert">
-          {section === "exercises-encoding" && (
+          {section === "encoding-tool" && (
             <>
-              <h3>SMS Encoding Practice</h3>
+              <h3>SMS Character Encoding Tool</h3>
               <p>
-                This interactive exercise helps you understand how text is encoded in SMS messages.
+                This interactive tool helps you understand how text is encoded in SMS messages.
                 Try different characters and see how they are converted to hexadecimal representation.
               </p>
               
               <div className="bg-primary/5 p-4 rounded-md border border-primary/20 mb-4">
-                <h4 className="mt-0 text-primary">Exercise Objectives</h4>
+                <h4 className="mt-0 text-primary">About SMS Character Encoding</h4>
+                <p className="mb-2">
+                  SMS messages can use different character encoding schemes depending on the content:
+                </p>
                 <ul className="mb-0">
-                  <li>Understand the difference between 7-bit and UCS2 encoding</li>
-                  <li>Practice encoding text into hexadecimal format</li>
-                  <li>See how special characters and non-Latin scripts affect encoding</li>
+                  <li><strong>7-bit GSM:</strong> Used for basic Latin alphabet, supports 160 chars per SMS</li>
+                  <li><strong>UCS2:</strong> Used for Unicode characters (emoji, non-Latin scripts), 70 chars per SMS</li>
                 </ul>
               </div>
               
@@ -339,273 +287,166 @@ export default function PDULearn() {
             </>
           )}
           
-          {section === "learning-intermediate" && (
+          {section === "network-architecture" && (
             <>
-              <h3>Intermediate SMS Protocol Concepts</h3>
+              <h3>Telecom Network Architecture</h3>
               <p>
-                Now that you understand the basics of SMS messaging, let's dive deeper into more advanced concepts
-                and explore the technical details of SMS message routing and delivery.
+                SMS messages travel through a complex network before reaching their destination.
+                This reference page explains the key components of the telecom network architecture
+                that enable messaging services.
               </p>
               
-              <div className="bg-primary/5 p-4 rounded-md border border-primary/20 mb-4">
-                <h4 className="mt-0 text-primary">Learning Objectives</h4>
-                <ol className="mb-2">
-                  <li>Understand the SMS protocol stack and network architecture</li>
-                  <li>Learn about SMSC (Short Message Service Center) functionality</li>
-                  <li>Explore message routing and the role of the HLR/VLR</li>
-                  <li>Understand delivery receipts and status reports</li>
-                </ol>
-                <p className="mb-0 text-sm">
-                  <strong>Estimated completion time:</strong> 30-40 minutes
-                </p>
+              <div className="bg-muted p-4 rounded-md my-4">
+                <h4 className="mt-0 mb-2 font-medium">Key Network Elements</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <h5 className="mt-0 mb-1 font-medium">Mobile Station (MS)</h5>
+                    <p className="text-sm mb-3">
+                      The mobile device (phone) where messages originate or terminate.
+                      Contains the Mobile Equipment (ME) and SIM card.
+                    </p>
+                    
+                    <h5 className="mt-0 mb-1 font-medium">Base Station System (BSS)</h5>
+                    <p className="text-sm mb-0">
+                      Handles radio communication with mobile devices.
+                      Consists of Base Transceiver Stations (BTS) and Base Station Controllers (BSC).
+                    </p>
+                  </div>
+                  <div>
+                    <h5 className="mt-0 mb-1 font-medium">Mobile Switching Center (MSC)</h5>
+                    <p className="text-sm mb-3">
+                      Core network element that routes calls and SMS messages.
+                      Interfaces with other networks and the SMSC.
+                    </p>
+                    
+                    <h5 className="mt-0 mb-1 font-medium">Short Message Service Center (SMSC)</h5>
+                    <p className="text-sm mb-0">
+                      Stores and forwards SMS messages.
+                      Handles message routing, retries, and delivery reports.
+                    </p>
+                  </div>
+                </div>
               </div>
               
-              <div className="my-6">
-                <h4>Module 1: SMS Network Architecture</h4>
-                <p>
-                  SMS messages travel through a complex network before reaching their destination.
-                  Let's explore the key components of this architecture:
-                </p>
-                
-                <div className="bg-muted p-4 rounded-md my-4">
-                  <h5 className="mt-0 mb-2 font-medium">Key Network Elements</h5>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <h6 className="mt-0 mb-1 font-medium">Mobile Station (MS)</h6>
-                      <p className="text-sm mb-3">
-                        The mobile device (phone) where messages originate or terminate.
-                        Contains the Mobile Equipment (ME) and SIM card.
-                      </p>
-                      
-                      <h6 className="mt-0 mb-1 font-medium">Base Station System (BSS)</h6>
-                      <p className="text-sm mb-0">
-                        Handles radio communication with mobile devices.
-                        Consists of Base Transceiver Stations (BTS) and Base Station Controllers (BSC).
-                      </p>
-                    </div>
-                    <div>
-                      <h6 className="mt-0 mb-1 font-medium">Mobile Switching Center (MSC)</h6>
-                      <p className="text-sm mb-3">
-                        Core network element that routes calls and SMS messages.
-                        Interfaces with other networks and the SMSC.
-                      </p>
-                      
-                      <h6 className="mt-0 mb-1 font-medium">Short Message Service Center (SMSC)</h6>
-                      <p className="text-sm mb-0">
-                        Stores and forwards SMS messages.
-                        Handles message routing, retries, and delivery reports.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="border-l-4 border-info pl-4 my-6">
-                  <h5 className="mt-0 text-info">SMS Message Flow</h5>
-                  <ol className="mb-0 text-sm">
-                    <li><strong>Submission:</strong> MS encodes the message and sends it to the MSC</li>
-                    <li><strong>Routing:</strong> MSC forwards the message to the SMSC</li>
-                    <li><strong>Storage:</strong> SMSC stores the message and attempts delivery</li>
-                    <li><strong>Recipient Location:</strong> SMSC queries the HLR for recipient location</li>
-                    <li><strong>Delivery:</strong> SMSC routes the message to the recipient's MSC</li>
-                    <li><strong>Final Delivery:</strong> MSC forwards the message to the recipient's MS</li>
-                    <li><strong>Confirmation:</strong> Delivery reports are sent back through the network</li>
-                  </ol>
-                </div>
-                
-                <div className="bg-secondary/5 p-4 rounded-md my-4 border">
-                  <h5 className="mt-0 mb-2 font-medium">Home Location Register (HLR) and Visitor Location Register (VLR)</h5>
-                  <p className="mb-1">
-                    These databases play a crucial role in SMS delivery:
-                  </p>
-                  <ul className="mb-0">
-                    <li><strong>HLR:</strong> Permanent database storing subscriber information, including current location area</li>
-                    <li><strong>VLR:</strong> Temporary database for subscribers currently in a specific location area</li>
-                  </ul>
-                </div>
-                
-                <div className="bg-muted/30 p-4 rounded-md mt-6">
-                  <h5 className="mt-0 mb-3">Knowledge Check</h5>
-                  <div className="space-y-3">
-                    <div>
-                      <p className="font-medium mb-2">1. What is the primary role of the SMSC in SMS messaging?</p>
-                      <div className="space-y-1">
-                        <div className="flex items-center">
-                          <input type="radio" id="q1a_int" name="q1_int" className="mr-2" />
-                          <label htmlFor="q1a_int">To encrypt messages for security</label>
-                        </div>
-                        <div className="flex items-center">
-                          <input type="radio" id="q1b_int" name="q1_int" className="mr-2" />
-                          <label htmlFor="q1b_int">To store and forward messages, handling routing and retries</label>
-                        </div>
-                        <div className="flex items-center">
-                          <input type="radio" id="q1c_int" name="q1_int" className="mr-2" />
-                          <label htmlFor="q1c_int">To compress messages to save bandwidth</label>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div>
-                      <p className="font-medium mb-2">2. Which database is queried to determine a recipient's current location?</p>
-                      <div className="space-y-1">
-                        <div className="flex items-center">
-                          <input type="radio" id="q2a_int" name="q2_int" className="mr-2" />
-                          <label htmlFor="q2a_int">SMSC Database</label>
-                        </div>
-                        <div className="flex items-center">
-                          <input type="radio" id="q2b_int" name="q2_int" className="mr-2" />
-                          <label htmlFor="q2b_int">Home Location Register (HLR)</label>
-                        </div>
-                        <div className="flex items-center">
-                          <input type="radio" id="q2c_int" name="q2_int" className="mr-2" />
-                          <label htmlFor="q2c_int">Mobile Equipment Registry</label>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="mt-4">
-                    <Button size="sm">Check Answers</Button>
-                  </div>
-                </div>
-                
-                <div className="flex justify-between mt-8">
-                  <Button variant="outline" onClick={() => setSection("learning-beginner")}>Previous Module</Button>
-                  <Button>Next Module: Status Reports</Button>
-                </div>
+              <div className="border-l-4 border-info pl-4 my-6">
+                <h4 className="mt-0 text-info">SMS Message Flow</h4>
+                <ol className="mb-0 text-sm">
+                  <li><strong>Submission:</strong> MS encodes the message and sends it to the MSC</li>
+                  <li><strong>Routing:</strong> MSC forwards the message to the SMSC</li>
+                  <li><strong>Storage:</strong> SMSC stores the message and attempts delivery</li>
+                  <li><strong>Recipient Location:</strong> SMSC queries the HLR for recipient location</li>
+                  <li><strong>Delivery:</strong> SMSC routes the message to the recipient's MSC</li>
+                  <li><strong>Final Delivery:</strong> MSC forwards the message to the recipient's MS</li>
+                  <li><strong>Confirmation:</strong> Delivery reports are sent back through the network</li>
+                </ol>
               </div>
+              
+              <div className="bg-secondary/5 p-4 rounded-md my-4 border">
+                <h4 className="mt-0 mb-2 font-medium">Home Location Register (HLR) and Visitor Location Register (VLR)</h4>
+                <p className="mb-1">
+                  These databases play a crucial role in SMS delivery:
+                </p>
+                <ul className="mb-0">
+                  <li><strong>HLR:</strong> Permanent database storing subscriber information, including current location area</li>
+                  <li><strong>VLR:</strong> Temporary database for subscribers currently in a specific location area</li>
+                </ul>
+              </div>
+              
+              <h4 className="mt-6">Network References</h4>
+              <p>
+                The SMS architecture is defined in the following 3GPP specifications:
+              </p>
+              <ul>
+                <li>3GPP TS 23.040: Technical realization of the Short Message Service (SMS)</li>
+                <li>3GPP TS 23.038: Alphabets and language-specific information</li>
+                <li>3GPP TS 29.002: Mobile Application Part (MAP) specification</li>
+              </ul>
             </>
           )}
           
-          {section === "learning-beginner" && (
+          {section === "gsm-concepts" && (
             <>
-              <h3>Beginner's Guide to SMS Protocols</h3>
+              <h3>GSM Concepts & Fundamentals</h3>
               <p>
-                Welcome to the interactive learning module for beginners! This course will introduce you to the fundamental 
-                concepts of SMS protocols and help you understand how text messages are sent and received across mobile networks.
+                The Global System for Mobile Communications (GSM) is the foundation for most mobile telecom
+                systems worldwide. This page covers key GSM concepts that are essential for understanding
+                mobile messaging and telecommunications.
               </p>
               
-              <div className="bg-primary/5 p-4 rounded-md border border-primary/20 mb-4">
-                <h4 className="mt-0 text-primary">Learning Objectives</h4>
-                <ol className="mb-2">
-                  <li>Understand what SMS PDUs are and why they're important</li>
-                  <li>Learn the basic structure of SMS messages</li>
-                  <li>Recognize different types of SMS messages</li>
-                  <li>Understand character encoding in SMS</li>
-                </ol>
-                <p className="mb-0 text-sm">
-                  <strong>Estimated completion time:</strong> 20-30 minutes
-                </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h4 className="mt-0 mb-2 font-medium">GSM Network Structure</h4>
+                  <ul className="mb-0">
+                    <li><strong>Cell Structure:</strong> Network divided into geographic cells</li>
+                    <li><strong>Frequency Reuse:</strong> Same frequencies reused in non-adjacent cells</li>
+                    <li><strong>Circuit-Switched:</strong> Traditional connection method for voice calls</li>
+                    <li><strong>Packet-Switched:</strong> Data transmission method (GPRS, EDGE)</li>
+                  </ul>
+                </div>
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h4 className="mt-0 mb-2 font-medium">SIM Card Technology</h4>
+                  <p className="mb-0">
+                    The SIM (Subscriber Identity Module) is a crucial component:
+                  </p>
+                  <ul className="mb-0">
+                    <li><strong>IMSI:</strong> International Mobile Subscriber Identity</li>
+                    <li><strong>Ki:</strong> Authentication key stored securely</li>
+                    <li><strong>File System:</strong> Hierarchical structure for storing contacts, messages</li>
+                    <li><strong>SIM Application Toolkit:</strong> Environment for network-controlled apps</li>
+                  </ul>
+                </div>
               </div>
               
               <div className="my-6">
-                <h4>Lesson 1: Introduction to SMS PDUs</h4>
+                <h4>GSM Identifiers</h4>
                 <p>
-                  SMS was developed in the 1980s as part of the GSM standard. Unlike modern messaging apps, 
-                  SMS operates through the cellular network's signaling paths, allowing messages to be sent even 
-                  when the network is congested with voice calls.
+                  GSM networks use several important identifiers:
                 </p>
                 
-                <div className="bg-muted p-4 rounded-md my-4">
-                  <h5 className="mt-0 mb-2 font-medium">What is a PDU?</h5>
-                  <p className="mb-0">
-                    <strong>PDU (Protocol Data Unit)</strong> is a binary format used to transmit SMS messages 
-                    between devices and the network. This binary format contains not just the message text, but also:
-                  </p>
-                  <ul className="mb-0">
-                    <li>Sender and recipient information</li>
-                    <li>Timestamps</li>
-                    <li>Protocol information</li>
-                    <li>Character encoding details</li>
-                  </ul>
-                </div>
+                <table className="min-w-full divide-y divide-gray-300 text-sm mb-4">
+                  <thead>
+                    <tr>
+                      <th className="py-2 px-4 text-left">Identifier</th>
+                      <th className="py-2 px-4 text-left">Description</th>
+                      <th className="py-2 px-4 text-left">Format Example</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    <tr>
+                      <td className="py-2 px-4">IMSI</td>
+                      <td className="py-2 px-4">International Mobile Subscriber Identity</td>
+                      <td className="py-2 px-4">310150123456789</td>
+                    </tr>
+                    <tr>
+                      <td className="py-2 px-4">MSISDN</td>
+                      <td className="py-2 px-4">Mobile phone number</td>
+                      <td className="py-2 px-4">+14155551234</td>
+                    </tr>
+                    <tr>
+                      <td className="py-2 px-4">IMEI</td>
+                      <td className="py-2 px-4">International Mobile Equipment Identity</td>
+                      <td className="py-2 px-4">490154203237518</td>
+                    </tr>
+                    <tr>
+                      <td className="py-2 px-4">TMSI</td>
+                      <td className="py-2 px-4">Temporary Mobile Subscriber Identity</td>
+                      <td className="py-2 px-4">0A1B2C3D</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
-                  <div className="border rounded-md p-4 bg-secondary/5">
-                    <h5 className="mt-0 mb-2 font-medium">Why use PDUs?</h5>
-                    <ul className="mb-0">
-                      <li>Efficient use of network bandwidth</li>
-                      <li>Standardized format across all devices</li>
-                      <li>Supports multiple character encodings</li>
-                      <li>Allows for metadata and control information</li>
-                    </ul>
-                  </div>
-                  <div className="border rounded-md p-4 bg-secondary/5">
-                    <h5 className="mt-0 mb-2 font-medium">PDU vs. Text Mode</h5>
-                    <p className="mb-0">
-                      Mobile phones can process SMS in two modes:
-                    </p>
-                    <ul className="mb-0">
-                      <li><strong>Text Mode:</strong> Human-readable format (handled by the phone)</li>
-                      <li><strong>PDU Mode:</strong> Binary format (how messages actually travel over the network)</li>
-                    </ul>
-                  </div>
-                </div>
-                
-                <div className="border-l-4 border-info pl-4 my-6">
-                  <h5 className="mt-0 text-info">Interactive Example</h5>
-                  <p>
-                    Consider this simple text message: <strong>"Hello, World!"</strong>
-                  </p>
-                  <p>
-                    In PDU format, it might look something like this (simplified):
-                  </p>
-                  <pre className="bg-muted/50 p-2 rounded text-xs overflow-auto">
-                    <code>07911326040000F0040B911346610089F60000FF0E48656C6C6F2C20576F726C6421</code>
-                  </pre>
-                  <p className="mb-0">
-                    Don't worry about understanding this yet! We'll break it down step by step in the following lessons.
-                  </p>
-                </div>
-                
-                <div className="bg-muted/30 p-4 rounded-md mt-6">
-                  <h5 className="mt-0 mb-3">Knowledge Check</h5>
-                  <div className="space-y-3">
-                    <div>
-                      <p className="font-medium mb-2">1. What does PDU stand for in the context of SMS?</p>
-                      <div className="space-y-1">
-                        <div className="flex items-center">
-                          <input type="radio" id="q1a" name="q1" className="mr-2" />
-                          <label htmlFor="q1a">Personal Data Upload</label>
-                        </div>
-                        <div className="flex items-center">
-                          <input type="radio" id="q1b" name="q1" className="mr-2" />
-                          <label htmlFor="q1b">Protocol Data Unit</label>
-                        </div>
-                        <div className="flex items-center">
-                          <input type="radio" id="q1c" name="q1" className="mr-2" />
-                          <label htmlFor="q1c">Phone Display Unit</label>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    <div>
-                      <p className="font-medium mb-2">2. Why are PDUs used for SMS transmission?</p>
-                      <div className="space-y-1">
-                        <div className="flex items-center">
-                          <input type="radio" id="q2a" name="q2" className="mr-2" />
-                          <label htmlFor="q2a">To make messages harder to read</label>
-                        </div>
-                        <div className="flex items-center">
-                          <input type="radio" id="q2b" name="q2" className="mr-2" />
-                          <label htmlFor="q2b">For efficient use of network bandwidth and standardization</label>
-                        </div>
-                        <div className="flex items-center">
-                          <input type="radio" id="q2c" name="q2" className="mr-2" />
-                          <label htmlFor="q2c">It's an optional format rarely used in practice</label>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="mt-4">
-                    <Button size="sm">Check Answers</Button>
-                  </div>
-                </div>
-                
-                <div className="flex justify-between mt-8">
-                  <Button variant="outline" disabled>Previous Lesson</Button>
-                  <Button>Next Lesson: SMS Message Types</Button>
-                </div>
+              <div className="border-l-4 border-info pl-4 my-6">
+                <h4 className="mt-0 text-info">GSM SMS Features</h4>
+                <p>
+                  SMS in GSM networks provides several features:
+                </p>
+                <ul className="mb-0">
+                  <li><strong>Store and Forward:</strong> Messages stored at SMSC until recipient is available</li>
+                  <li><strong>Delivery Reports:</strong> Confirmation of message delivery</li>
+                  <li><strong>Message Classes:</strong> Different display behaviors (flash, normal, SIM, ME)</li>
+                  <li><strong>Cell Broadcast:</strong> Messages sent to all phones in a geographic area</li>
+                </ul>
               </div>
             </>
           )}
