@@ -272,6 +272,7 @@ export default function PDULearn() {
                     variant={section === "pdu-formats" ? "default" : "outline"}
                     size="sm"
                     onClick={() => setSection("pdu-formats")}
+                    data-section="pdu-formats"
                   >
                     PDU Formats
                   </Button>
@@ -279,6 +280,7 @@ export default function PDULearn() {
                     variant={section === "encodings" ? "default" : "outline"}
                     size="sm"
                     onClick={() => setSection("encodings")}
+                    data-section="encodings"
                   >
                     Character Encodings
                   </Button>
