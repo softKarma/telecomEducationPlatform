@@ -455,12 +455,14 @@ export function parsePDU(pduString: string, pduType: "sms-deliver" | "sms-submit
   if (pduType === 'sms-deliver') {
     // For SMS-DELIVER, report but don't error if MTI is unexpected
     if (mti !== 0) {
-      console.warn(`Warning: Unexpected MTI ${mti} for SMS-DELIVER (expected 0)`);
+      // Just provide a description, don't warn - this is expected for examples
+      console.log(`Note: MTI ${mti} for SMS-DELIVER (standard is 0)`);
     }
   } else if (pduType === 'sms-submit') {
     // For SMS-SUBMIT, report but don't error if MTI is unexpected
     if (mti !== 1) {
-      console.warn(`Warning: Unexpected MTI ${mti} for SMS-SUBMIT (expected 1)`);
+      // Just provide a description, don't warn - this is expected for examples
+      console.log(`Note: MTI ${mti} for SMS-SUBMIT (standard is 1)`);
     }
   }
   
@@ -629,23 +631,17 @@ export function parsePDU(pduString: string, pduType: "sms-deliver" | "sms-submit
     // Destination Address
     const destAddrLength = bytes[offset++];
     
-    // Sanity check for destination address length (should be reasonable)
-    // Some malformed PDUs can have very large values here
+    // Check for destination address length
+    // In SMS PDUs, address length can be in semi-octets, so 0x0B could mean 11 semi-octets
     if (destAddrLength > 32) {
-      console.warn(`Suspicious destination address length: ${destAddrLength}. Adjusting to a reasonable maximum.`);
-      // Instead of failing, we'll try to recover by setting a reasonable max length
-      // This helps with malformed PDUs
-      const actualRemainingBytes = bytes.length - offset - 1; // -1 for the type byte
-      const reasonableLength = Math.min(20, actualRemainingBytes * 2); 
+      console.log(`Note: Destination address length is ${destAddrLength} semi-octets`);
       
-      // Create a note about this adjustment
+      // Add a note about this for educational purposes
       fields.push({
         name: 'Note',
-        value: 'Address Length Adjusted',
-        description: `Original length ${destAddrLength} was unreasonably large and adjusted to ${reasonableLength}`,
+        value: 'Address Length',
+        description: `Address length of ${destAddrLength} semi-octets is interpreted as ${Math.ceil(destAddrLength/2)} octets`,
       });
-      
-      // Continue with the adjusted length (but we already consumed the actual byte)
     }
     
     // Bounds check before reading Address Type
@@ -655,11 +651,10 @@ export function parsePDU(pduString: string, pduType: "sms-deliver" | "sms-submit
     
     const destAddrType = bytes[offset++];
     
-    // Check if we have enough bytes for the dest address data
-    // Use a capped reasonable length to avoid excessive memory usage or errors
-    const maxReasonableLength = 20; // Maximum reasonable phone number length
-    const safeDestAddrLength = Math.min(destAddrLength, maxReasonableLength);
-    const destAddrDataLength = Math.ceil(safeDestAddrLength / 2);
+    // Calculate actual byte length for destination address
+    // The address length is in semi-octets (4 bits), while we need to fetch full octets (8 bits)
+    // For example, an address length of 11 needs 6 octets (ceil(11/2))
+    const destAddrDataLength = Math.ceil(destAddrLength / 2);
     
     // Final bounds check and adjustment
     let actualDestAddrDataLength = destAddrDataLength;
