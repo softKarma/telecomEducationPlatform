@@ -12,6 +12,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import ByteDisplay from "./ByteDisplay";
 import { exampleSmppPdus } from "@/lib/smppUtils";
+import { findTooltip, hasTooltip } from "@/lib/tooltipUtils";
 
 // Field Info component
 interface FieldInfoProps {
@@ -256,14 +257,14 @@ export default function SMPPParser() {
                           <tr>
                             <td className="pb-1 pr-3 text-muted-foreground">
                               Command Name:
-                              <FieldInfo tooltip={fieldDescriptions.commandName} />
+                              <FieldInfo tooltip={findTooltip('commandName', fieldDescriptions)} />
                             </td>
                             <td className="pb-1 font-medium">{parsedData.header.commandName}</td>
                           </tr>
                           <tr>
                             <td className="pb-1 pr-3 text-muted-foreground">
                               Command ID:
-                              <FieldInfo tooltip={fieldDescriptions.commandId} />
+                              <FieldInfo tooltip={findTooltip('commandId', fieldDescriptions)} />
                             </td>
                             <td className="pb-1 font-medium">{parsedData.header.commandId}</td>
                           </tr>
@@ -397,18 +398,7 @@ export default function SMPPParser() {
                           <tr key={index}>
                             <td className="px-4 py-2 flex items-center">
                               {property.name}
-                              {(fieldDescriptions[property.name] || 
-                                fieldDescriptions[property.name.toLowerCase()] || 
-                                fieldDescriptions[property.name.toLowerCase().replace(/\s+/g, '')] ||
-                                fieldDescriptions[property.name.toLowerCase().replace(/[-_]/g, '')]) && (
-                                <FieldInfo tooltip={
-                                  fieldDescriptions[property.name] || 
-                                  fieldDescriptions[property.name.toLowerCase()] || 
-                                  fieldDescriptions[property.name.toLowerCase().replace(/\s+/g, '')] ||
-                                  fieldDescriptions[property.name.toLowerCase().replace(/[-_]/g, '')] ||
-                                  "Field information"
-                                } />
-                              )}
+                              <FieldInfo tooltip={findTooltip(property.name, fieldDescriptions)} />
                             </td>
                             <td className="px-4 py-2 font-mono">{property.value}</td>
                             <td className="px-4 py-2 text-muted-foreground">{property.description}</td>
