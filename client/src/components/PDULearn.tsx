@@ -782,9 +782,9 @@ export default function PDULearn() {
             </>
           )}
           
-          {section === "overview" && (
+          {section === "sms-overview" && (
             <>
-              <h3>What is 3GPP 23.040?</h3>
+              <h3>SMS Technology & 3GPP 23.040</h3>
               <p>
                 The 3GPP 23.040 specification defines the Short Message Service (SMS) for GSM and UMTS networks. 
                 It details the format, protocols, and procedures for exchanging text messages between mobile devices 
