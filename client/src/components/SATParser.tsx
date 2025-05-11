@@ -346,28 +346,28 @@ export default function SATParser() {
                           <tr>
                             <td className="pb-1 pr-3 text-muted-foreground">
                               Command Type:
-                              <FieldInfo tooltip={fieldDescriptions.commandType} />
+                              <FieldInfo tooltip={findTooltip('commandType', fieldDescriptions)} />
                             </td>
                             <td className="pb-1 font-medium">{parsedData.header.commandType}</td>
                           </tr>
                           <tr>
                             <td className="pb-1 pr-3 text-muted-foreground">
                               Command Qualifier:
-                              <FieldInfo tooltip={fieldDescriptions.commandQualifier} />
+                              <FieldInfo tooltip={findTooltip('commandQualifier', fieldDescriptions)} />
                             </td>
                             <td className="pb-1 font-medium">0x{parsedData.header.commandQualifier}</td>
                           </tr>
                           <tr>
                             <td className="pb-1 pr-3 text-muted-foreground">
                               Source Device:
-                              <FieldInfo tooltip={fieldDescriptions.source} />
+                              <FieldInfo tooltip={findTooltip('source', fieldDescriptions)} />
                             </td>
                             <td className="pb-1 font-medium">{parsedData.header.deviceIdentities.source}</td>
                           </tr>
                           <tr>
                             <td className="pb-1 pr-3 text-muted-foreground">
                               Destination Device:
-                              <FieldInfo tooltip={fieldDescriptions.destination} />
+                              <FieldInfo tooltip={findTooltip('destination', fieldDescriptions)} />
                             </td>
                             <td className="pb-1 font-medium">{parsedData.header.deviceIdentities.destination}</td>
                           </tr>
@@ -433,18 +433,7 @@ export default function SATParser() {
                           <tr key={index}>
                             <td className="px-4 py-2 flex items-center">
                               {property.name}
-                              {(fieldDescriptions[property.name] || 
-                                fieldDescriptions[property.name.toLowerCase()] || 
-                                fieldDescriptions[property.name.toLowerCase().replace(/\s+/g, '')] ||
-                                fieldDescriptions[property.name.toLowerCase().replace(/[-_]/g, '')]) && (
-                                <FieldInfo tooltip={
-                                  fieldDescriptions[property.name] || 
-                                  fieldDescriptions[property.name.toLowerCase()] || 
-                                  fieldDescriptions[property.name.toLowerCase().replace(/\s+/g, '')] ||
-                                  fieldDescriptions[property.name.toLowerCase().replace(/[-_]/g, '')] ||
-                                  "Field information"
-                                } />
-                              )}
+                              <FieldInfo tooltip={findTooltip(property.name, fieldDescriptions)} />
                             </td>
                             <td className="px-4 py-2 font-mono">{property.value}</td>
                             <td className="px-4 py-2 text-muted-foreground">{property.description}</td>
