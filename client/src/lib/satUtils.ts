@@ -441,6 +441,55 @@ export function parseSAT(pduString: string): SATParseResult {
         });
         break;
         
+      case TAG_RESPONSE_LENGTH:
+        if (length > 0) {
+          fields.push({
+            name: "Response Length",
+            value: tagData[0].toString(),
+            description: `Maximum length of response expected: ${tagData[0]} characters`,
+            offset: offset - 2,
+            length: length + 2,
+            rawBytes: bytesToHex([tag, length, ...tagData])
+          });
+        }
+        break;
+        
+      case TAG_EVENT_LIST:
+        if (length > 0) {
+          const events = tagData.map(eventCode => {
+            switch (eventCode) {
+              case 0x00: return "MT call";
+              case 0x01: return "Call connected";
+              case 0x02: return "Call disconnected";
+              case 0x03: return "Location status";
+              case 0x04: return "User activity";
+              case 0x05: return "Idle screen available";
+              case 0x06: return "Card reader status";
+              case 0x07: return "Language selection";
+              case 0x08: return "Browser termination";
+              case 0x09: return "Data available";
+              case 0x0A: return "Channel status";
+              case 0x0B: return "Access Technology Change";
+              case 0x0C: return "Display parameters changed";
+              case 0x0D: return "Local connection";
+              case 0x0E: return "Network Search Mode Change";
+              case 0x0F: return "Browsing status";
+              case 0x10: return "Frames Information Change";
+              default: return `Unknown event (0x${eventCode.toString(16)})`;
+            }
+          });
+          
+          fields.push({
+            name: "Event List",
+            value: events.join(", "),
+            description: `Events to monitor: ${events.join(", ")}`,
+            offset: offset - 2,
+            length: length + 2, 
+            rawBytes: bytesToHex([tag, length, ...tagData])
+          });
+        }
+        break;
+            
       case TAG_DURATION:
         if (length >= 2) {
           const timeUnit = tagData[0];
