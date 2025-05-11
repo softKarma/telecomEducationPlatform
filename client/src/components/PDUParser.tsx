@@ -424,7 +424,7 @@ export default function PDUParser() {
                                         <Tooltip>
                                           <TooltipTrigger asChild>
                                             <button 
-                                              onClick={() => openKnowledgeSection(getKnowledgeBaseItem("TP-OA")!)}
+                                              onClick={() => openKnowledgeSection(getKnowledgeBaseItem("TP-OA")!.section)}
                                               className="ml-1 inline-flex"
                                             >
                                               <Info size={12} className="text-blue-400 hover:text-blue-500" />
@@ -451,7 +451,7 @@ export default function PDUParser() {
                                         <Tooltip>
                                           <TooltipTrigger asChild>
                                             <button 
-                                              onClick={() => openKnowledgeSection(getKnowledgeBaseItem("TP-DA")!)}
+                                              onClick={() => openKnowledgeSection(getKnowledgeBaseItem("TP-DA")!.section)}
                                               className="ml-1 inline-flex"
                                             >
                                               <Info size={12} className="text-blue-400 hover:text-blue-500" />
@@ -482,7 +482,7 @@ export default function PDUParser() {
                                         <Tooltip>
                                           <TooltipTrigger asChild>
                                             <button 
-                                              onClick={() => openKnowledgeSection(getKnowledgeBaseItem("Service Centre Time Stamp")!)}
+                                              onClick={() => openKnowledgeSection(getKnowledgeBaseItem("Service Centre Time Stamp")!.section)}
                                               className="ml-1 inline-flex"
                                             >
                                               <Info size={12} className="text-blue-400 hover:text-blue-500" />
@@ -508,7 +508,7 @@ export default function PDUParser() {
                                       <Tooltip>
                                         <TooltipTrigger asChild>
                                           <button 
-                                            onClick={() => openKnowledgeSection(getKnowledgeBaseItem("Data Coding Scheme")!)}
+                                            onClick={() => openKnowledgeSection(getKnowledgeBaseItem("Data Coding Scheme")!.section)}
                                             className="ml-1 inline-flex"
                                           >
                                             <Info size={12} className="text-blue-400 hover:text-blue-500" />
@@ -533,7 +533,7 @@ export default function PDUParser() {
                                       <Tooltip>
                                         <TooltipTrigger asChild>
                                           <button 
-                                            onClick={() => openKnowledgeSection(getKnowledgeBaseItem("User Data Header")!)}
+                                            onClick={() => openKnowledgeSection(getKnowledgeBaseItem("User Data Header")!.section)}
                                             className="ml-1 inline-flex"
                                           >
                                             <Info size={12} className="text-blue-400 hover:text-blue-500" />
@@ -595,7 +595,7 @@ export default function PDUParser() {
                                         <Tooltip>
                                           <TooltipTrigger asChild>
                                             <button 
-                                              onClick={() => openKnowledgeSection(getKnowledgeBaseItem(property.name)!)}
+                                              onClick={() => openKnowledgeSection(getKnowledgeBaseItem(property.name)!.section)}
                                               className="ml-1 inline-flex"
                                             >
                                               <Info size={14} className="text-blue-400 hover:text-blue-500" />
@@ -642,7 +642,7 @@ export default function PDUParser() {
                             <span>SMSC Information</span>
                             {getKnowledgeBaseItem("SMSC Address") && (
                               <button 
-                                onClick={() => openKnowledgeSection(getKnowledgeBaseItem("SMSC Address")!)}
+                                onClick={() => openKnowledgeSection(getKnowledgeBaseItem("SMSC Address")!.section)}
                                 className="ml-1 inline-flex"
                               >
                                 <Info size={12} className="text-blue-400 hover:text-blue-500" />
