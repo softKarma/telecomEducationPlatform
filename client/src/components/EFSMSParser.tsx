@@ -15,24 +15,33 @@ export default function EFSMSParser() {
   const [recordNumber, setRecordNumber] = useState(1);
   const [activeTab, setActiveTab] = useState("input");
   
-  const { data, isPending, isError, error, refetch } = useQuery<EFSMSParseResult>({
+  const { data, isPending, isError, error, refetch } = useQuery({
     queryKey: ["parse-efsms", hexData, recordNumber],
     queryFn: async () => {
-      if (!hexData) return null;
-      const result = await apiRequest<EFSMSParseResult>("/api/parse-efsms", {
-        method: "POST",
-        body: JSON.stringify({ hexData, recordNumber }),
-      });
-      return result;
+      if (!hexData) return Promise.resolve(null);
+      try {
+        const result = await apiRequest("/api/parse-efsms", {
+          method: "POST",
+          body: JSON.stringify({ hexData, recordNumber }),
+        });
+        return result as EFSMSParseResult;
+      } catch (e) {
+        console.error("Error parsing EF_SMS data:", e);
+        throw e;
+      }
     },
     enabled: !!hexData,
   });
 
   const handleParse = async () => {
     if (hexData.trim()) {
-      await refetch();
-      if (activeTab === "input") {
-        setActiveTab("output");
+      try {
+        await refetch();
+        if (activeTab === "input") {
+          setActiveTab("output");
+        }
+      } catch (error) {
+        console.error("Error parsing EF_SMS data:", error);
       }
     }
   };
@@ -94,28 +103,28 @@ export default function EFSMSParser() {
                     variant="outline"
                     size="sm"
                     className="justify-start text-left font-mono overflow-hidden truncate"
-                    onClick={() => handleUseExample(exampleEfSmsPdus.unread)}
+                    onClick={() => handleUseExample(exampleEfSmsPdus["unread-message"])}
                   >
                     <span className="font-normal mr-2 text-muted-foreground">Unread:</span>
-                    {exampleEfSmsPdus.unread.substring(0, 20)}...
+                    {exampleEfSmsPdus["unread-message"].substring(0, 20)}...
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
                     className="justify-start text-left font-mono overflow-hidden truncate"
-                    onClick={() => handleUseExample(exampleEfSmsPdus.read)}
+                    onClick={() => handleUseExample(exampleEfSmsPdus["read-message"])}
                   >
                     <span className="font-normal mr-2 text-muted-foreground">Read:</span>
-                    {exampleEfSmsPdus.read.substring(0, 20)}...
+                    {exampleEfSmsPdus["read-message"].substring(0, 20)}...
                   </Button>
                   <Button
                     variant="outline"
                     size="sm"
                     className="justify-start text-left font-mono overflow-hidden truncate"
-                    onClick={() => handleUseExample(exampleEfSmsPdus.sent)}
+                    onClick={() => handleUseExample(exampleEfSmsPdus["stored-sent"])}
                   >
                     <span className="font-normal mr-2 text-muted-foreground">Sent:</span>
-                    {exampleEfSmsPdus.sent.substring(0, 20)}...
+                    {exampleEfSmsPdus["stored-sent"].substring(0, 20)}...
                   </Button>
                 </div>
               </div>
