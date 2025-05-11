@@ -2481,6 +2481,906 @@ export default function PDULearn() {
                   </p>
                 </div>
               </div>
+              
+              <div className="bg-primary/5 p-4 rounded-md border border-primary/20 mb-6">
+                <h4 className="mt-0 text-primary mb-2">Spectrum Efficiency Evolution</h4>
+                <p className="mb-1">
+                  Each generation has improved spectrum efficiency (bits per Hz) through advanced technologies:
+                </p>
+                <ul className="mb-0">
+                  <li><strong>1G:</strong> Analog FM modulation (low efficiency)</li>
+                  <li><strong>2G:</strong> Digital modulation (GMSK in GSM)</li>
+                  <li><strong>3G:</strong> WCDMA with adaptive modulation</li>
+                  <li><strong>4G:</strong> OFDMA with advanced MIMO</li>
+                  <li><strong>5G:</strong> Scalable OFDM, massive MIMO, beamforming</li>
+                </ul>
+              </div>
+            </>
+          )}
+          
+          {section === "3g-technology" && (
+            <>
+              <h3>3G Technology: The Mobile Broadband Revolution</h3>
+              <p>
+                Third Generation (3G) mobile technology represented a significant leap forward in telecommunications, 
+                bringing true mobile broadband capabilities to consumers worldwide. Launched in the early 2000s, 
+                3G networks enabled faster data transmission, video calling, and mobile internet access at 
+                unprecedented speeds.
+              </p>
+              
+              <div className="bg-muted/50 p-4 rounded-md border mb-4">
+                <h4 className="mt-0">Key 3G Standards</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <h5 className="font-medium mt-0 mb-2">UMTS/WCDMA</h5>
+                    <ul className="mb-0">
+                      <li>Evolved from GSM standards</li>
+                      <li>Uses 5 MHz channel bandwidth</li>
+                      <li>Supports theoretical speeds up to 2 Mbps</li>
+                      <li>Deployed primarily in Europe and Asia</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h5 className="font-medium mt-0 mb-2">CDMA2000</h5>
+                    <ul className="mb-0">
+                      <li>Evolved from CDMA (IS-95) standards</li>
+                      <li>Includes 1xRTT and EV-DO variants</li>
+                      <li>EV-DO Rev. A reached speeds of 3.1 Mbps</li>
+                      <li>Widely deployed in North America</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              
+              <h4>3G Network Architecture</h4>
+              <p>
+                The 3G UMTS architecture introduced several new components while maintaining compatibility 
+                with existing GSM/GPRS infrastructure:
+              </p>
+              
+              <div className="overflow-x-auto my-4">
+                <table className="min-w-full border border-border">
+                  <thead className="bg-muted/50">
+                    <tr>
+                      <th className="px-4 py-2 border-b border-r">Component</th>
+                      <th className="px-4 py-2 border-b border-r">Description</th>
+                      <th className="px-4 py-2 border-b">Function</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="px-4 py-2 font-medium border-r">Node B</td>
+                      <td className="px-4 py-2 border-r">Base station in UMTS</td>
+                      <td className="px-4 py-2">
+                        Provides radio coverage and manages connections with mobile devices (UEs)
+                      </td>
+                    </tr>
+                    <tr className="bg-muted/20">
+                      <td className="px-4 py-2 font-medium border-r">RNC</td>
+                      <td className="px-4 py-2 border-r">Radio Network Controller</td>
+                      <td className="px-4 py-2">
+                        Controls multiple Node Bs and manages radio resources
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 font-medium border-r">SGSN</td>
+                      <td className="px-4 py-2 border-r">Serving GPRS Support Node</td>
+                      <td className="px-4 py-2">
+                        Handles mobility management and packet routing
+                      </td>
+                    </tr>
+                    <tr className="bg-muted/20">
+                      <td className="px-4 py-2 font-medium border-r">GGSN</td>
+                      <td className="px-4 py-2 border-r">Gateway GPRS Support Node</td>
+                      <td className="px-4 py-2">
+                        Provides connectivity to external packet data networks (internet)
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 font-medium border-r">MSC</td>
+                      <td className="px-4 py-2 border-r">Mobile Switching Center</td>
+                      <td className="px-4 py-2">
+                        Handles circuit-switched services, including voice calls
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              
+              <h4>Air Interface Technology</h4>
+              <p>
+                The revolutionary aspect of 3G was its air interface, particularly the adoption of Code Division Multiple Access (CDMA) techniques:
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">WCDMA (UMTS)</h5>
+                  <ul className="mb-0">
+                    <li><strong>Wideband CDMA:</strong> Uses wider 5 MHz channels (vs. 200 kHz in GSM)</li>
+                    <li><strong>Spreading:</strong> Data is spread across the frequency band using unique codes</li>
+                    <li><strong>Chip Rate:</strong> 3.84 Mcps (million chips per second)</li>
+                    <li><strong>Advantage:</strong> Better spectrum efficiency and capacity</li>
+                  </ul>
+                </div>
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">CDMA2000</h5>
+                  <ul className="mb-0">
+                    <li><strong>Multi-Carrier:</strong> Uses multiple 1.25 MHz carriers</li>
+                    <li><strong>EV-DO:</strong> Evolution-Data Optimized for faster data</li>
+                    <li><strong>Chip Rate:</strong> 1.2288 Mcps</li>
+                    <li><strong>Advantage:</strong> Smooth upgrade path from IS-95 CDMA</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <h4>3G Enhancements: HSPA and Beyond</h4>
+              <p>
+                As 3G matured, several enhancements were introduced to improve data rates and efficiency:
+              </p>
+              
+              <div className="overflow-x-auto my-4">
+                <table className="min-w-full border border-border">
+                  <thead className="bg-muted/50">
+                    <tr>
+                      <th className="px-4 py-2 border-b border-r">Enhancement</th>
+                      <th className="px-4 py-2 border-b border-r">Year</th>
+                      <th className="px-4 py-2 border-b border-r">Downlink Speed</th>
+                      <th className="px-4 py-2 border-b">Key Improvements</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="px-4 py-2 font-medium border-r">HSDPA (3.5G)</td>
+                      <td className="px-4 py-2 border-r">2005-2006</td>
+                      <td className="px-4 py-2 border-r">Up to 14.4 Mbps</td>
+                      <td className="px-4 py-2">
+                        Higher-order modulation (16-QAM), faster scheduling, HARQ
+                      </td>
+                    </tr>
+                    <tr className="bg-muted/20">
+                      <td className="px-4 py-2 font-medium border-r">HSUPA</td>
+                      <td className="px-4 py-2 border-r">2007-2008</td>
+                      <td className="px-4 py-2 border-r">Up to 5.76 Mbps (UL)</td>
+                      <td className="px-4 py-2">
+                        Improved uplink speeds, faster response times
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 font-medium border-r">HSPA+</td>
+                      <td className="px-4 py-2 border-r">2008-2011</td>
+                      <td className="px-4 py-2 border-r">Up to 42 Mbps</td>
+                      <td className="px-4 py-2">
+                        64-QAM, MIMO, Dual-Carrier operation
+                      </td>
+                    </tr>
+                    <tr className="bg-muted/20">
+                      <td className="px-4 py-2 font-medium border-r">DC-HSPA+</td>
+                      <td className="px-4 py-2 border-r">2011+</td>
+                      <td className="px-4 py-2 border-r">Up to 84 Mbps</td>
+                      <td className="px-4 py-2">
+                        Dual-Carrier with MIMO, approaching 4G speeds
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              
+              <h4>Technical Focus: WCDMA Principles</h4>
+              <div className="bg-primary/5 p-4 rounded-md border border-primary/20 mb-4">
+                <p className="mb-2">
+                  WCDMA is the primary air interface technology used in UMTS 3G networks. It works on these key principles:
+                </p>
+                <ol className="mb-0">
+                  <li><strong>Spreading:</strong> Each user's data is multiplied by a unique high-rate spreading code (chips)</li>
+                  <li><strong>Scrambling:</strong> Cells use different scrambling codes to differentiate from each other</li>
+                  <li><strong>Power Control:</strong> Precise control (1500 times per second) to minimize interference</li>
+                  <li><strong>Soft Handover:</strong> UE can connect to multiple cells simultaneously</li>
+                  <li><strong>Variable Spreading Factor:</strong> Different services can use different spreading factors</li>
+                </ol>
+              </div>
+              
+              <h4>3G Impact and Legacy</h4>
+              <p>
+                3G revolutionized mobile communications with several lasting impacts:
+              </p>
+              <ul>
+                <li><strong>Smartphone Revolution:</strong> 3G data speeds enabled the explosion of smartphones and mobile apps</li>
+                <li><strong>Mobile Internet:</strong> Made browsing the real internet (not just WAP) practical on mobile devices</li>
+                <li><strong>Video Services:</strong> Enabled mobile video calling and early mobile video streaming</li>
+                <li><strong>Location Services:</strong> Supported better positioning technology for navigation and location-based services</li>
+                <li><strong>Global Roaming:</strong> More unified global standards improved international connectivity</li>
+              </ul>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-6">
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">3G Frequencies</h5>
+                  <ul className="mb-0 text-sm">
+                    <li>850 MHz (Band 5)</li>
+                    <li>900 MHz (Band 8)</li>
+                    <li>1700/2100 MHz (Band 4)</li>
+                    <li>1900 MHz (Band 2)</li>
+                    <li>2100 MHz (Band 1) - Primary</li>
+                  </ul>
+                </div>
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">Channel Bandwidth</h5>
+                  <ul className="mb-0 text-sm">
+                    <li>WCDMA: 5 MHz</li>
+                    <li>CDMA2000 1X: 1.25 MHz</li>
+                    <li>CDMA2000 EV-DO: 1.25 MHz</li>
+                    <li>TD-SCDMA: 1.6 MHz</li>
+                  </ul>
+                </div>
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">Core Protocol Stack</h5>
+                  <ul className="mb-0 text-sm">
+                    <li>Physical Layer: WCDMA/CDMA</li>
+                    <li>Data Link: RLC/MAC</li>
+                    <li>Network: GTP tunneling</li>
+                    <li>Transport: TCP/UDP</li>
+                  </ul>
+                </div>
+              </div>
+            </>
+          )}
+          
+          {section === "5g-technology" && (
+            <>
+              <h3>5G Technology: The Next Generation of Mobile Communications</h3>
+              <p>
+                Fifth Generation (5G) mobile technology represents a revolutionary advancement in wireless 
+                communications, designed not just as an incremental improvement over 4G, but as a transformative 
+                platform enabling new use cases and industries. Commercialized from 2019, 5G combines significantly 
+                higher data rates, ultra-low latency, massive connectivity, and enhanced reliability.
+              </p>
+              
+              <div className="bg-primary/5 p-4 rounded-md border border-primary/20 mb-6">
+                <h4 className="mt-0 text-primary mb-2">5G Design Goals</h4>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <h5 className="font-medium mt-0 mb-2 text-sm">Enhanced Mobile Broadband (eMBB)</h5>
+                    <ul className="mb-0 text-sm">
+                      <li>Peak data rates up to 20 Gbps</li>
+                      <li>User experienced rates of 100+ Mbps</li>
+                      <li>Support for high-density areas</li>
+                      <li>Improved coverage and capacity</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h5 className="font-medium mt-0 mb-2 text-sm">Ultra-Reliable Low Latency Communications (URLLC)</h5>
+                    <ul className="mb-0 text-sm">
+                      <li>End-to-end latency of 1 ms</li>
+                      <li>99.999% reliability</li>
+                      <li>Support for mission-critical applications</li>
+                      <li>Deterministic communications</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h5 className="font-medium mt-0 mb-2 text-sm">Massive Machine Type Communications (mMTC)</h5>
+                    <ul className="mb-0 text-sm">
+                      <li>Connection density of 1 million/km²</li>
+                      <li>Energy-efficient devices</li>
+                      <li>Support for IoT at massive scale</li>
+                      <li>Long battery life (10+ years)</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              
+              <h4>5G Network Architecture</h4>
+              <p>
+                5G introduces a service-based architecture (SBA) that is cloud-native, virtualized, and highly flexible:
+              </p>
+              
+              <div className="overflow-x-auto my-4">
+                <table className="min-w-full border border-border">
+                  <thead className="bg-muted/50">
+                    <tr>
+                      <th className="px-4 py-2 border-b border-r">Component</th>
+                      <th className="px-4 py-2 border-b border-r">Description</th>
+                      <th className="px-4 py-2 border-b">Function</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="px-4 py-2 font-medium border-r">gNB</td>
+                      <td className="px-4 py-2 border-r">5G base station</td>
+                      <td className="px-4 py-2">
+                        Provides radio access for 5G NR; can be split into CU (centralized unit) and 
+                        DU (distributed unit)
+                      </td>
+                    </tr>
+                    <tr className="bg-muted/20">
+                      <td className="px-4 py-2 font-medium border-r">AMF</td>
+                      <td className="px-4 py-2 border-r">Access and Mobility Management Function</td>
+                      <td className="px-4 py-2">
+                        Handles connection and mobility management, security
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 font-medium border-r">SMF</td>
+                      <td className="px-4 py-2 border-r">Session Management Function</td>
+                      <td className="px-4 py-2">
+                        Manages sessions, IP address allocation, and routing
+                      </td>
+                    </tr>
+                    <tr className="bg-muted/20">
+                      <td className="px-4 py-2 font-medium border-r">UPF</td>
+                      <td className="px-4 py-2 border-r">User Plane Function</td>
+                      <td className="px-4 py-2">
+                        Handles user data, packet routing and forwarding, QoS enforcement
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 font-medium border-r">PCF</td>
+                      <td className="px-4 py-2 border-r">Policy Control Function</td>
+                      <td className="px-4 py-2">
+                        Manages policies and rules for network behavior
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              
+              <h4>Key 5G Technologies</h4>
+              <p>
+                5G incorporates several revolutionary technologies that enable its enhanced capabilities:
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">Massive MIMO</h5>
+                  <ul className="mb-0">
+                    <li><strong>Scale:</strong> Dozens to hundreds of antenna elements</li>
+                    <li><strong>Beamforming:</strong> Directs energy precisely to users</li>
+                    <li><strong>Spatial Multiplexing:</strong> Multiple data streams in same spectrum</li>
+                    <li><strong>Benefit:</strong> Dramatically increased capacity and coverage</li>
+                  </ul>
+                </div>
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">mmWave Spectrum</h5>
+                  <ul className="mb-0">
+                    <li><strong>High-Frequency:</strong> 24-100 GHz bands</li>
+                    <li><strong>Bandwidth:</strong> Much wider channels (100-400 MHz)</li>
+                    <li><strong>Trade-off:</strong> Higher speeds but shorter range</li>
+                    <li><strong>Challenge:</strong> Requires dense deployment, sensitive to obstacles</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">Network Slicing</h5>
+                  <ul className="mb-0">
+                    <li><strong>Concept:</strong> Multiple virtual networks on shared infrastructure</li>
+                    <li><strong>Customization:</strong> Each slice optimized for specific services</li>
+                    <li><strong>Isolation:</strong> Guaranteed resources and security per slice</li>
+                    <li><strong>Examples:</strong> eMBB slice, URLLC slice, IoT slice</li>
+                  </ul>
+                </div>
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">Edge Computing</h5>
+                  <ul className="mb-0">
+                    <li><strong>Concept:</strong> Moving computing resources closer to users</li>
+                    <li><strong>MEC:</strong> Multi-access Edge Computing integration</li>
+                    <li><strong>Result:</strong> Lower latency, reduced backhaul traffic</li>
+                    <li><strong>Applications:</strong> AR/VR, autonomous vehicles, industrial control</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <h4>5G NR Air Interface</h4>
+              <p>
+                5G New Radio (NR) introduces a flexible, scalable air interface with significant advances:
+              </p>
+              
+              <div className="overflow-x-auto my-4">
+                <table className="min-w-full border border-border">
+                  <thead className="bg-muted/50">
+                    <tr>
+                      <th className="px-4 py-2 border-b border-r">Feature</th>
+                      <th className="px-4 py-2 border-b">Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="px-4 py-2 font-medium border-r">Scalable OFDM</td>
+                      <td className="px-4 py-2">
+                        Flexible subcarrier spacing (15/30/60/120/240 kHz) allowing adaption to different use cases and frequencies
+                      </td>
+                    </tr>
+                    <tr className="bg-muted/20">
+                      <td className="px-4 py-2 font-medium border-r">Advanced Channel Coding</td>
+                      <td className="px-4 py-2">
+                        LDPC (Low-Density Parity Check) for data channels, Polar codes for control channels - superior performance to turbo codes
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 font-medium border-r">Flexible Numerology</td>
+                      <td className="px-4 py-2">
+                        Adaptable frame structure with different slot durations, allowing optimization for latency or throughput
+                      </td>
+                    </tr>
+                    <tr className="bg-muted/20">
+                      <td className="px-4 py-2 font-medium border-r">Mini-Slot Structure</td>
+                      <td className="px-4 py-2">
+                        Transmissions can start at any time without waiting for slot boundaries, crucial for URLLC
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 font-medium border-r">3D Beamforming</td>
+                      <td className="px-4 py-2">
+                        Precise beam steering in both horizontal and vertical planes, maximizing signal strength and minimizing interference
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              
+              <h4>5G Deployment Modes</h4>
+              <p>
+                5G networks can be deployed in different modes, each with distinct characteristics:
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">Non-Standalone (NSA) Mode</h5>
+                  <ul className="mb-0">
+                    <li><strong>Architecture:</strong> Uses existing 4G core (EPC) with 5G radio (NR)</li>
+                    <li><strong>Dual Connectivity:</strong> Devices connect to both 4G and 5G simultaneously</li>
+                    <li><strong>Advantage:</strong> Faster deployment leveraging existing 4G infrastructure</li>
+                    <li><strong>Limitation:</strong> Cannot deliver full 5G capabilities, especially URLLC</li>
+                  </ul>
+                </div>
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">Standalone (SA) Mode</h5>
+                  <ul className="mb-0">
+                    <li><strong>Architecture:</strong> Complete 5G system with 5G core and 5G radio</li>
+                    <li><strong>Capabilities:</strong> Enables all 5G features including network slicing, URLLC</li>
+                    <li><strong>Implementation:</strong> More complex, requires new core network</li>
+                    <li><strong>Future:</strong> Ultimate target for 5G deployments</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <h4>5G Spectrum Bands</h4>
+              <p>
+                5G operates across a wide range of spectrum bands, categorized into three main groups:
+              </p>
+              
+              <div className="overflow-x-auto my-4">
+                <table className="min-w-full border border-border">
+                  <thead className="bg-muted/50">
+                    <tr>
+                      <th className="px-4 py-2 border-b border-r">Band Category</th>
+                      <th className="px-4 py-2 border-b border-r">Frequency Range</th>
+                      <th className="px-4 py-2 border-b border-r">Key Characteristics</th>
+                      <th className="px-4 py-2 border-b">Typical Use Cases</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="px-4 py-2 font-medium border-r">Low-Band</td>
+                      <td className="px-4 py-2 border-r">600-900 MHz</td>
+                      <td className="px-4 py-2 border-r">
+                        <ul className="mb-0 pl-4">
+                          <li>Excellent coverage (10+ km)</li>
+                          <li>Good building penetration</li>
+                          <li>Limited bandwidth (40-100 MHz)</li>
+                        </ul>
+                      </td>
+                      <td className="px-4 py-2">
+                        <ul className="mb-0 pl-4">
+                          <li>Nationwide coverage</li>
+                          <li>Rural deployments</li>
+                          <li>IoT applications</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="bg-muted/20">
+                      <td className="px-4 py-2 font-medium border-r">Mid-Band</td>
+                      <td className="px-4 py-2 border-r">1-6 GHz</td>
+                      <td className="px-4 py-2 border-r">
+                        <ul className="mb-0 pl-4">
+                          <li>Balanced coverage (1-2 km)</li>
+                          <li>Good capacity</li>
+                          <li>Moderate bandwidth (100-200 MHz)</li>
+                        </ul>
+                      </td>
+                      <td className="px-4 py-2">
+                        <ul className="mb-0 pl-4">
+                          <li>Urban/suburban coverage</li>
+                          <li>General mobile broadband</li>
+                          <li>Fixed wireless access</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 font-medium border-r">High-Band (mmWave)</td>
+                      <td className="px-4 py-2 border-r">24-100 GHz</td>
+                      <td className="px-4 py-2 border-r">
+                        <ul className="mb-0 pl-4">
+                          <li>Limited coverage (200-300m)</li>
+                          <li>Poor penetration</li>
+                          <li>Massive bandwidth (400+ MHz)</li>
+                        </ul>
+                      </td>
+                      <td className="px-4 py-2">
+                        <ul className="mb-0 pl-4">
+                          <li>High-density hotspots</li>
+                          <li>Venues, stadiums</li>
+                          <li>Industrial applications</li>
+                        </ul>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              
+              <h4>5G Applications and Use Cases</h4>
+              <p>
+                5G enables a wide range of new applications and use cases beyond traditional mobile broadband:
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-6">
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">Enhanced Mobile Broadband</h5>
+                  <ul className="mb-0 text-sm">
+                    <li>8K video streaming</li>
+                    <li>360° video and AR/VR</li>
+                    <li>Cloud gaming</li>
+                    <li>Holographic communications</li>
+                    <li>Fixed wireless access (FWA)</li>
+                  </ul>
+                </div>
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">Ultra-Reliable Communications</h5>
+                  <ul className="mb-0 text-sm">
+                    <li>Autonomous vehicles</li>
+                    <li>Remote surgery</li>
+                    <li>Industrial automation</li>
+                    <li>Smart grid control</li>
+                    <li>Public safety and emergency response</li>
+                  </ul>
+                </div>
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">Massive IoT Connectivity</h5>
+                  <ul className="mb-0 text-sm">
+                    <li>Smart cities</li>
+                    <li>Environmental monitoring</li>
+                    <li>Asset tracking</li>
+                    <li>Agricultural sensors</li>
+                    <li>Massive industrial IoT</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <h4>Future Evolution: Beyond 5G</h4>
+              <p>
+                As 5G continues to evolve, several technological advancements are already being explored for future releases and beyond:
+              </p>
+              <ul>
+                <li><strong>Terahertz Communications:</strong> Exploring spectrum above 100 GHz for even greater bandwidth</li>
+                <li><strong>Cell-Free Massive MIMO:</strong> Distributed antenna systems that coordinate seamlessly</li>
+                <li><strong>AI-Native Networks:</strong> Networks that use AI/ML for self-optimization and management</li>
+                <li><strong>Quantum Communications:</strong> Quantum-secured links for unbreakable encryption</li>
+                <li><strong>Integrated Sensing and Communications:</strong> Using the network for both communication and environmental sensing</li>
+                <li><strong>6G Research:</strong> Early research into the next generation, targeting commercial deployment in the 2030s</li>
+              </ul>
+            </>
+          )}
+          
+          {section === "4g-technology" && (
+            <>
+              <h3>4G Technology: The All-IP Mobile Broadband Era</h3>
+              <p>
+                Fourth Generation (4G) mobile technology marked a paradigm shift in mobile communications, 
+                introducing all-IP networks that revolutionized how we access and use mobile data. 
+                Launched commercially around 2010, 4G networks delivered substantially higher speeds, 
+                lower latency, and better spectrum efficiency than their 3G predecessors.
+              </p>
+              
+              <div className="bg-muted/50 p-4 rounded-md border mb-4">
+                <h4 className="mt-0">Key 4G Standards</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <h5 className="font-medium mt-0 mb-2">LTE (Long Term Evolution)</h5>
+                    <ul className="mb-0">
+                      <li>Developed by 3GPP</li>
+                      <li>Scalable bandwidth from 1.4 MHz to 20 MHz</li>
+                      <li>Peak rates: 100 Mbps downlink, 50 Mbps uplink</li>
+                      <li>Became the global 4G standard</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h5 className="font-medium mt-0 mb-2">WiMAX (IEEE 802.16)</h5>
+                    <ul className="mb-0">
+                      <li>Developed by IEEE</li>
+                      <li>Bandwidth up to 20 MHz</li>
+                      <li>Initially competed with LTE</li>
+                      <li>Limited commercial success</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              
+              <h4>4G Network Architecture: EPC</h4>
+              <p>
+                The 4G LTE architecture introduced the Evolved Packet Core (EPC), a simplified, all-IP network architecture:
+              </p>
+              
+              <div className="overflow-x-auto my-4">
+                <table className="min-w-full border border-border">
+                  <thead className="bg-muted/50">
+                    <tr>
+                      <th className="px-4 py-2 border-b border-r">Component</th>
+                      <th className="px-4 py-2 border-b border-r">Description</th>
+                      <th className="px-4 py-2 border-b">Function</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="px-4 py-2 font-medium border-r">eNodeB</td>
+                      <td className="px-4 py-2 border-r">Evolved Node B</td>
+                      <td className="px-4 py-2">
+                        Integrated base station that handles radio resource management directly 
+                        (no RNC needed)
+                      </td>
+                    </tr>
+                    <tr className="bg-muted/20">
+                      <td className="px-4 py-2 font-medium border-r">MME</td>
+                      <td className="px-4 py-2 border-r">Mobility Management Entity</td>
+                      <td className="px-4 py-2">
+                        Handles signaling, mobility management, and user authentication
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 font-medium border-r">S-GW</td>
+                      <td className="px-4 py-2 border-r">Serving Gateway</td>
+                      <td className="px-4 py-2">
+                        Routes data packets and serves as mobility anchor during handovers
+                      </td>
+                    </tr>
+                    <tr className="bg-muted/20">
+                      <td className="px-4 py-2 font-medium border-r">P-GW</td>
+                      <td className="px-4 py-2 border-r">PDN Gateway</td>
+                      <td className="px-4 py-2">
+                        Connects to external packet data networks and handles IP address allocation
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 font-medium border-r">HSS</td>
+                      <td className="px-4 py-2 border-r">Home Subscriber Server</td>
+                      <td className="px-4 py-2">
+                        Central database containing user subscription information
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              
+              <div className="bg-primary/5 p-4 rounded-md border border-primary/20 mb-6 mt-4">
+                <h4 className="mt-0 text-primary mb-2">Key Architectural Improvements Over 3G</h4>
+                <ul className="mb-0">
+                  <li><strong>Flatter Architecture:</strong> Fewer network elements reduces latency</li>
+                  <li><strong>Distributed Intelligence:</strong> More functions moved to base stations (eNodeBs)</li>
+                  <li><strong>All-IP Network:</strong> No separate domain for voice traffic</li>
+                  <li><strong>Simplified Interfaces:</strong> More direct connections between network elements</li>
+                </ul>
+              </div>
+              
+              <h4>4G Air Interface Technology: OFDMA</h4>
+              <p>
+                4G LTE replaced CDMA-based technologies with Orthogonal Frequency Division Multiple Access (OFDMA):
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">OFDMA (Downlink)</h5>
+                  <ul className="mb-0">
+                    <li><strong>Subcarriers:</strong> Data is transmitted on many narrow subcarriers (15 kHz each)</li>
+                    <li><strong>Orthogonality:</strong> Subcarriers are mathematically orthogonal to prevent interference</li>
+                    <li><strong>Resource Blocks:</strong> Smallest unit of resource allocation (12 subcarriers × 0.5ms)</li>
+                    <li><strong>Advantage:</strong> Resilience to multipath fading, efficient spectrum use</li>
+                  </ul>
+                </div>
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">SC-FDMA (Uplink)</h5>
+                  <ul className="mb-0">
+                    <li><strong>Single Carrier:</strong> Modified form of OFDMA with better power efficiency</li>
+                    <li><strong>PAPR:</strong> Lower Peak-to-Average Power Ratio saves battery life</li>
+                    <li><strong>DFT Spreading:</strong> Uses DFT spreading to reduce power fluctuations</li>
+                    <li><strong>Advantage:</strong> Better for power-limited devices (mobile phones)</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <h4>Advanced LTE Features</h4>
+              <p>
+                Several key technologies enabled LTE's high performance:
+              </p>
+              
+              <div className="overflow-x-auto my-4">
+                <table className="min-w-full border border-border">
+                  <thead className="bg-muted/50">
+                    <tr>
+                      <th className="px-4 py-2 border-b border-r">Feature</th>
+                      <th className="px-4 py-2 border-b">Description and Benefits</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="px-4 py-2 font-medium border-r">MIMO</td>
+                      <td className="px-4 py-2">
+                        Multiple-Input Multiple-Output antenna technology increases throughput and 
+                        reliability by using multiple transmit and receive antennas
+                      </td>
+                    </tr>
+                    <tr className="bg-muted/20">
+                      <td className="px-4 py-2 font-medium border-r">Adaptive Modulation & Coding</td>
+                      <td className="px-4 py-2">
+                        Dynamically adjusts modulation scheme and coding rate based on channel 
+                        conditions (QPSK, 16-QAM, 64-QAM)
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 font-medium border-r">HARQ</td>
+                      <td className="px-4 py-2">
+                        Hybrid Automatic Repeat Request combines error correction coding and 
+                        automatic retransmission for faster error recovery
+                      </td>
+                    </tr>
+                    <tr className="bg-muted/20">
+                      <td className="px-4 py-2 font-medium border-r">X2 Interface</td>
+                      <td className="px-4 py-2">
+                        Direct connection between eNodeBs for faster handovers and improved 
+                        interference coordination
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              
+              <h4>LTE-Advanced: True 4G</h4>
+              <p>
+                While initial LTE deployments were marketed as 4G, only LTE-Advanced (LTE Release 10+) officially met 
+                the ITU's IMT-Advanced requirements for true 4G:
+              </p>
+              
+              <div className="overflow-x-auto my-4">
+                <table className="min-w-full border border-border">
+                  <thead className="bg-muted/50">
+                    <tr>
+                      <th className="px-4 py-2 border-b border-r">Feature</th>
+                      <th className="px-4 py-2 border-b border-r">Description</th>
+                      <th className="px-4 py-2 border-b">Benefit</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="px-4 py-2 font-medium border-r">Carrier Aggregation</td>
+                      <td className="px-4 py-2 border-r">
+                        Combines up to 5 carriers of 20 MHz each
+                      </td>
+                      <td className="px-4 py-2">
+                        Increased bandwidth and throughput up to 1 Gbps
+                      </td>
+                    </tr>
+                    <tr className="bg-muted/20">
+                      <td className="px-4 py-2 font-medium border-r">Enhanced MIMO</td>
+                      <td className="px-4 py-2 border-r">
+                        Up to 8x8 MIMO in downlink, 4x4 in uplink
+                      </td>
+                      <td className="px-4 py-2">
+                        Higher spectral efficiency and data rates
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 font-medium border-r">CoMP</td>
+                      <td className="px-4 py-2 border-r">
+                        Coordinated Multi-Point transmission/reception
+                      </td>
+                      <td className="px-4 py-2">
+                        Improved performance at cell edges
+                      </td>
+                    </tr>
+                    <tr className="bg-muted/20">
+                      <td className="px-4 py-2 font-medium border-r">Relay Nodes</td>
+                      <td className="px-4 py-2 border-r">
+                        Low-power base stations that relay signals
+                      </td>
+                      <td className="px-4 py-2">
+                        Extended coverage and improved cell-edge performance
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 font-medium border-r">HetNets</td>
+                      <td className="px-4 py-2 border-r">
+                        Heterogeneous Networks with macro, micro, pico, and femto cells
+                      </td>
+                      <td className="px-4 py-2">
+                        Increased capacity in high-traffic areas
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              
+              <h4>Voice over LTE (VoLTE)</h4>
+              <p>
+                As 4G LTE is an all-IP network, it required new approaches for voice services:
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">VoLTE Architecture</h5>
+                  <ul className="mb-0">
+                    <li><strong>IMS Core:</strong> IP Multimedia Subsystem for session management</li>
+                    <li><strong>QoS:</strong> Dedicated bearer with guaranteed bit rate for voice</li>
+                    <li><strong>Codec:</strong> Typically AMR-WB (HD Voice) for better quality</li>
+                    <li><strong>SIP:</strong> Session Initiation Protocol for call setup</li>
+                  </ul>
+                </div>
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">VoLTE Benefits</h5>
+                  <ul className="mb-0">
+                    <li><strong>HD Voice:</strong> Wider audio frequency range (50Hz–7kHz vs. 300Hz–3.4kHz)</li>
+                    <li><strong>Fast Call Setup:</strong> Typically 2-3 seconds vs. 5-10 seconds</li>
+                    <li><strong>Simultaneous Voice & Data:</strong> No switching between networks</li>
+                    <li><strong>Enhanced Services:</strong> Video calling, rich communication services</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <h4>4G LTE Technical Details</h4>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-6">
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">LTE Frequencies</h5>
+                  <ul className="mb-0 text-sm">
+                    <li>700 MHz (Band 12, 13, 17)</li>
+                    <li>850 MHz (Band 5, 18, 19)</li>
+                    <li>900 MHz (Band 8)</li>
+                    <li>1800 MHz (Band 3)</li>
+                    <li>1900 MHz (Band 2, 25)</li>
+                    <li>AWS 1700/2100 MHz (Band 4)</li>
+                    <li>2600 MHz (Band 7)</li>
+                  </ul>
+                </div>
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">Channel Bandwidths</h5>
+                  <ul className="mb-0 text-sm">
+                    <li>1.4 MHz (6 Resource Blocks)</li>
+                    <li>3 MHz (15 Resource Blocks)</li>
+                    <li>5 MHz (25 Resource Blocks)</li>
+                    <li>10 MHz (50 Resource Blocks)</li>
+                    <li>15 MHz (75 Resource Blocks)</li>
+                    <li>20 MHz (100 Resource Blocks)</li>
+                  </ul>
+                </div>
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h5 className="mt-0 mb-2 font-medium">Frame Structure</h5>
+                  <ul className="mb-0 text-sm">
+                    <li>Frame: 10 ms</li>
+                    <li>Subframe: 1 ms (TTI)</li>
+                    <li>Slot: 0.5 ms</li>
+                    <li>Symbol: 66.7 μs</li>
+                    <li>Cyclic Prefix: Normal/Extended</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <h4>4G Impact and Legacy</h4>
+              <p>
+                4G LTE transformed mobile communications and enabled new use cases:
+              </p>
+              <ul>
+                <li><strong>Mobile Video:</strong> Enabled high-quality streaming, video conferencing, and live broadcasting</li>
+                <li><strong>App Economy:</strong> Boosted the mobile app ecosystem with reliable, fast connectivity</li>
+                <li><strong>IoT Foundation:</strong> Early IoT deployments began leveraging LTE networks</li>
+                <li><strong>Mobile Broadband:</strong> Made wireless a viable alternative to fixed broadband in many cases</li>
+                <li><strong>Reduced Digital Divide:</strong> Brought high-speed internet to areas without fixed infrastructure</li>
+                <li><strong>Foundation for 5G:</strong> Many 4G/LTE concepts evolved into 5G technologies</li>
+              </ul>
             </>
           )}
         </div>
