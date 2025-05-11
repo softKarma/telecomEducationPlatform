@@ -8,10 +8,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { AlertCircle, Check, Copy } from "lucide-react";
+import { AlertCircle, Check, Copy, Info } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import ByteDisplay from "./ByteDisplay";
+import { useLocation } from "wouter";
 
 // Example PDUs
 const examplePdus = {
