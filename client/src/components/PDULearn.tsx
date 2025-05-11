@@ -12,7 +12,8 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 // Learning content sections
 type LearnSection = 
   // Level 1: High-level telecom overview
-  "telecom-overview" | "cellular-networks" | "network-evolution" |
+  "telecom-overview" | "cellular-networks" | "network-evolution" | 
+  "3g-technology" | "4g-technology" | "5g-technology" |
   // Level 2: Network architecture
   "network-architecture" | "gsm-concepts" | "signaling-protocols" |
   // Level 3: Mobile services
@@ -126,6 +127,27 @@ export default function PDULearn() {
                     onClick={() => setSection("network-evolution")}
                   >
                     Network Evolution
+                  </Button>
+                  <Button 
+                    variant={section === "3g-technology" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSection("3g-technology")}
+                  >
+                    3G Technology
+                  </Button>
+                  <Button 
+                    variant={section === "4g-technology" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSection("4g-technology")}
+                  >
+                    4G Technology
+                  </Button>
+                  <Button 
+                    variant={section === "5g-technology" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSection("5g-technology")}
+                  >
+                    5G Technology
                   </Button>
                 </div>
               </AccordionContent>
