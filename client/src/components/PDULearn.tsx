@@ -296,6 +296,13 @@ export default function PDULearn() {
                   >
                     Multipart SMS
                   </Button>
+                  <Button 
+                    variant={section === "user-data-header" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSection("user-data-header")}
+                  >
+                    User Data Header
+                  </Button>
                 </div>
               </AccordionContent>
             </AccordionItem>
@@ -324,7 +331,27 @@ export default function PDULearn() {
                   >
                     SMPP Protocol
                   </Button>
-
+                  <Button 
+                    variant={section === "sms-delivery-reports" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSection("sms-delivery-reports")}
+                  >
+                    Delivery Reports
+                  </Button>
+                  <Button 
+                    variant={section === "sms-encryption" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSection("sms-encryption")}
+                  >
+                    SMS Encryption
+                  </Button>
+                  <Button 
+                    variant={section === "sim-toolkit-sms" ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setSection("sim-toolkit-sms")}
+                  >
+                    SIM Toolkit SMS
+                  </Button>
                 </div>
               </AccordionContent>
             </AccordionItem>
