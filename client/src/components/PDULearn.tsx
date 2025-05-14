@@ -1409,6 +1409,272 @@ export default function PDULearn() {
             </>
           )}
           
+          {section === "user-data-header" && (
+            <>
+              <h3>User Data Header (UDH) in SMS Messages</h3>
+              <p>
+                The User Data Header (UDH) is a special mechanism in SMS messages that enables enhanced 
+                functionality beyond simple text messages. The UDH is a binary header inserted at the beginning
+                of the message content and is indicated by setting the TP-UDHI flag in the PDU.
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                  <h4>Understanding TP-UDHI Flag</h4>
+                  <p className="text-sm">
+                    The TP-UDHI (User Data Header Indicator) is a bit in the first octet of SMS PDUs:
+                  </p>
+                  
+                  <div className="bg-muted/50 p-4 rounded-md border mb-4">
+                    <h5 className="mt-0 text-sm font-medium">First Octet Bit Structure</h5>
+                    <div className="font-mono text-xs overflow-x-auto">
+                      <table className="min-w-full border-collapse">
+                        <thead>
+                          <tr>
+                            <th className="border px-2 py-1">Bit 7</th>
+                            <th className="border px-2 py-1">Bit 6</th>
+                            <th className="border px-2 py-1">Bit 5</th>
+                            <th className="border px-2 py-1">Bit 4</th>
+                            <th className="border px-2 py-1">Bit 3</th>
+                            <th className="border px-2 py-1">Bit 2</th>
+                            <th className="border px-2 py-1">Bit 1</th>
+                            <th className="border px-2 py-1">Bit 0</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td className="border px-2 py-1 text-center">RP</td>
+                            <td className="border px-2 py-1 text-center">UDHI</td>
+                            <td className="border px-2 py-1 text-center">SRR</td>
+                            <td className="border px-2 py-1 text-center">VPF</td>
+                            <td className="border px-2 py-1 text-center">VPF</td>
+                            <td className="border px-2 py-1 text-center">RD</td>
+                            <td className="border px-2 py-1 text-center">MTI</td>
+                            <td className="border px-2 py-1 text-center">MTI</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <ul className="text-xs mt-2 mb-0">
+                      <li><strong>MTI:</strong> Message Type Indicator (00 for SMS-DELIVER, 01 for SMS-SUBMIT)</li>
+                      <li><strong>RD:</strong> Reject Duplicates</li>
+                      <li><strong>VPF:</strong> Validity Period Format</li>
+                      <li><strong>SRR:</strong> Status Report Request</li>
+                      <li><strong>UDHI:</strong> User Data Header Indicator (1 = UDH present)</li>
+                      <li><strong>RP:</strong> Reply Path</li>
+                    </ul>
+                  </div>
+                  
+                  <p className="text-sm">
+                    When the UDHI bit is set to 1 (true), it indicates that the User Data field begins 
+                    with a header that contains additional control information.
+                  </p>
+                </div>
+                
+                <div>
+                  <h4>UDH Structure</h4>
+                  <p className="text-sm">
+                    The User Data Header follows a consistent structure:
+                  </p>
+                  
+                  <div className="overflow-x-auto mt-2">
+                    <table className="min-w-full border-collapse">
+                      <thead>
+                        <tr className="bg-muted/50">
+                          <th className="px-3 py-2 border">Field</th>
+                          <th className="px-3 py-2 border">Size (bytes)</th>
+                          <th className="px-3 py-2 border">Description</th>
+                        </tr>
+                      </thead>
+                      <tbody className="text-sm">
+                        <tr>
+                          <td className="px-3 py-2 border">UDHL</td>
+                          <td className="px-3 py-2 border text-center">1</td>
+                          <td className="px-3 py-2 border">User Data Header Length</td>
+                        </tr>
+                        <tr className="bg-muted/10">
+                          <td className="px-3 py-2 border" colSpan={3}>One or more Information Elements (IEs):</td>
+                        </tr>
+                        <tr>
+                          <td className="px-3 py-2 border pl-6">IEI</td>
+                          <td className="px-3 py-2 border text-center">1</td>
+                          <td className="px-3 py-2 border">Information Element Identifier</td>
+                        </tr>
+                        <tr className="bg-muted/10">
+                          <td className="px-3 py-2 border pl-6">IEDL</td>
+                          <td className="px-3 py-2 border text-center">1</td>
+                          <td className="px-3 py-2 border">Information Element Data Length</td>
+                        </tr>
+                        <tr>
+                          <td className="px-3 py-2 border pl-6">IED</td>
+                          <td className="px-3 py-2 border text-center">Variable</td>
+                          <td className="px-3 py-2 border">Information Element Data</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  
+                  <div className="border-l-4 border-accent pl-4 mt-4">
+                    <h5 className="text-sm font-medium mt-0 mb-1 text-accent">Example UDH</h5>
+                    <div className="font-mono text-xs">
+                      <div>05 00 03 AB 02 01</div>
+                      <div className="mt-1">
+                        <div>05: UDHL (header length = 5 bytes)</div>
+                        <div>00: IEI (concatenated SMS, 8-bit reference)</div>
+                        <div>03: IEDL (length of this IE = 3 bytes)</div>
+                        <div>AB: Reference number (171)</div>
+                        <div>02: Total parts (2 messages)</div>
+                        <div>01: Part number (this is part 1)</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <h4>Common Information Element Identifiers</h4>
+              <p>
+                The IEI byte identifies the type of information contained in each element:
+              </p>
+              
+              <div className="overflow-x-auto">
+                <table className="min-w-full border-collapse">
+                  <thead>
+                    <tr className="bg-muted">
+                      <th className="px-4 py-2 border">IEI Value</th>
+                      <th className="px-4 py-2 border">Information Element</th>
+                      <th className="px-4 py-2 border">Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="px-4 py-2 border text-center font-mono">00</td>
+                      <td className="px-4 py-2 border">Concatenated SMS (8-bit reference)</td>
+                      <td className="px-4 py-2 border">Indicates a message part in a multipart SMS with 8-bit reference number</td>
+                    </tr>
+                    <tr className="bg-muted/10">
+                      <td className="px-4 py-2 border text-center font-mono">08</td>
+                      <td className="px-4 py-2 border">Concatenated SMS (16-bit reference)</td>
+                      <td className="px-4 py-2 border">Indicates a message part in a multipart SMS with 16-bit reference number</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 border text-center font-mono">04</td>
+                      <td className="px-4 py-2 border">Application port addressing (8-bit)</td>
+                      <td className="px-4 py-2 border">Specifies source and destination ports for WAP, OTA, etc.</td>
+                    </tr>
+                    <tr className="bg-muted/10">
+                      <td className="px-4 py-2 border text-center font-mono">05</td>
+                      <td className="px-4 py-2 border">Application port addressing (16-bit)</td>
+                      <td className="px-4 py-2 border">16-bit version of port addressing</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 border text-center font-mono">01</td>
+                      <td className="px-4 py-2 border">Special SMS Message Indication</td>
+                      <td className="px-4 py-2 border">Indicates voicemail, fax, email, etc.</td>
+                    </tr>
+                    <tr className="bg-muted/10">
+                      <td className="px-4 py-2 border text-center font-mono">09</td>
+                      <td className="px-4 py-2 border">Wireless Control Message Protocol</td>
+                      <td className="px-4 py-2 border">Used for WAP Push messages</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 border text-center font-mono">24</td>
+                      <td className="px-4 py-2 border">National Language Single Shift</td>
+                      <td className="px-4 py-2 border">Defines language-specific single shift tables</td>
+                    </tr>
+                    <tr className="bg-muted/10">
+                      <td className="px-4 py-2 border text-center font-mono">25</td>
+                      <td className="px-4 py-2 border">National Language Locking Shift</td>
+                      <td className="px-4 py-2 border">Defines language-specific locking shift tables</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              
+              <h4>UDH Impact on Message Content</h4>
+              <p>
+                When a UDH is present in an SMS:
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div>
+                  <h5 className="text-sm font-medium">Character Count Effects</h5>
+                  <ul className="text-sm">
+                    <li>The UDH takes up space from the user data area</li>
+                    <li>For 7-bit encoding: Header bytes reduce the available characters (160 → 153 or less)</li>
+                    <li>For 8-bit data: Header bytes reduce available data bytes (140 → 134 or less)</li>
+                    <li>For UCS2: Header bytes reduce available characters (70 → 67 or less)</li>
+                  </ul>
+                </div>
+                
+                <div>
+                  <h5 className="text-sm font-medium">7-bit Encoding Padding</h5>
+                  <p className="text-sm">
+                    For 7-bit encoding, special handling is required:
+                  </p>
+                  <ul className="text-sm mb-0">
+                    <li>The UDH is always byte-aligned (8-bit boundary)</li>
+                    <li>Fill bits (0-7 bits) may be added after the UDH for proper alignment</li>
+                    <li>These fill bits ensure 7-bit encoded text starts on a septet boundary</li>
+                    <li>The formula to calculate fill bits: (UDHL+1) * 8 % 7</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div className="bg-muted/50 p-4 rounded-md border mb-6">
+                <h4 className="mt-0">Implementing UDH in PDUs</h4>
+                <ol className="mb-0">
+                  <li>
+                    <strong>Set the TP-UDHI bit in the first octet</strong>
+                    <ul className="text-sm">
+                      <li>For SMS-SUBMIT: First octet value of 0x41 includes UDHI</li>
+                      <li>For SMS-DELIVER: First octet value of 0x40 includes UDHI</li>
+                    </ul>
+                  </li>
+                  <li>
+                    <strong>Calculate the User Data Length correctly</strong>
+                    <ul className="text-sm">
+                      <li>Include the header length in the total User Data Length</li>
+                      <li>For 7-bit: UDL = number of septets (not bytes) including header and fill bits</li>
+                      <li>For 8-bit/UCS2: UDL = number of bytes including header</li>
+                    </ul>
+                  </li>
+                  <li>
+                    <strong>Add the UDH at the beginning of the User Data field</strong>
+                    <ul className="text-sm">
+                      <li>Start with the UDHL byte</li>
+                      <li>Follow with the IE(s) according to the correct format</li>
+                    </ul>
+                  </li>
+                  <li>
+                    <strong>For 7-bit encoding, add fill bits after the UDH if needed</strong>
+                  </li>
+                  <li>
+                    <strong>Add the actual message content after the UDH (and any fill bits)</strong>
+                  </li>
+                </ol>
+              </div>
+              
+              <h4>Parsing PDUs with UDHI Flag</h4>
+              <p>
+                When decoding a PDU with the UDHI flag set:
+              </p>
+              <ol>
+                <li>Extract the first byte from the User Data field (UDHL)</li>
+                <li>Extract the next UDHL bytes to get the complete UDH</li>
+                <li>For each Information Element in the UDH:
+                  <ul>
+                    <li>Extract the IEI byte to identify the element type</li>
+                    <li>Extract the IEDL byte to determine the element data length</li>
+                    <li>Extract the IED bytes according to the IEDL</li>
+                    <li>Process the IE according to its type (e.g., handle concatenation)</li>
+                  </ul>
+                </li>
+                <li>For 7-bit encoded messages, calculate and skip any fill bits</li>
+                <li>Process the remaining User Data as the actual message content</li>
+              </ol>
+            </>
+          )}
+          
           {section === "sim-toolkit-sms" && (
             <>
               <h3>SIM Toolkit SMS Messages</h3>
