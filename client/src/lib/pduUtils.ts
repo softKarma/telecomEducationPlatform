@@ -292,6 +292,26 @@ function hasUserDataHeader(firstOctet: number): boolean {
   return (firstOctet & 0x40) === 0x40;
 }
 
+// Utility function to get Information Element name
+function getInformationElementName(ieID: number): string {
+  switch (ieID) {
+    case 0x00: return "Concatenated SMS (8-bit reference)";
+    case 0x08: return "Concatenated SMS (16-bit reference)";
+    case 0x01: return "Special SMS Message Indication";
+    case 0x04: return "Application Port Addressing (8-bit)";
+    case 0x05: return "Application Port Addressing (16-bit)";
+    case 0x06: return "SMSC Control Parameters";
+    case 0x07: return "UDH Source Indicator";
+    case 0x09: return "Wireless Control Message Protocol";
+    case 0x20: return "RFC 822 E-Mail Header";
+    case 0x21: return "Hyperlink Format Element";
+    case 0x22: return "Reply Address Element";
+    case 0x24: return "National Language Single Shift";
+    case 0x25: return "National Language Locking Shift";
+    default: return `Unknown IE (${ieID.toString(16).padStart(2, '0')})`;
+  }
+}
+
 // Parse User Data Header
 function parseUserDataHeader(data: number[]): {
   headerLength: number,
@@ -300,46 +320,114 @@ function parseUserDataHeader(data: number[]): {
     reference: number,
     totalParts: number,
     partNumber: number
-  }
+  },
+  informationElements: Array<{
+    identifier: number,
+    identifierName: string,
+    length: number,
+    data: number[],
+    description: string
+  }>
 } {
-  if (!data.length) return { headerLength: 0, multipart: false };
+  if (!data.length) return { headerLength: 0, multipart: false, informationElements: [] };
   
   const headerLength = data[0] + 1; // +1 for the length byte itself
   let offset = 1;
   let multipart = false;
   let multipartInfo;
+  const informationElements: Array<{
+    identifier: number,
+    identifierName: string,
+    length: number,
+    data: number[],
+    description: string
+  }> = [];
   
   while (offset < headerLength) {
+    // Ensure we don't read past the data
+    if (offset + 1 >= data.length) break;
+    
     const ieID = data[offset++];
     const ieLength = data[offset++];
+    
+    // Safety check for buffer overruns
+    if (offset + ieLength > data.length) break;
+    
+    // Extract the element data
+    const elementData = data.slice(offset, offset + ieLength);
+    let description = "";
     
     // Concatenated SMS (8-bit reference)
     if (ieID === 0x00 && ieLength === 3) {
       multipart = true;
       multipartInfo = {
-        reference: data[offset],
-        totalParts: data[offset + 1],
-        partNumber: data[offset + 2]
+        reference: elementData[0],
+        totalParts: elementData[1],
+        partNumber: elementData[2]
       };
-      offset += 3;
+      description = `Reference: ${elementData[0]}, Parts: ${elementData[1]}, This Part: ${elementData[2]}`;
     }
     // Concatenated SMS (16-bit reference)
     else if (ieID === 0x08 && ieLength === 4) {
       multipart = true;
       multipartInfo = {
-        reference: (data[offset] << 8) | data[offset + 1],
-        totalParts: data[offset + 2],
-        partNumber: data[offset + 3]
+        reference: (elementData[0] << 8) | elementData[1],
+        totalParts: elementData[2],
+        partNumber: elementData[3]
       };
-      offset += 4;
+      description = `Reference: ${(elementData[0] << 8) | elementData[1]}, Parts: ${elementData[2]}, This Part: ${elementData[3]}`;
     }
+    // Application Port Addressing (8-bit)
+    else if (ieID === 0x04 && ieLength === 2) {
+      description = `Destination Port: ${elementData[0]}, Source Port: ${elementData[1]}`;
+    } 
+    // Application Port Addressing (16-bit)
+    else if (ieID === 0x05 && ieLength === 4) {
+      const destPort = (elementData[0] << 8) | elementData[1];
+      const srcPort = (elementData[2] << 8) | elementData[3];
+      description = `Destination Port: ${destPort}, Source Port: ${srcPort}`;
+    }
+    // Special SMS Message Indication
+    else if (ieID === 0x01 && ieLength === 2) {
+      const msgType = elementData[0] & 0x0F;
+      const msgTypeDesc = msgType === 0 ? "Voicemail" :
+                         msgType === 1 ? "Fax" :
+                         msgType === 2 ? "Email" :
+                         msgType === 3 ? "Other" : "Unknown";
+      const isStored = ((elementData[0] & 0x80) !== 0) ? "Store" : "Discard";
+      const msgCount = elementData[1];
+      description = `Type: ${msgTypeDesc}, ${isStored}, Count: ${msgCount}`;
+    }
+    // National Language Single Shift
+    else if (ieID === 0x24 && ieLength === 1) {
+      description = `Language Identifier: ${elementData[0]}`;
+    }
+    // National Language Locking Shift
+    else if (ieID === 0x25 && ieLength === 1) {
+      description = `Language Identifier: ${elementData[0]}`;
+    }
+    // Wireless Control Message Protocol
+    else if (ieID === 0x09) {
+      description = "WAP Push or other wireless protocol data";
+    }
+    // Other Information Elements
     else {
-      // Skip unknown IE
-      offset += ieLength;
+      description = `Data: ${bytesToHex(elementData)}`;
     }
+    
+    // Add to the information elements collection
+    informationElements.push({
+      identifier: ieID,
+      identifierName: getInformationElementName(ieID),
+      length: ieLength,
+      data: elementData,
+      description
+    });
+    
+    offset += ieLength;
   }
   
-  return { headerLength, multipart, multipartInfo };
+  return { headerLength, multipart, multipartInfo, informationElements };
 }
 
 // Parse PDU
@@ -903,7 +991,7 @@ export function parsePDU(pduString: string, pduType: "sms-deliver" | "sms-submit
     headerInfo.multipart = udhInfo.multipart;
     headerInfo.multipartInfo = udhInfo.multipartInfo;
     
-    // Add UDH fields
+    // Add UDH length field
     fields.push({
       name: 'User Data Header Length',
       value: userData[0].toString(),
@@ -913,14 +1001,58 @@ export function parsePDU(pduString: string, pduType: "sms-deliver" | "sms-submit
       rawBytes: bytesToHex([userData[0]])
     });
     
+    // Add the UDHL to the visual structure breakdown
+    structureBreakdown.bytes.push(bytesToHex([userData[0]]));
+    structureBreakdown.descriptions.push('UDH Length');
+    structureBreakdown.colors.push('info');
+    structureBreakdown.tooltips.push(`User Data Header Length (${userData[0]} bytes)`);
+    
+    // Process each information element
+    for (const ie of udhInfo.informationElements) {
+      const prevField = fields[fields.length - 1];
+      const ieOffset = prevField && prevField.offset !== undefined && prevField.length !== undefined 
+                      ? prevField.offset + prevField.length
+                      : offset + 1; // fallback
+      
+      // Add IE details to field list
+      fields.push({
+        name: ie.identifierName,
+        value: ie.description,
+        description: `Information Element ID: ${ie.identifier.toString(16).padStart(2, '0')}, Length: ${ie.length}`,
+        offset: ieOffset,
+        length: ie.length + 2, // +2 for the IE ID and length bytes
+        rawBytes: bytesToHex([ie.identifier, ie.length, ...ie.data])
+      });
+      
+      // Add IE to visual structure breakdown
+      const ieIdByte = bytesToHex([ie.identifier]);
+      const ieLengthByte = bytesToHex([ie.length]);
+      
+      structureBreakdown.bytes.push(ieIdByte);
+      structureBreakdown.descriptions.push('IE Identifier');
+      structureBreakdown.colors.push('info');
+      structureBreakdown.tooltips.push(`Information Element ID: ${ie.identifier.toString(16).padStart(2, '0')} (${ie.identifierName})`);
+      
+      structureBreakdown.bytes.push(ieLengthByte);
+      structureBreakdown.descriptions.push('IE Length');
+      structureBreakdown.colors.push('info');
+      structureBreakdown.tooltips.push(`Information Element Length: ${ie.length} bytes`);
+      
+      // Add IE data bytes with a different color
+      for (const dataByte of ie.data) {
+        structureBreakdown.bytes.push(bytesToHex([dataByte]));
+        structureBreakdown.descriptions.push('IE Data');
+        structureBreakdown.colors.push('info-light');
+        structureBreakdown.tooltips.push(`IE Data: ${ie.description}`);
+      }
+    }
+    
+    // If it's a multipart message, add a special summary field
     if (headerInfo.multipart && headerInfo.multipartInfo) {
       fields.push({
-        name: 'Concatenated SMS',
-        value: `Ref: ${headerInfo.multipartInfo.reference}, Part: ${headerInfo.multipartInfo.partNumber}/${headerInfo.multipartInfo.totalParts}`,
-        description: 'Multipart SMS information',
-        offset: offset + 1,
-        length: userData[0] > 0 ? userData[0] : 0,
-        rawBytes: bytesToHex(userData.slice(1, 1 + userData[0]))
+        name: 'Multipart Message',
+        value: `Part ${headerInfo.multipartInfo.partNumber} of ${headerInfo.multipartInfo.totalParts}`,
+        description: `This message is part of a concatenated SMS with reference number ${headerInfo.multipartInfo.reference}`,
       });
     }
   }

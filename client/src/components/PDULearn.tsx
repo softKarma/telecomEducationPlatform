@@ -21,9 +21,9 @@ type LearnSection =
   // Level 4: SMS technology
   "sms-overview" | "sms-architecture" | "sms-flow" |
   // Level 5: SMS protocols
-  "pdu-formats" | "encodings" | "fields" | "multipart" |
+  "pdu-formats" | "encodings" | "fields" | "multipart" | "user-data-header" |
   // Level 6: Advanced protocols
-  "sat" | "smpp" |
+  "sat" | "smpp" | "sms-delivery-reports" | "sms-encryption" | "sim-toolkit-sms" |
   // Tools
   "encoding-tool" | "external-resources";
 
