@@ -7,5 +7,6 @@ dependencies = [
     "fastapi>=0.115.12",
     "pydantic>=2.11.4",
     "trafilatura>=2.0.0",
+    "twilio>=9.6.0",
     "uvicorn>=0.34.2",
 ]

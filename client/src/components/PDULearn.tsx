@@ -795,6 +795,61 @@ export default function PDULearn() {
                   <li><strong>Cell Broadcast:</strong> Messages sent to all phones in a geographic area</li>
                 </ul>
               </div>
+              
+              <h3>Advanced SMS Capabilities</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h4 className="mt-0 mb-2 font-medium">Status Reports & PoR</h4>
+                  <p className="text-sm mb-2">
+                    SMS can include mechanisms to track message delivery:
+                  </p>
+                  <ul className="mb-0 text-sm">
+                    <li><strong>Status Reports:</strong> SMS-STATUS-REPORT PDUs returned to the sender</li>
+                    <li><strong>Proof of Receipt (PoR):</strong> Application-level confirmation that a message was processed</li>
+                    <li><strong>TP-SRR Flag:</strong> Status Report Request flag in SMS-SUBMIT</li>
+                    <li><strong>TP-SRI Flag:</strong> Status Report Indication flag in SMS-DELIVER</li>
+                  </ul>
+                </div>
+                
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h4 className="mt-0 mb-2 font-medium">SIM Toolkit SMS</h4>
+                  <p className="text-sm mb-2">
+                    Special SMS types for SIM Application Toolkit:
+                  </p>
+                  <ul className="mb-0 text-sm">
+                    <li><strong>SMS-PP Download:</strong> Messages sent directly to SIM applications</li>
+                    <li><strong>TP-UDHI:</strong> User Data Header Indicator for SAT commands</li>
+                    <li><strong>OTA Updates:</strong> Remote SIM card updates via SMS</li>
+                    <li><strong>Class 2 Messages:</strong> Messages stored directly on the SIM</li>
+                  </ul>
+                </div>
+                
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h4 className="mt-0 mb-2 font-medium">SMS Encryption</h4>
+                  <p className="text-sm mb-2">
+                    Methods to secure SMS content:
+                  </p>
+                  <ul className="mb-0 text-sm">
+                    <li><strong>End-to-End:</strong> Message content encryption before PDU creation</li>
+                    <li><strong>Network:</strong> Encryption between mobile and network (A5 algorithms)</li>
+                    <li><strong>Binary SMS:</strong> Used for encrypted payloads (8-bit data)</li>
+                    <li><strong>Crypto APIs:</strong> Application-level encryption via device APIs</li>
+                  </ul>
+                </div>
+                
+                <div className="border rounded-md p-4 bg-secondary/5">
+                  <h4 className="mt-0 mb-2 font-medium">SMS Special Services</h4>
+                  <p className="text-sm mb-2">
+                    Additional SMS capabilities:
+                  </p>
+                  <ul className="mb-0 text-sm">
+                    <li><strong>Reply Path:</strong> Allows direct reply to a message originator</li>
+                    <li><strong>Validity Period:</strong> Duration the SMSC should try to deliver</li>
+                    <li><strong>Priority:</strong> Message importance indicator</li>
+                    <li><strong>Port Addressing:</strong> WAP Push and other application services</li>
+                  </ul>
+                </div>
+              </div>
             </>
           )}
           
@@ -1032,6 +1087,486 @@ export default function PDULearn() {
                   <li>If any character is outside the 7-bit alphabet → Switch to UCS2</li>
                   <li>For binary data applications → Use 8-bit encoding</li>
                 </ol>
+              </div>
+            </>
+          )}
+          
+          {section === "sms-delivery-reports" && (
+            <>
+              <h3>SMS Delivery Reports & Proof of Receipt</h3>
+              <p>
+                SMS provides mechanisms to verify that messages have been delivered to the recipient's
+                device and optionally that they have been processed by an application. These features are
+                especially important for service-critical messaging applications.
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                  <h4>Status Reports</h4>
+                  <p className="text-sm">
+                    A status report is a network-level confirmation that a message has reached the recipient's device.
+                    It's implemented using the <strong>SMS-STATUS-REPORT</strong> PDU type and involves several key elements:
+                  </p>
+                  
+                  <div className="bg-muted/50 p-4 rounded-md border mb-4">
+                    <h5 className="mt-0 text-sm font-medium">How Status Reports Work</h5>
+                    <ol className="mb-0 text-sm">
+                      <li>Sender sets the <strong>TP-SRR</strong> (Status Report Request) bit in the SMS-SUBMIT PDU</li>
+                      <li>SMSC remembers this request and assigns a <strong>Message Reference</strong> number</li>
+                      <li>When the message is delivered, the SMSC generates an SMS-STATUS-REPORT</li>
+                      <li>The status report is sent back to the original sender's device</li>
+                      <li>The sender's device matches the reference number to the original message</li>
+                    </ol>
+                  </div>
+                </div>
+                
+                <div>
+                  <h4>SMS-STATUS-REPORT Format</h4>
+                  <p className="text-sm">
+                    The SMS-STATUS-REPORT PDU contains the following key fields:
+                  </p>
+                  
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Field</TableHead>
+                        <TableHead>Description</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      <TableRow>
+                        <TableCell>Message Reference</TableCell>
+                        <TableCell>Identifier matching the original SMS-SUBMIT</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>Recipient Address</TableCell>
+                        <TableCell>Address from the original message</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>Service Centre Time Stamp</TableCell>
+                        <TableCell>When the original message was received by the SMSC</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>Discharge Time</TableCell>
+                        <TableCell>When the message was delivered to the recipient</TableCell>
+                      </TableRow>
+                      <TableRow>
+                        <TableCell>Status</TableCell>
+                        <TableCell>Final delivery status code (delivered, failed, pending, etc.)</TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </div>
+              </div>
+              
+              <h4>Proof of Receipt (PoR)</h4>
+              <p>
+                While status reports confirm delivery to a device, Proof of Receipt (PoR) provides application-level
+                confirmation that a message was actually processed by an application on the recipient's device.
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                  <h5 className="text-sm font-medium">PoR Implementation</h5>
+                  <p className="text-sm">
+                    PoR can be implemented in several ways:
+                  </p>
+                  <ul className="text-sm">
+                    <li><strong>Return Result:</strong> The receiving application sends back a confirmation message</li>
+                    <li><strong>User Data Header:</strong> Special UDH elements to request and provide receipt</li>
+                    <li><strong>WDP (Wireless Datagram Protocol):</strong> Acknowledgment at the bearer layer</li>
+                    <li><strong>Custom protocols:</strong> Application-specific implementations</li>
+                  </ul>
+                  
+                  <div className="border-l-4 border-info pl-4 mt-4">
+                    <h5 className="mt-0 text-sm font-medium text-info">PoR for Secure Services</h5>
+                    <p className="mb-0 text-sm">
+                      PoR is essential for secure services like:
+                    </p>
+                    <ul className="mb-0 text-sm">
+                      <li>Banking transactions</li>
+                      <li>Two-factor authentication</li>
+                      <li>SIM OTA updates</li>
+                      <li>Device management commands</li>
+                    </ul>
+                  </div>
+                </div>
+                
+                <div>
+                  <h5 className="text-sm font-medium">PoR User Data Header</h5>
+                  <p className="text-sm">
+                    When implemented via UDH, a PoR uses Information Elements with specific IDs:
+                  </p>
+                  <div className="font-mono bg-muted p-3 rounded text-xs">
+                    <div>User Data Header:</div>
+                    <div>- Header Length: <span className="text-primary">05</span></div>
+                    <div>- Information Element ID: <span className="text-primary">09</span> (for PoR)</div>
+                    <div>- IE Length: <span className="text-primary">03</span></div>
+                    <div>- PoR Control Data:</div>
+                    <div>&nbsp;&nbsp;- Request/Response: <span className="text-primary">01</span> or <span className="text-primary">02</span></div>
+                    <div>&nbsp;&nbsp;- Status: <span className="text-primary">00</span> (Success) or other</div>
+                    <div>&nbsp;&nbsp;- Message Reference: <span className="text-primary">XX</span></div>
+                  </div>
+                  
+                  <p className="mt-3 text-sm">
+                    The PoR message is typically sent as a normal SMS-SUBMIT PDU with the appropriate UDH elements,
+                    referring to the original message.
+                  </p>
+                </div>
+              </div>
+              
+              <h4>Delivery Report Status Codes</h4>
+              <p>
+                Status reports include a byte that indicates the delivery outcome with specific bit patterns.
+                The most common status codes include:
+              </p>
+              
+              <div className="overflow-x-auto">
+                <table className="min-w-full border-collapse">
+                  <thead>
+                    <tr className="bg-muted">
+                      <th className="px-4 py-2 border">Hex Code</th>
+                      <th className="px-4 py-2 border">Status</th>
+                      <th className="px-4 py-2 border">Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="px-4 py-2 border text-center font-mono">00</td>
+                      <td className="px-4 py-2 border">Completed</td>
+                      <td className="px-4 py-2 border">Message was successfully delivered</td>
+                    </tr>
+                    <tr className="bg-muted/10">
+                      <td className="px-4 py-2 border text-center font-mono">01</td>
+                      <td className="px-4 py-2 border">Pending</td>
+                      <td className="px-4 py-2 border">Message is still pending delivery</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 border text-center font-mono">20</td>
+                      <td className="px-4 py-2 border">Expired</td>
+                      <td className="px-4 py-2 border">Message validity period expired</td>
+                    </tr>
+                    <tr className="bg-muted/10">
+                      <td className="px-4 py-2 border text-center font-mono">21</td>
+                      <td className="px-4 py-2 border">Deleted</td>
+                      <td className="px-4 py-2 border">Message was deleted by SMSC administrator</td>
+                    </tr>
+                    <tr>
+                      <td className="px-4 py-2 border text-center font-mono">30-3F</td>
+                      <td className="px-4 py-2 border">Temporary Error</td>
+                      <td className="px-4 py-2 border">Temporary error, SMSC still trying</td>
+                    </tr>
+                    <tr className="bg-muted/10">
+                      <td className="px-4 py-2 border text-center font-mono">40-4F</td>
+                      <td className="px-4 py-2 border">Permanent Error</td>
+                      <td className="px-4 py-2 border">Permanent error, no more attempts</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </>
+          )}
+          
+          {section === "sms-encryption" && (
+            <>
+              <h3>SMS Encryption & Security</h3>
+              <p>
+                SMS messages are transmitted in clear text through the mobile network, making them 
+                vulnerable to interception. Various encryption methods have been developed to secure SMS
+                communications for sensitive applications.
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                  <h4>Network Layer Security</h4>
+                  <p className="text-sm">
+                    By default, SMS messages have basic security through the mobile network:
+                  </p>
+                  
+                  <ul className="text-sm">
+                    <li><strong>Air Interface Encryption:</strong> A5/1, A5/3 algorithms encrypt radio traffic</li>
+                    <li><strong>Authentication:</strong> SIM-based authentication of the sending device</li>
+                    <li><strong>SS7 Security:</strong> Network signaling protocols (limited security)</li>
+                  </ul>
+                  
+                  <div className="bg-destructive/10 rounded-md p-3 mt-4">
+                    <h5 className="text-sm font-medium mt-0 mb-1 text-destructive">Network Security Limitations</h5>
+                    <ul className="text-sm mb-0">
+                      <li>Only protects the radio link between phone and base station</li>
+                      <li>Messages may be in clear text within the operator's network</li>
+                      <li>Vulnerable to SS7 network attacks</li>
+                      <li>No protection in the SMSC or on gateways</li>
+                      <li>A5/1 encryption has known vulnerabilities</li>
+                    </ul>
+                  </div>
+                </div>
+                
+                <div>
+                  <h4>End-to-End Encryption</h4>
+                  <p className="text-sm">
+                    For truly secure SMS, end-to-end encryption is required:
+                  </p>
+                  
+                  <ul className="text-sm">
+                    <li><strong>AES:</strong> Advanced Encryption Standard (128/256-bit)</li>
+                    <li><strong>3DES:</strong> Triple Data Encryption Standard</li>
+                    <li><strong>RSA:</strong> Public key cryptography for key exchange</li>
+                    <li><strong>ECC:</strong> Elliptic Curve Cryptography (better for limited space)</li>
+                  </ul>
+                  
+                  <div className="border rounded-md p-3 mt-4 bg-accent/10">
+                    <h5 className="text-sm font-medium mt-0 mb-1">Implementation Methods</h5>
+                    <ul className="text-sm mb-0">
+                      <li><strong>Binary SMS:</strong> Using 8-bit encoded messages to carry encrypted data</li>
+                      <li><strong>Secure Messaging Apps:</strong> OTT solutions with their own protocols</li>
+                      <li><strong>SIM Toolkit:</strong> Encryption done within the secure SIM environment</li>
+                      <li><strong>S/MIME:</strong> Encrypted message format for enterprise use</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              
+              <h4>SMS Encryption Process</h4>
+              <p>
+                Implementing end-to-end encryption in SMS requires several key steps:
+              </p>
+              
+              <div className="bg-muted/50 rounded-md p-4 mb-6">
+                <ol className="mb-0">
+                  <li>
+                    <strong>Key Exchange:</strong> Secure exchange of encryption keys between parties
+                    <ul className="text-sm">
+                      <li>May use initial key exchange over a different secure channel</li>
+                      <li>Or use asymmetric encryption (RSA/ECC) for key exchange</li>
+                      <li>Sometimes uses pre-shared keys distributed securely</li>
+                    </ul>
+                  </li>
+                  <li>
+                    <strong>Content Encryption:</strong> Original message encrypted using symmetric encryption
+                    <ul className="text-sm">
+                      <li>Typically AES or similar strong cipher</li>
+                      <li>Generates ciphertext that is unreadable without the key</li>
+                    </ul>
+                  </li>
+                  <li>
+                    <strong>Binary Encoding:</strong> Encrypted data encoded into a format suitable for SMS
+                    <ul className="text-sm">
+                      <li>Usually Base64 or hexadecimal encoding</li>
+                      <li>Needs to be represented in characters that can be transmitted</li>
+                    </ul>
+                  </li>
+                  <li>
+                    <strong>PDU Creation:</strong> Creating an SMS-SUBMIT PDU with the encoded encrypted data
+                    <ul className="text-sm">
+                      <li>Typically uses 8-bit data encoding (DCS=0x04)</li>
+                      <li>May include User Data Header for special processing instructions</li>
+                    </ul>
+                  </li>
+                  <li>
+                    <strong>Decryption:</strong> Recipient's device decrypts the message
+                    <ul className="text-sm">
+                      <li>Extracts the encrypted payload from the PDU</li>
+                      <li>Uses the corresponding decryption key</li>
+                      <li>Recovers the original plain text message</li>
+                    </ul>
+                  </li>
+                </ol>
+              </div>
+              
+              <h4>8-bit SMS for Encrypted Messages</h4>
+              <p>
+                Encrypted SMS messages typically use the 8-bit data encoding format:
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <h5 className="text-sm font-medium">PDU Format Considerations</h5>
+                  <ul className="text-sm">
+                    <li><strong>DCS (Data Coding Scheme):</strong> Set to 0x04 for 8-bit data</li>
+                    <li><strong>Max Length:</strong> Limited to 140 bytes per message</li>
+                    <li><strong>Multipart:</strong> Often requires concatenated SMS for larger payloads</li>
+                    <li><strong>UDH:</strong> May include security metadata in User Data Header</li>
+                  </ul>
+                </div>
+                
+                <div>
+                  <h5 className="text-sm font-medium">Example Encrypted SMS Structure</h5>
+                  <div className="font-mono text-xs bg-black/5 p-2 rounded">
+                    <div>07912374910000F4040B9193547654F60000F016FB0D9ABBDDA56B3DD70</div>
+                    <div className="mt-1 grid grid-cols-1 gap-1">
+                      <div><span className="bg-primary/20 px-1 py-0.5 rounded mr-1">0791...</span> SMSC Info</div>
+                      <div><span className="bg-secondary/20 px-1 py-0.5 rounded mr-1">04</span> First Octet (SMS-DELIVER)</div>
+                      <div><span className="bg-accent/20 px-1 py-0.5 rounded mr-1">0B91...</span> Sender Address</div>
+                      <div><span className="bg-destructive/20 px-1 py-0.5 rounded mr-1">00</span> Protocol ID</div>
+                      <div><span className="bg-primary/20 px-1 py-0.5 rounded mr-1">04</span> DCS (8-bit data)</div>
+                      <div><span className="bg-secondary/20 px-1 py-0.5 rounded mr-1">00F0...</span> Timestamp</div>
+                      <div><span className="bg-accent/20 px-1 py-0.5 rounded mr-1">16</span> User Data Length (22 bytes)</div>
+                      <div><span className="bg-destructive/20 px-1 py-0.5 rounded mr-1">FB0D9A...</span> Encrypted Content</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+          
+          {section === "sim-toolkit-sms" && (
+            <>
+              <h3>SIM Toolkit SMS Messages</h3>
+              <p>
+                SIM Application Toolkit (SAT) uses special SMS message formats to communicate between 
+                network applications and the SIM card. These messages are used for remote SIM management, 
+                value-added services, and secure operations.
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                  <h4>SMS Point-to-Point (SMS-PP) Download</h4>
+                  <p className="text-sm">
+                    SMS-PP is the primary mechanism for sending data to a SIM card application:
+                  </p>
+                  
+                  <ul className="text-sm">
+                    <li><strong>Purpose:</strong> Send commands or data directly to a SIM application</li>
+                    <li><strong>Format:</strong> Special SMS format with specific Protocol ID (0x7F)</li>
+                    <li><strong>Security:</strong> Often encrypted or cryptographically signed</li>
+                    <li><strong>Processing:</strong> Automatically intercepted by the device and sent to SIM</li>
+                  </ul>
+                  
+                  <div className="bg-muted/50 p-3 rounded mt-4">
+                    <h5 className="text-sm font-medium mt-0 mb-1">SMS-PP Structure</h5>
+                    <ol className="text-sm mb-0">
+                      <li><strong>SMS-DELIVER PDU:</strong> Standard SMS message from network</li>
+                      <li><strong>Protocol ID:</strong> 0x7F to indicate SIM Data Download</li>
+                      <li><strong>User Data:</strong> Contains the Command Packet</li>
+                      <li><strong>Command Packet:</strong> SIM command with headers and security</li>
+                      <li><strong>Response Packet:</strong> Optionally sent back from SIM to server</li>
+                    </ol>
+                  </div>
+                </div>
+                
+                <div>
+                  <h4>Command Packet Structure</h4>
+                  <p className="text-sm">
+                    The Command Packet within the SMS-PP follows a defined structure:
+                  </p>
+                  
+                  <div className="overflow-x-auto">
+                    <table className="min-w-full border-collapse mt-2">
+                      <thead>
+                        <tr className="bg-muted/50">
+                          <th className="px-3 py-2 border">Field</th>
+                          <th className="px-3 py-2 border">Size</th>
+                          <th className="px-3 py-2 border">Description</th>
+                        </tr>
+                      </thead>
+                      <tbody className="text-sm">
+                        <tr>
+                          <td className="px-3 py-2 border">Command Packet Header</td>
+                          <td className="px-3 py-2 border">Variable</td>
+                          <td className="px-3 py-2 border">Includes length, SPI, KIC/KID</td>
+                        </tr>
+                        <tr className="bg-muted/10">
+                          <td className="px-3 py-2 border">Command Header</td>
+                          <td className="px-3 py-2 border">4 bytes</td>
+                          <td className="px-3 py-2 border">CLA, INS, P1, P2 parameters</td>
+                        </tr>
+                        <tr>
+                          <td className="px-3 py-2 border">Lc</td>
+                          <td className="px-3 py-2 border">1 byte</td>
+                          <td className="px-3 py-2 border">Length of command data</td>
+                        </tr>
+                        <tr className="bg-muted/10">
+                          <td className="px-3 py-2 border">Command Data</td>
+                          <td className="px-3 py-2 border">Variable</td>
+                          <td className="px-3 py-2 border">Actual command data</td>
+                        </tr>
+                        <tr>
+                          <td className="px-3 py-2 border">Le</td>
+                          <td className="px-3 py-2 border">0-1 byte</td>
+                          <td className="px-3 py-2 border">Expected response length</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  
+                  <div className="border-l-4 border-info pl-4 mt-4">
+                    <h5 className="text-sm font-medium mt-0 mb-1 text-info">Security Parameters</h5>
+                    <ul className="text-sm mb-0">
+                      <li><strong>SPI:</strong> Security Parameters Indicator</li>
+                      <li><strong>KIC:</strong> Key and algorithm for cryptographic operations</li>
+                      <li><strong>KID:</strong> Key and algorithm for integrity/authentication</li>
+                      <li><strong>TAR:</strong> Toolkit Application Reference</li>
+                      <li><strong>CNTR:</strong> Counter for replay protection</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              
+              <h4>Over-The-Air (OTA) Updates</h4>
+              <p>
+                A key application of SIM Toolkit SMS is Over-The-Air updates for SIM cards:
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div>
+                  <h5 className="text-sm font-medium">OTA Operations</h5>
+                  <ul className="text-sm">
+                    <li><strong>Remote File Management:</strong> Update files on the SIM</li>
+                    <li><strong>Application Management:</strong> Install, update, or delete applications</li>
+                    <li><strong>Profile Management:</strong> Update subscriber details</li>
+                    <li><strong>Key Management:</strong> Update security keys and parameters</li>
+                    <li><strong>Service Activation:</strong> Enable/disable specific services</li>
+                  </ul>
+                </div>
+                
+                <div>
+                  <h5 className="text-sm font-medium">APDU Commands</h5>
+                  <p className="text-sm">
+                    OTA updates use Application Protocol Data Units (APDUs) to interact with the SIM card:
+                  </p>
+                  <div className="font-mono text-xs bg-black/5 p-2 rounded">
+                    <div className="mb-1">Example APDU Structure:</div>
+                    <div><span className="text-primary">A0</span> <span className="text-secondary">A4</span> <span className="text-accent">00</span> <span className="text-destructive">00</span> <span className="text-info">02</span> <span className="text-warning">3F00</span> <span className="text-primary">00</span></div>
+                    <div className="mt-1 grid grid-cols-1 gap-1">
+                      <div><span className="text-primary">A0</span>: CLA (Class byte)</div>
+                      <div><span className="text-secondary">A4</span>: INS (Instruction code - SELECT)</div>
+                      <div><span className="text-accent">00</span>: P1 (Parameter 1)</div>
+                      <div><span className="text-destructive">00</span>: P2 (Parameter 2)</div>
+                      <div><span className="text-info">02</span>: Lc (Length of data field)</div>
+                      <div><span className="text-warning">3F00</span>: Data (File ID to select)</div>
+                      <div><span className="text-primary">00</span>: Le (Expected response length)</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <h4>SMS-CB (Cell Broadcast) for SIM Toolkit</h4>
+              <p>
+                In addition to SMS-PP, Cell Broadcast messages can also be used for SIM Toolkit:
+              </p>
+              
+              <ul>
+                <li><strong>Function:</strong> Broadcasts to all devices in a geographic area</li>
+                <li><strong>Format:</strong> Special message identifier for SIM Toolkit applications</li>
+                <li><strong>Use Cases:</strong> Mass SIM updates, emergency services, location-based services</li>
+                <li><strong>Processing:</strong> Messages with specific identifiers are forwarded to the SIM</li>
+              </ul>
+              
+              <div className="border p-4 rounded bg-muted/20 mt-4">
+                <h4 className="mt-0">SMS Class Values for SIM Toolkit</h4>
+                <p>
+                  SMS messages use specific class values to indicate how they should be handled:
+                </p>
+                <ul className="mb-0">
+                  <li><strong>Class 0:</strong> "Flash" SMS, displayed immediately on screen</li>
+                  <li><strong>Class 1:</strong> Stored on device (in default memory)</li>
+                  <li><strong>Class 2:</strong> SIM-specific messages (stored on SIM card)</li>
+                  <li><strong>Class 3:</strong> Messages intended for the receiving device itself</li>
+                </ul>
+                <p className="mt-4 mb-0">
+                  <strong>Class 2</strong> is particularly important for SIM Toolkit, as these messages are stored 
+                  directly on the SIM card and can be accessed by SIM applications.
+                </p>
               </div>
             </>
           )}
