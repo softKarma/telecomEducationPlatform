@@ -511,25 +511,50 @@ export default function PDUParser() {
                       </div>
 
                       <div className="text-xs space-y-2">
-                        <div className="flex items-center">
-                          <span className="w-4 h-4 bg-primary/20 border border-primary/30 inline-block mr-2"></span>
-                          <span>SMSC Information</span>
-                        </div>
-                        <div className="flex items-center">
-                          <span className="w-4 h-4 bg-secondary/20 border border-secondary/30 inline-block mr-2"></span>
-                          <span>{parsedData.header.messageType === 'sms-deliver' ? 'Originating Address' : 'Destination Address'}</span>
-                        </div>
-                        <div className="flex items-center">
-                          <span className="w-4 h-4 bg-muted border border-muted-foreground/30 inline-block mr-2"></span>
-                          <span>Protocol Identifiers</span>
-                        </div>
-                        <div className="flex items-center">
-                          <span className="w-4 h-4 bg-accent/20 border border-accent/30 inline-block mr-2"></span>
-                          <span>{parsedData.header.messageType === 'sms-deliver' ? 'Timestamp' : 'Validity Period'}</span>
-                        </div>
-                        <div className="flex items-center">
-                          <span className="w-4 h-4 bg-destructive/20 border border-destructive/30 inline-block mr-2"></span>
-                          <span>User Data</span>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                          <div className="space-y-2">
+                            <h4 className="font-medium text-sm">Basic PDU Elements</h4>
+                            <div className="flex items-center">
+                              <span className="w-4 h-4 bg-primary/20 border border-primary/30 inline-block mr-2"></span>
+                              <span>SMSC Information</span>
+                            </div>
+                            <div className="flex items-center">
+                              <span className="w-4 h-4 bg-secondary/20 border border-secondary/30 inline-block mr-2"></span>
+                              <span>{parsedData.header.messageType === 'sms-deliver' ? 'Originating Address' : 'Destination Address'}</span>
+                            </div>
+                            <div className="flex items-center">
+                              <span className="w-4 h-4 bg-muted border border-muted-foreground/30 inline-block mr-2"></span>
+                              <span>Protocol Identifiers</span>
+                            </div>
+                            <div className="flex items-center">
+                              <span className="w-4 h-4 bg-accent/20 border border-accent/30 inline-block mr-2"></span>
+                              <span>{parsedData.header.messageType === 'sms-deliver' ? 'Timestamp' : 'Validity Period'}</span>
+                            </div>
+                            <div className="flex items-center">
+                              <span className="w-4 h-4 bg-destructive/20 border border-destructive/30 inline-block mr-2"></span>
+                              <span>User Data</span>
+                            </div>
+                          </div>
+                          
+                          <div className="space-y-2">
+                            <h4 className="font-medium text-sm">UDH Elements</h4>
+                            <div className="flex items-center">
+                              <span className="w-4 h-4 bg-blue-500/20 border-blue-500/40 border inline-block mr-2"></span>
+                              <span>User Data Header</span>
+                            </div>
+                            <div className="flex items-center">
+                              <span className="w-4 h-4 bg-blue-300/20 border-blue-300/40 border inline-block mr-2"></span>
+                              <span>Information Element Data</span>
+                            </div>
+                            <div className="flex items-center">
+                              <span className="w-4 h-4 bg-orange-500/20 border-orange-500/40 border inline-block mr-2"></span>
+                              <span>Concatenated SMS</span>
+                            </div>
+                            <div className="flex items-center">
+                              <span className="w-4 h-4 bg-green-500/20 border-green-500/40 border inline-block mr-2"></span>
+                              <span>Application Port or Special Indicators</span>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
