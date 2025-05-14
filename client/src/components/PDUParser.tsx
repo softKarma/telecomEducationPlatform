@@ -78,7 +78,18 @@ const fieldDescriptions = {
   "tp-pid": "Protocol identifier parameter indicating how the SC is to process the message",
   "tp-dcs": "Data coding scheme indicating the message encoding scheme and message class",
   "tp-udl": "User data length in the appropriate units based on encoding",
-  "tp-udhi": "User data header indicator flag"
+  "tp-udhi": "User data header indicator flag - when set to 1, indicates user data begins with a header",
+  
+  // UDH specific fields
+  "user data header length": "Length of the User Data Header in octets (excluding this length byte itself)",
+  "information element identifier": "Identifier for the type of information element in the UDH",
+  "information element length": "Length of the information element data in octets",
+  "information element data": "Data portion of the information element",
+  "concatenated sms": "Information about a segmented SMS message that should be reassembled",
+  "concatenated sms reference": "Reference number to identify all parts of the same concatenated message",
+  "application port addressing": "Port numbers to route SMS to specific applications on the device",
+  "special message indication": "Indicates messages like voicemail, fax notifications, etc.",
+  "national language shift tables": "Defines which character set to use for the message text"
 };
 
 // Example PDUs
@@ -254,6 +265,58 @@ export default function PDUParser() {
                   className="h-7 text-xs"
                 >
                   Submit (Part 2)
+                </Button>
+              </div>
+              
+              <Label className="block text-sm font-medium mb-2 mt-4">UDH Examples</Label>
+              <div className="flex flex-wrap gap-2">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => loadExamplePdu("deliver-udh-port")}
+                  className="h-7 text-xs"
+                >
+                  UDH (App Port)
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => loadExamplePdu("deliver-udh-concat1")}
+                  className="h-7 text-xs"
+                >
+                  UDH (Concat 1/2)
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => loadExamplePdu("deliver-udh-concat2")}
+                  className="h-7 text-xs"
+                >
+                  UDH (Concat 2/2)
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => loadExamplePdu("deliver-udh-7bit1")}
+                  className="h-7 text-xs"
+                >
+                  UDH (7-bit, 1/2)
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => loadExamplePdu("deliver-udh-7bit2")}
+                  className="h-7 text-xs"
+                >
+                  UDH (7-bit, 2/2)
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => loadExamplePdu("deliver-udh-special")}
+                  className="h-7 text-xs"
+                >
+                  UDH (Special Msg)
                 </Button>
               </div>
             </div>
