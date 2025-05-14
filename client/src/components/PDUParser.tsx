@@ -424,6 +424,19 @@ export default function PDUParser() {
                             </tr>
                             <tr>
                               <td className="pb-1 pr-3 text-muted-foreground">
+                                User Data Header:
+                                <FieldInfo tooltip={findTooltip('user data header', fieldDescriptions)} />
+                              </td>
+                              <td className="pb-1 font-medium">
+                                {parsedData.properties.some(prop => prop.name.toLowerCase().includes('user data header')) ? (
+                                  <span className="text-blue-500">Present</span>
+                                ) : (
+                                  "None"
+                                )}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td className="pb-1 pr-3 text-muted-foreground">
                                 Multipart:
                                 <FieldInfo tooltip={findTooltip('multipart', fieldDescriptions)} />
                               </td>
@@ -556,20 +569,70 @@ export default function PDUParser() {
 
                     <h3 className="text-sm font-semibold my-2">Octet Description</h3>
                     <div className="border rounded-lg divide-y">
-                      {parsedData.properties
-                        .filter(prop => prop.rawBytes)
-                        .map((property, index) => (
-                          <div key={index} className="p-3">
-                            <h4 className="font-medium">
-                              {property.offset !== undefined 
-                                ? `0x${property.offset.toString(16).padStart(2, '0')}: ${property.rawBytes}`
-                                : property.name}
-                            </h4>
-                            <p className="text-xs text-muted-foreground">
-                              {property.description}
-                            </p>
-                          </div>
-                        ))}
+                      {/* Group fields by type for better organization */}
+                      {(() => {
+                        // Extract UDH-related fields
+                        const udhFields = parsedData.properties.filter(prop => 
+                          prop.rawBytes && 
+                          (prop.name.toLowerCase().includes('user data header') || 
+                           prop.name.toLowerCase().includes('information element'))
+                        );
+                        
+                        // Extract non-UDH fields
+                        const normalFields = parsedData.properties.filter(prop => 
+                          prop.rawBytes && 
+                          !(prop.name.toLowerCase().includes('user data header') || 
+                            prop.name.toLowerCase().includes('information element'))
+                        );
+                        
+                        // Render normal fields first
+                        return (
+                          <>
+                            {normalFields.map((property, index) => (
+                              <div key={`normal-${index}`} className="p-3">
+                                <h4 className="font-medium">
+                                  {property.offset !== undefined 
+                                    ? `0x${property.offset.toString(16).padStart(2, '0')}: ${property.rawBytes}`
+                                    : property.name}
+                                </h4>
+                                <p className="text-xs text-muted-foreground">
+                                  {property.description}
+                                </p>
+                                {property.value && property.value !== property.rawBytes && (
+                                  <p className="text-xs mt-1">Value: <span className="font-medium">{property.value}</span></p>
+                                )}
+                              </div>
+                            ))}
+                            
+                            {/* UDH Section Header if UDH fields exist */}
+                            {udhFields.length > 0 && (
+                              <div className="p-3 bg-blue-50 dark:bg-blue-950/30 border-t-2 border-blue-300">
+                                <h4 className="font-semibold text-blue-600 dark:text-blue-400">User Data Header Fields</h4>
+                                <p className="text-xs text-muted-foreground">
+                                  The following fields are part of the User Data Header, indicated by the UDHI flag
+                                </p>
+                              </div>
+                            )}
+                            
+                            {/* UDH Fields with special styling */}
+                            {udhFields.map((property, index) => (
+                              <div key={`udh-${index}`} className="p-3 bg-blue-50/30 dark:bg-blue-950/10">
+                                <h4 className="font-medium text-blue-700 dark:text-blue-300">
+                                  {property.offset !== undefined 
+                                    ? `0x${property.offset.toString(16).padStart(2, '0')}: ${property.rawBytes}`
+                                    : property.name}
+                                </h4>
+                                <p className="text-xs text-muted-foreground">
+                                  {property.description}
+                                </p>
+                                {property.value && property.value !== property.rawBytes && (
+                                  <p className="text-xs mt-1">Value: <span className="font-medium">{property.value}</span></p>
+                                )}
+                              </div>
+                            ))}
+                          </>
+                        );
+                      })()}
                     </div>
                   </div>
                 </TabsContent>

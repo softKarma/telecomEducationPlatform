@@ -19,6 +19,14 @@ export default function ByteDisplay({ value, color, tooltip }: ByteDisplayProps)
       case 'danger':
       case 'destructive':
         return 'bg-destructive/20 border-destructive/30';
+      case 'info':
+        return 'bg-blue-500/20 border-blue-500/40';
+      case 'info-light':
+        return 'bg-blue-300/20 border-blue-300/40';
+      case 'warning':
+        return 'bg-orange-500/20 border-orange-500/40';
+      case 'success':
+        return 'bg-green-500/20 border-green-500/40';
       case 'neutral':
       default:
         return 'bg-muted border border-muted-foreground/30';
